@@ -1,4 +1,5 @@
-
+usage
+---
 $ python ./train.py \
   --data_dir data/processed/push/push_train \ # path to the training set.
   --model CDNA \ # the model type to use - DNA, CDNA, or STP
