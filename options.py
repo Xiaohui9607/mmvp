@@ -15,7 +15,7 @@ class Options():
     def __init__(self):
         self.parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-        self.parser.add_argument('--data_dir', default='./data/CY101data', help='directory containing data.')
+        self.parser.add_argument('--data_dir', default='./data/CY101NPY', help='directory containing data.')
         self.parser.add_argument('--channels', type=int, default=3, help='# channel of input')
         self.parser.add_argument('--height', type=int, default=64, help='height of image')
         self.parser.add_argument('--width', type=int, default=64, help='width of image')
@@ -26,7 +26,7 @@ class Options():
         self.parser.add_argument('--use_state',  default=False, action='store_true', help='Whether or not to give the state+action to the model')
         self.parser.add_argument('--model', default='CDNA', help='model architecture to use - CDNA, DNA, or STP')
         self.parser.add_argument('--num_masks', type=int, default=10, help='number of masks, usually 1 for DNA, 10 for CDNA, STN.')
-        self.parser.add_argument('--device', default='cuda', help='cuda:[d] | cpu')
+        self.parser.add_argument('--device', default='cpu', help='cuda:[d] | cpu')
 
         # training details
         self.parser.add_argument('--print_interval', type=int, default=10, help='# iterations to output loss')
