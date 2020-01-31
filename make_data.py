@@ -3,20 +3,21 @@ import glob
 import numpy as np
 import PIL.Image
 
-DATA_DIR = '/home/golf/data/CY101'
-OUT_DIR = '/home/golf/data/CY101NPY'
+DATA_DIR = './data/CY101'
+OUT_DIR = './data/CY101NPY'
 IMG_WIDTH = 64
 IMG_HEIGHT = 64
 
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
                     'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24 }
 
+CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 10
 STEP = 4
 
 
 def read_dir():
-    samples = glob.glob(os.path.join(DATA_DIR, '*/*/*/*'))
+    samples = glob.glob(os.path.join(DATA_DIR, '*/*/*/*/*'))
     return samples
 
 
@@ -36,16 +37,20 @@ def run():
     samples = read_dir()
 
     for sample in samples:
-        out_sample_dir = os.path.join(OUT_DIR, sample.split('/')[-1], '_'.join(sample.split('/')[5:8]))
+        save = False
+        for bh in CHOOSEN_BEHAVIORS:
+            save = save or (bh in sample)
+        if save:
+            out_sample_dir = os.path.join(OUT_DIR, '_'.join(sample.split('/')[-4:]))
 
-        out_sample_npys = generate_npy(sample)
-        for i, subsample in enumerate(out_sample_npys):
-            np.save(out_sample_dir+'_'+str(i), subsample)
+            out_sample_npys = generate_npy(sample)
+            for i, subsample in enumerate(out_sample_npys):
+                np.save(out_sample_dir+'_'+str(i), subsample)
 
 
 if __name__ == '__main__':
     if not os.path.exists(OUT_DIR):
         os.makedirs(OUT_DIR)
-        for behavior in SEQUENCE_LENGTHS.keys():
-            os.mkdir(os.path.join(OUT_DIR, behavior))
+        # for behavior in SEQUENCE_LENGTHS.keys():
+        #     os.mkdir(os.path.join(OUT_DIR, behavior))
     run()
