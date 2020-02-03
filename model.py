@@ -46,13 +46,21 @@ class Model():
 
             gen_images, _ = self.net(images, actions, states[0])
 
-            loss, psnr = 0.0, 0.0
-            for i, (image, gen_image) in enumerate(zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames-1:])):
-                recon_loss = self.mse_loss(image, gen_image)
-                psnr_i = peak_signal_to_noise_ratio(image, gen_image)
-                loss += recon_loss
-                psnr += psnr_i
-
+            # loss, psnr = 0.0, 0.0
+            # gen_images = []
+            # gt_images = []
+            # for i, (image, gen_image) in enumerate(zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames-1:])):
+            #     gen_images.append(gen_image)
+            #     gt_images.append(image)
+            #     # recon_loss = self.mse_loss(image, gen_image)
+            #     # psnr_i = peak_signal_to_noise_ratio(image, gen_image)
+            #     # loss += recon_loss
+            #     # psnr += psnr_i
+            # gen_images = torch.cat(gen_images, dim=1)
+            # gt_images = torch.cat(gt_images, dim=1)
+            gen_images = torch.cat([gen_image.unsqueeze(dim=1) for gen_image in gen_images[self.opt.context_frames-1:]], dim=1)
+            gt_images = torch.cat([gt_image.unsqueeze(dim=1) for gt_image in images[self.opt.context_frames:]], dim=1)
+            loss = self.mse_loss(gt_images, gen_images)
             loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
             loss.backward()
             self.optimizer.step()
