@@ -3,8 +3,8 @@ import glob
 import numpy as np
 import PIL.Image
 
-DATA_DIR = './data/CY101'
-OUT_DIR = './data/CY101NPY'
+DATA_DIR = '../data/CY101'
+OUT_DIR = '../data/CY101NPY'
 IMG_WIDTH = 64
 IMG_HEIGHT = 64
 

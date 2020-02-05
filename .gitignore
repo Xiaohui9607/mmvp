@@ -6,4 +6,3 @@ __pycache__/
 *.py[cod]
 weight/*
 predict/*
-data/*

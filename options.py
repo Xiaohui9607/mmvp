@@ -15,7 +15,7 @@ class Options():
     def __init__(self):
         self.parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-        self.parser.add_argument('--data_dir', default='./data/CY101NPY', help='directory containing data.')
+        self.parser.add_argument('--data_dir', default='../data/CY101NPY', help='directory containing data.')
         self.parser.add_argument('--channels', type=int, default=3, help='# channel of input')
         self.parser.add_argument('--height', type=int, default=64, help='height of image')
         self.parser.add_argument('--width', type=int, default=64, help='width of image')
