@@ -2,7 +2,7 @@ import os
 import torch
 from torch import nn
 from networks import network
-from data.data import build_dataloader_CY101
+from data import build_dataloader_CY101
 from torch.nn import functional as F
 
 def peak_signal_to_noise_ratio(true, pred):
