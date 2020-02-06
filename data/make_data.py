@@ -1,5 +1,6 @@
 import os
 import glob
+import random
 import numpy as np
 import PIL.Image
 
@@ -11,6 +12,8 @@ IMG_HEIGHT = 64
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
                     'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24 }
 
+CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc', 'cup',
+              'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg', 'ball']
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 10
 STEP = 4
@@ -36,13 +39,27 @@ def generate_npy(path):
 def run():
     samples = read_dir()
 
+    if os.path.exists(os.path.join(OUT_DIR, 'train')):
+        os.rmdir(os.path.join(OUT_DIR, 'train'))
+    os.mkdir(os.path.join(OUT_DIR, 'train'))
+
+    if os.path.exists(os.path.join(OUT_DIR, 'test')):
+        os.rmdir(os.path.join(OUT_DIR, 'test'))
+    os.mkdir(os.path.join(OUT_DIR, 'test'))
+    random.shuffle(CATEGORIES)
     for sample in samples:
         save = False
         for bh in CHOOSEN_BEHAVIORS:
             save = save or (bh in sample)
         if save:
-            out_sample_dir = os.path.join(OUT_DIR, '_'.join(sample.split('/')[-4:]))
-
+            subdir = ''
+            for ct in CATEGORIES[:5]:
+                if ct in sample:
+                    subdir = 'test'
+            for ct in CATEGORIES[5:]:
+                if ct in sample:
+                    subdir = 'train'
+            out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(sample.split('/')[-4:]))
             out_sample_npys = generate_npy(sample)
             for i, subsample in enumerate(out_sample_npys):
                 np.save(out_sample_dir+'_'+str(i), subsample)
