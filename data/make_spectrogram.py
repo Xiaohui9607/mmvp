@@ -95,8 +95,8 @@ if __name__ == '__main__':
 
     # Before running the code, make sure to have these two folders,
     # Reading data and plotting the spectrogram
-    data_path_root_folder_non_vision = "/Users/ramtin/Desktop/Prof_Sinapov/Jivko_dataset/CY101Dataset/rc_data/"
-    plot_path_root_folder = "/Users/ramtin/Desktop/spectrogram/"
+    data_path_root_folder_non_vision = "../../CY101/rc_data/"
+    plot_path_root_folder = "../../CY101/"
 
     #TODO a folder does't have: "exec_5", thus temporary excluded from all folders
     executions = ["exec_1", "exec_2","exec_3","exec_4"]

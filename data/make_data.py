@@ -1,11 +1,14 @@
+import re
 import os
 import glob
 import random
 import numpy as np
+import pickle
+
 import PIL.Image
 
-DATA_DIR = '../data/CY101'
-OUT_DIR = '../data/CY101NPY'
+DATA_DIR = '../../data/CY101'
+OUT_DIR = '../../data/CY101NPY'
 IMG_WIDTH = 64
 IMG_HEIGHT = 64
 
@@ -14,17 +17,27 @@ SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc', 'cup',
               'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg', 'ball']
+
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 10
 STEP = 4
 
 
 def read_dir():
-    samples = glob.glob(os.path.join(DATA_DIR, '*/*/*/*/*'))
-    return samples
+    visons = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
+    haptics = glob.glob(os.path.join(DATA_DIR, 'rc_data/*/*/*/*/proprioception/ttrq0.txt'))
+    audios = glob.glob(os.path.join(DATA_DIR, 'rc_data/*/*/*/*/hearing/*.wav'))
+    vibros = glob.glob(os.path.join(DATA_DIR, 'rc_data/*/*/*/*/vibro/*.tsv'))
+    return visons, haptics, audios, vibros
 
 
-def generate_npy(path):
+def generate_npy_vision(path):
+
+    '''
+
+    :param path: path to images folder,
+    :return: numpy array with size [SUB_SAMPLE_SIZE, SEQ_LENGTH, ...]
+    '''
     files = sorted(glob.glob(os.path.join(path, '*.jpg')))
     imglist = []
     for file in files:
@@ -36,33 +49,83 @@ def generate_npy(path):
     return ret
 
 
-def run():
-    samples = read_dir()
+def generate_npy_haptic(path):
+    '''
+    :param path: path to ttrq0.txt, you need to open it before you process
+    :return: list of numpy array with size [SEQ_LENGTH, ...]
+    '''
+    return [np.zeros([SEQUENCE_LENGTH, 7])]
 
-    if os.path.exists(os.path.join(OUT_DIR, 'train')):
-        os.rmdir(os.path.join(OUT_DIR, 'train'))
-    os.mkdir(os.path.join(OUT_DIR, 'train'))
 
-    if os.path.exists(os.path.join(OUT_DIR, 'test')):
-        os.rmdir(os.path.join(OUT_DIR, 'test'))
-    os.mkdir(os.path.join(OUT_DIR, 'test'))
+def generate_npy_audio(path):
+    '''
+    :param path: path to ttrq0.txt, you need to open it before you process
+    :return: list of numpy array with size [SEQ_LENGTH, ...]
+    '''
+    return [np.zeros([SEQUENCE_LENGTH, 7])]
+
+
+def generate_npy_vibro(path):
+    '''
+
+    :param path: path to .tsv, you need to open it before you process
+    :return: list of numpy array with size [SEQ_LENGTH, ...]
+    '''
+    return [np.zeros([SEQUENCE_LENGTH, 7])]
+
+
+def process_vision(visions):
+    train_subir = 'train'
+    test_subir = 'test'
+    if os.path.exists(os.path.join(OUT_DIR, train_subir)):
+        os.rmdir(os.path.join(OUT_DIR, train_subir))
+    os.makedirs(os.path.join(OUT_DIR, train_subir))
+
+    if os.path.exists(os.path.join(OUT_DIR, test_subir)):
+        os.rmdir(os.path.join(OUT_DIR, test_subir))
+    os.makedirs(os.path.join(OUT_DIR, test_subir))
+
     random.shuffle(CATEGORIES)
-    for sample in samples:
+    for vision in visions:
         save = False
         for bh in CHOOSEN_BEHAVIORS:
-            save = save or (bh in sample)
+            save = save or (bh in vision)
         if save:
             subdir = ''
             for ct in CATEGORIES[:5]:
-                if ct in sample:
-                    subdir = 'test'
+                if ct in vision:
+                    subdir = test_subir
             for ct in CATEGORIES[5:]:
-                if ct in sample:
-                    subdir = 'train'
-            out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(sample.split('/')[-4:]))
-            out_sample_npys = generate_npy(sample)
-            for i, subsample in enumerate(out_sample_npys):
-                np.save(out_sample_dir+'_'+str(i), subsample)
+                if ct in vision:
+                    subdir = train_subir
+
+            out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
+
+            haptic = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
+            audio = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'hearing', '*.wav')
+            vibro = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'vibro', '*.tsv')
+            out_vision_npys = generate_npy_vision(vision)
+            out_haptic_npys = generate_npy_haptic(haptic)
+            out_audio_npys = generate_npy_audio(audio)
+            out_vibro_npys = generate_npy_vibro(vibro)
+            # make sure that all the lists are in the same length!
+            for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
+                    out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
+                ret = {
+                    'vision': out_vision_npy,
+                    'haptic': out_haptic_npy,
+                    'audio': out_audio_npy,
+                    'vibro': out_vibro_npy
+                }
+                np.save(out_sample_dir+'_'+str(i), ret)
+
+
+def run():
+
+    visons, haptics, audios, vibros = read_dir()
+    process_vision(visons)
+    # process_haptic(haptics)
+
 
 
 if __name__ == '__main__':
