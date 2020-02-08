@@ -16,13 +16,14 @@ IMG_HEIGHT = 64
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
                     'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24 }
 
+
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc', 'cup',
               'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg', 'ball']
+
 
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 10
 STEP = 4
-
 
 
 def read_dir():
@@ -50,10 +51,15 @@ def generate_npy_vision(path):
         ret.append(np.concatenate(imglist[i:i+SEQUENCE_LENGTH], axis=0))
     return ret, len(imglist)
 
+
 def generate_npy_haptic(path, n_frames):
+
     '''
     :param path: path to ttrq0.txt, you need to open it before you process
+    :param n_frames: # frames
     :return: list of numpy array with size [SEQ_LENGTH, ...]
+    :preprocess protocol: 48 bins for each single frame, given one frame, if #bin is less than 48,
+                            we pad it in the tail with the last bin value. if #bin is more than 48, we take bin[:48]
     '''
     haplist = open(path, 'r').readlines()
     haplist = [list(map(float, v.strip().split('\t'))) for v in haplist]
@@ -62,8 +68,8 @@ def generate_npy_haptic(path, n_frames):
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
     groups = np.digitize(haplist[:,0], bins, right=False)
 
-    haplist = [haplist[np.where(groups==idx)][...,1:] for idx in range(1, n_frames+1)]
-    haplist = [np.append(ht, np.copy(ht[-1:, ...]), axis=0)[np.newaxis,...] if ht.shape[0] == 47 else ht[np.newaxis,...] for ht in haplist]
+    haplist = [haplist[np.where(groups==idx)][...,1:][:48] for idx in range(1, n_frames+1)]
+    haplist = [np.pad(ht, [[0, 48-ht.shape[0]],[0, 0]] ,mode='edge')[np.newaxis,...] for ht in haplist]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0))
@@ -118,6 +124,8 @@ def process_vision(visions):
             out_vision_npys, n_frames = generate_npy_vision(vision)
             out_audio_npys = generate_npy_audio(audio, n_frames)
             out_haptic_npys = generate_npy_haptic(haptic, n_frames)
+            print(len(out_vision_npys), len(out_haptic_npys))
+
             out_vibro_npys = generate_npy_vibro(vibro)
             # make sure that all the lists are in the same length!
             for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
