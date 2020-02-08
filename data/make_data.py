@@ -106,7 +106,7 @@ def process_vision(visions):
     for vision in visions:
         save = False
         for bh in CHOOSEN_BEHAVIORS:
-            save = save or (bh in vision)
+            save = save or (bh in vision.split('/'))
         if save:
             subdir = ''
             for ct in CATEGORIES[:5]:
