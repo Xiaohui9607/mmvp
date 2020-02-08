@@ -4,13 +4,14 @@ import glob
 import random
 import numpy as np
 import pickle
-
+import pandas as pd
 import PIL.Image
 
 DATA_DIR = '../../data/CY101'
 OUT_DIR = '../../data/CY101NPY'
 IMG_WIDTH = 64
 IMG_HEIGHT = 64
+
 
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
                     'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24 }
@@ -21,6 +22,7 @@ CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'met
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 10
 STEP = 4
+
 
 
 def read_dir():
@@ -46,18 +48,29 @@ def generate_npy_vision(path):
     ret = []
     for i in range(0, len(imglist)-SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(imglist[i:i+SEQUENCE_LENGTH], axis=0))
-    return ret
+    return ret, len(imglist)
 
-
-def generate_npy_haptic(path):
+def generate_npy_haptic(path, n_frames):
     '''
     :param path: path to ttrq0.txt, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
-    return [np.zeros([SEQUENCE_LENGTH, 7])]
+    haplist = open(path, 'r').readlines()
+    haplist = [list(map(float, v.strip().split('\t'))) for v in haplist]
+    haplist = np.array(haplist)
+    time_duration = (haplist[-1][0] - haplist[0][0])/n_frames
+    bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
+    groups = np.digitize(haplist[:,0], bins, right=False)
+
+    haplist = [haplist[np.where(groups==idx)][...,1:] for idx in range(1, n_frames+1)]
+    haplist = [np.append(ht, np.copy(ht[-1:, ...]), axis=0)[np.newaxis,...] if ht.shape[0] == 47 else ht[np.newaxis,...] for ht in haplist]
+    ret = []
+    for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
+        ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0))
+    return ret
 
 
-def generate_npy_audio(path):
+def generate_npy_audio(path, n_frames):
     '''
     :param path: path to ttrq0.txt, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
@@ -77,13 +90,11 @@ def generate_npy_vibro(path):
 def process_vision(visions):
     train_subir = 'train'
     test_subir = 'test'
-    if os.path.exists(os.path.join(OUT_DIR, train_subir)):
-        os.rmdir(os.path.join(OUT_DIR, train_subir))
-    os.makedirs(os.path.join(OUT_DIR, train_subir))
+    if not os.path.exists(os.path.join(OUT_DIR, train_subir)):
+        os.makedirs(os.path.join(OUT_DIR, train_subir))
 
-    if os.path.exists(os.path.join(OUT_DIR, test_subir)):
-        os.rmdir(os.path.join(OUT_DIR, test_subir))
-    os.makedirs(os.path.join(OUT_DIR, test_subir))
+    if not os.path.exists(os.path.join(OUT_DIR, test_subir)):
+        os.makedirs(os.path.join(OUT_DIR, test_subir))
 
     random.shuffle(CATEGORIES)
     for vision in visions:
@@ -104,9 +115,9 @@ def process_vision(visions):
             haptic = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
             audio = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'hearing', '*.wav')
             vibro = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'vibro', '*.tsv')
-            out_vision_npys = generate_npy_vision(vision)
-            out_haptic_npys = generate_npy_haptic(haptic)
-            out_audio_npys = generate_npy_audio(audio)
+            out_vision_npys, n_frames = generate_npy_vision(vision)
+            out_audio_npys = generate_npy_audio(audio, n_frames)
+            out_haptic_npys = generate_npy_haptic(haptic, n_frames)
             out_vibro_npys = generate_npy_vibro(vibro)
             # make sure that all the lists are in the same length!
             for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
