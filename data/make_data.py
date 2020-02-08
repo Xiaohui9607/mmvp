@@ -68,9 +68,9 @@ def generate_npy_haptic(path, n_frames):
     haplist = np.array(haplist)
     time_duration = (haplist[-1][0] - haplist[0][0])/n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
-    grou = np.digitize(haplist[:,0], bins, right=False)
+    groups = np.digitize(haplist[:,0], bins, right=False)
 
-    haplist = [haplist[np.where(grou==idx)][...,1:][:48] for idx in range(1, n_frames+1)]
+    haplist = [haplist[np.where(groups==idx)][...,1:][:48] for idx in range(1, n_frames+1)]
     haplist = [np.pad(ht, [[0, 48-ht.shape[0]],[0, 0]] ,mode='edge')[np.newaxis,...] for ht in haplist]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
