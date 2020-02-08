@@ -6,6 +6,7 @@ import numpy as np
 import pickle
 import pandas as pd
 import PIL.Image
+from .make_spectrogram import plotstft
 
 DATA_DIR = '../../data/CY101'
 OUT_DIR = '../../data/CY101NPY'
@@ -30,6 +31,10 @@ def read_dir():
     visons = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
     return visons
 
+
+def convert_audio_to_image(audio_path):
+    ims = plotstft(audio_path)
+    return ims
 
 def generate_npy_vision(path):
 
@@ -63,9 +68,9 @@ def generate_npy_haptic(path, n_frames):
     haplist = np.array(haplist)
     time_duration = (haplist[-1][0] - haplist[0][0])/n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
-    groups = np.digitize(haplist[:,0], bins, right=False)
+    grou = np.digitize(haplist[:,0], bins, right=False)
 
-    haplist = [haplist[np.where(groups==idx)][...,1:][:48] for idx in range(1, n_frames+1)]
+    haplist = [haplist[np.where(grou==idx)][...,1:][:48] for idx in range(1, n_frames+1)]
     haplist = [np.pad(ht, [[0, 48-ht.shape[0]],[0, 0]] ,mode='edge')[np.newaxis,...] for ht in haplist]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
@@ -73,12 +78,34 @@ def generate_npy_haptic(path, n_frames):
     return ret
 
 
-def generate_npy_audio(path, n_frames):
+
+def generate_npy_audio(path, n_frames_vision_image):
     '''
-    :param path: path to ttrq0.txt, you need to open it before you process
+    :param path: path to audio, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
-    return [np.zeros([SEQUENCE_LENGTH, 7])]
+    audio_path = glob.glob(path)[0]
+    converted_image_array = convert_audio_to_image(audio_path)
+
+    #TODO delete these two lines
+    # path = "../../data/spectrogram/cone_1/trial_1/exec_1/crush/hearing/cone_1_trial_1_exec_1_crush_hearing.png"
+    # img = np.array(PIL.Image.open(path))[np.newaxis, np.newaxis, ...] # create a new dimension
+
+    img = converted_image_array[np.newaxis, np.newaxis, ...] # create a new dimension
+    image_width = len(img[0][0][0])
+    effective_each_frame_length = int(image_width/n_frames_vision_image)
+    # here we need to crop from width
+    width_to_keep = effective_each_frame_length * n_frames_vision_image
+    cropped_image = img[:,:,:,:width_to_keep]
+    imglist = []
+    for i in range(0, n_frames_vision_image):
+        imglist.append(cropped_image[:,:,:,(i*effective_each_frame_length):(i*effective_each_frame_length)+effective_each_frame_length])
+
+    ret = []
+    for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
+        ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
+
+    return ret
 
 
 def generate_npy_vibro(path):

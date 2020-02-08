@@ -51,27 +51,25 @@ def logscale_spec(spec, sr=44100, factor=20.):
     return newspec, freqs
 
 """ plot spectrogram"""
-def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet", fig_name="spectrogram"):
-    samplerate, samples = wav.read(audiopath)
-    print("*****samplerate*****", samplerate)
+def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_name="spectrogram"):
+
+    samplerate, samples = wav.read(audio_path)
+    # print("*****samplerate*****", samplerate)
 
     s = stft(samples, binsize)
-
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
-
     ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
 
     timebins, freqbins = np.shape(ims)
-
-    print("timebins: ", timebins)
-    print("freqbins: ", freqbins)
+    # print("timebins: ", timebins)
+    # print("freqbins: ", freqbins)
 
     plt.figure(figsize=(15, 7.5))
     plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
     plt.colorbar()
 
-    plt.xlabel("time (s)")
-    plt.ylabel("frequency (hz)")
+    # plt.xlabel("time (s)")
+    # plt.ylabel("frequency (hz)")
     plt.xlim([0, timebins-1])
     plt.ylim([0, freqbins])
 
@@ -80,6 +78,8 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet", fig_name="
     ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
     plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
 
+    '''
+    # generating imgages for audio files
     if plotpath:
         plt.savefig(plotpath+fig_name, bbox_inches="tight")
         plt.close()
@@ -87,40 +87,41 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet", fig_name="
         plt.show()
 
     plt.clf()
+    '''
 
     return ims
 
 
-if __name__ == '__main__':
-
-    # Before running the code, make sure to have these two folders,
-    # Reading data and plotting the spectrogram
-    data_path_root_folder_non_vision = "../../CY101/rc_data/"
-    plot_path_root_folder = "../../CY101/"
-
-    #TODO a folder does't have: "exec_5", thus temporary excluded from all folders
-    executions = ["exec_1", "exec_2","exec_3","exec_4"]
-    behaviors = ["crush", "grasp", "hold", "lift_slow", "low_drop", "poke", "push", "shake", "tap"]
-    modality = "hearing" #audio
-
-    category_object_list = os.listdir(data_path_root_folder_non_vision)
-
-    #removing hidden file, e.g. .DS Store
-    for item in category_object_list:
-        if item.startswith("."):
-            category_object_list.remove(item)
-
-    for category_object in category_object_list:
-        for execution in executions:
-            for behavior in behaviors:
-                folder = data_path_root_folder_non_vision + category_object + "/trial_1/" + \
-                         execution + "/" + behavior + "/" + modality + "/"
-                os.chdir(folder)
-                for file in glob.glob("*.wav"):
-                    filepath = folder + file
-                    plotpath = plot_path_root_folder + category_object + "/trial_1/" + execution \
-                               + "/" + behavior + "/" + modality + "/"
-                    spectrogram_name = category_object + "_trial_1" + "_" + execution + "_" + behavior + "_" + modality
-                    if not os.path.exists(plotpath):
-                        os.makedirs(plotpath)
-                    ims = plotstft(filepath, plotpath=plotpath, fig_name=spectrogram_name)
+# if __name__ == '__main__':
+#
+#     # Before running the code, make sure to have these two folders,
+#     # Reading data and plotting the spectrogram
+#     data_path_root_folder_non_vision = "../../CY101/rc_data/"
+#     plot_path_root_folder = "../../CY101/"
+#
+#     #TODO a folder does't have: "exec_5", thus temporary excluded from all folders
+#     executions = ["exec_1", "exec_2","exec_3","exec_4"]
+#     behaviors = ["crush", "grasp", "hold", "lift_slow", "low_drop", "poke", "push", "shake", "tap"]
+#     modality = "hearing" #audio
+#
+#     category_object_list = os.listdir(data_path_root_folder_non_vision)
+#
+#     #removing hidden file, e.g. .DS Store
+#     for item in category_object_list:
+#         if item.startswith("."):
+#             category_object_list.remove(item)
+#
+#     for category_object in category_object_list:
+#         for execution in executions:
+#             for behavior in behaviors:
+#                 folder = data_path_root_folder_non_vision + category_object + "/trial_1/" + \
+#                          execution + "/" + behavior + "/" + modality + "/"
+#                 os.chdir(folder)
+#                 for file in glob.glob("*.wav"):
+#                     filepath = folder + file
+#                     plotpath = plot_path_root_folder + category_object + "/trial_1/" + execution \
+#                                + "/" + behavior + "/" + modality + "/"
+#                     spectrogram_name = category_object + "_trial_1" + "_" + execution + "_" + behavior + "_" + modality
+#                     if not os.path.exists(plotpath):
+#                         os.makedirs(plotpath)
+#                     ims = plotstft(filepath, plotpath=plotpath, fig_name=spectrogram_name)
