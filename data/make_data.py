@@ -28,10 +28,7 @@ STEP = 4
 
 def read_dir():
     visons = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
-    haptics = glob.glob(os.path.join(DATA_DIR, 'rc_data/*/*/*/*/proprioception/ttrq0.txt'))
-    audios = glob.glob(os.path.join(DATA_DIR, 'rc_data/*/*/*/*/hearing/*.wav'))
-    vibros = glob.glob(os.path.join(DATA_DIR, 'rc_data/*/*/*/*/vibro/*.tsv'))
-    return visons, haptics, audios, vibros
+    return visons
 
 
 def generate_npy_vision(path):
@@ -93,7 +90,7 @@ def generate_npy_vibro(path):
     return [np.zeros([SEQUENCE_LENGTH, 7])]
 
 
-def process_vision(visions):
+def process(visions):
     train_subir = 'train'
     test_subir = 'test'
     if not os.path.exists(os.path.join(OUT_DIR, train_subir)):
@@ -141,9 +138,8 @@ def process_vision(visions):
 
 def run():
 
-    visons, haptics, audios, vibros = read_dir()
-    process_vision(visons)
-    # process_haptic(haptics)
+    visons = read_dir()
+    process(visons)
 
 
 
