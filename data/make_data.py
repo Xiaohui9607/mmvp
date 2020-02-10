@@ -8,8 +8,8 @@ import pandas as pd
 import PIL.Image
 from make_spectrogram import plotstft
 
-DATA_DIR = '../../data/CY101'
-OUT_DIR = '../../data/CY101NPY'
+DATA_DIR = '../data/CY101'
+OUT_DIR = '../data/CY101NPY'
 IMG_WIDTH = 64
 IMG_HEIGHT = 64
 
@@ -97,9 +97,8 @@ def generate_npy_audio(path, n_frames_vision_image):
     # img = np.array(PIL.Image.open(path))[np.newaxis, np.newaxis, ...] # create a new dimension
 
     img = converted_image_array[np.newaxis, np.newaxis, ...] # create a new dimension
-    import matplotlib.pyplot as plt
     image_width = img.shape[2]
-    effective_each_frame_length = int(image_width/n_frames_vision_image)
+    effective_each_frame_length = 16
     # here we need to crop from width
     width_to_keep = effective_each_frame_length * n_frames_vision_image
     cropped_image = img[:,:,:width_to_keep,:]

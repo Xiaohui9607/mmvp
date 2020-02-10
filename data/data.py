@@ -87,7 +87,7 @@ class CY101Dataset(Dataset):
             haptic = torch.cat([self.haptic_transform(single_haptic).unsqueeze(0) for single_haptic in haptic.unbind(0)], dim=0)
         if self.audio_transform is not None:
             audio = torch.cat([self.audio_transform(single_audio).unsqueeze(0) for single_audio in audio.unbind(0)], dim=0)
-
+        print(audio.shape)
         return vision.to(self.device), haptic.to(self.device), audio.to(self.device)
 
     def __len__(self):
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     opt = Options().parse()
     opt.data_dir = '../'+opt.data_dir
     tr, va = build_dataloader_CY101(opt)
-    for a,b,c in tr:
+    for a, b, c in tr:
         pass
     pass
 
