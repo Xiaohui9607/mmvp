@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 import pandas as pd
 import PIL.Image
-from .make_spectrogram import plotstft
+from make_spectrogram import plotstft
 
 DATA_DIR = '../../data/CY101'
 OUT_DIR = '../../data/CY101NPY'
@@ -76,7 +76,6 @@ def generate_npy_haptic(path, n_frames):
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0))
     return ret
-
 
 
 def generate_npy_audio(path, n_frames_vision_image):
@@ -150,15 +149,15 @@ def process(visions):
             out_haptic_npys = generate_npy_haptic(haptic, n_frames)
             print(len(out_vision_npys), len(out_haptic_npys))
 
-            out_vibro_npys = generate_npy_vibro(vibro)
+            # out_vibro_npys = generate_npy_vibro(vibro)
             # make sure that all the lists are in the same length!
-            for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
-                    out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
+            for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
+                    out_vision_npys, out_haptic_npys, out_audio_npys)):
                 ret = {
                     'vision': out_vision_npy,
                     'haptic': out_haptic_npy,
                     'audio': out_audio_npy,
-                    'vibro': out_vibro_npy
+                    # 'vibro': out_vibro_npy
                 }
                 np.save(out_sample_dir+'_'+str(i), ret)
 

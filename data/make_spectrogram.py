@@ -59,24 +59,24 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
     s = stft(samples, binsize)
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
     ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
-
-    timebins, freqbins = np.shape(ims)
-    # print("timebins: ", timebins)
-    # print("freqbins: ", freqbins)
-
-    plt.figure(figsize=(15, 7.5))
-    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
-    plt.colorbar()
-
-    # plt.xlabel("time (s)")
-    # plt.ylabel("frequency (hz)")
-    plt.xlim([0, timebins-1])
-    plt.ylim([0, freqbins])
-
-    xlocs = np.float32(np.linspace(0, timebins-1, 5))
-    plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
-    ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
-    plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
+    #
+    # timebins, freqbins = np.shape(ims)
+    # # print("timebins: ", timebins)
+    # # print("freqbins: ", freqbins)
+    #
+    # plt.figure(figsize=(15, 7.5))
+    # plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
+    # plt.colorbar()
+    #
+    # # plt.xlabel("time (s)")
+    # # plt.ylabel("frequency (hz)")
+    # plt.xlim([0, timebins-1])
+    # plt.ylim([0, freqbins])
+    #
+    # xlocs = np.float32(np.linspace(0, timebins-1, 5))
+    # plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
+    # ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
+    # plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
 
     '''
     # generating imgages for audio files
