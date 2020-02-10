@@ -98,7 +98,7 @@ def generate_npy_audio(path, n_frames_vision_image):
 
     img = converted_image_array[np.newaxis, np.newaxis, ...] # create a new dimension
     image_width = img.shape[2]
-    effective_each_frame_length = 16
+    effective_each_frame_length = int(image_width/n_frames_vision_image)
     # here we need to crop from width
     width_to_keep = effective_each_frame_length * n_frames_vision_image
     cropped_image = img[:,:,:width_to_keep,:]

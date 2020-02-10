@@ -2,10 +2,11 @@ import os
 import torch
 from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset
+import torch.nn.functional as F
 import numpy as np
 
 IMG_EXTENSIONS = ('.npy',)
-
+AUDIO_LENGTH = 16
 
 def make_dataset(path):
      # = os.path.join(path)
@@ -100,7 +101,6 @@ def build_dataloader(opt):
         transforms.Resize((opt.height, opt.width)),
         transforms.ToTensor()
     ])
-
     train_ds = PushDataset(
         root=os.path.join(opt.data_dir, 'push_train'),
         image_transform=image_transform,
@@ -127,23 +127,35 @@ def build_dataloader_CY101(opt):
         im = im[:, :width, :width]
         return im
 
-    transform = transforms.Compose([
+    def padding(au):
+        length = au.shape[1]
+        if length < AUDIO_LENGTH:
+            au = F.pad(au, (0,0,0,1), mode='constant', value=torch.tensor(au[-1,-1,:]))
+        au = au[:,:AUDIO_LENGTH,:]
+        return au
+
+    image_transform = transforms.Compose([
         transforms.Lambda(crop),
         transforms.ToPILImage(),
         transforms.Resize((opt.height, opt.width)),
         transforms.ToTensor()
     ])
 
+    audio_transform = transforms.Compose([
+        transforms.Lambda(padding)
+    ])
     train_ds = CY101Dataset(
         root=os.path.join(opt.data_dir+'/train'),
-        image_transform=transform,
+        image_transform=image_transform,
+        audio_transform=audio_transform,
         loader=npy_loader,
         device=opt.device
     )
 
     valid_ds = CY101Dataset(
         root=os.path.join(opt.data_dir+'/test'),
-        image_transform=transform,
+        image_transform=image_transform,
+        audio_transform=audio_transform,
         loader=npy_loader,
         device=opt.device
     )
