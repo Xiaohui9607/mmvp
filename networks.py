@@ -132,7 +132,7 @@ class network(nn.Module):
         self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
-    def forward(self, images, haptics):
+    def forward(self, images, haptics, audios):
         '''
 
         :param inputs: T * N * C * H * W
@@ -183,14 +183,14 @@ class network(nn.Module):
             enc2 = torch.relu(self.enc2(lstm4))
 
             # TODO: pass in state and action
-            haptic_feat = self.haptic_feat(haptic)
+            haptic_feat = self.haptic_feat(haptic).permute([0,2,1]).unsqueeze(-1)
+            smear = haptic_feat
             # state_action = torch.cat([action, current_state], dim=1)
 
             # smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])
-            # smear = smear.repeat(1, 1, enc2.shape[2] , enc2.shape[3])
+            smear = smear.repeat(1, 1, 1 , enc2.shape[3])
 
-            if self.use_haptic:
-                enc2 = torch.cat([enc2, smear], dim=1)
+            enc2 = torch.cat([enc2, smear], dim=1)
 
             enc3 = torch.relu(self.enc3(enc2))
 

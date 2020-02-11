@@ -26,7 +26,7 @@ class Model():
         self.dataloader = {'train': train_dataloader, 'valid': valid_dataloader}
 
         self.net = network(self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
-                               self.opt.use_state, self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
+                               self.opt.use_haptic, self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
         self.net.to(self.device)
         self.mse_loss = nn.MSELoss()
         self.w_state = 1e-4
@@ -37,15 +37,19 @@ class Model():
 
     def train_epoch(self, epoch):
         print("--------------------start training epoch %2d--------------------" % epoch)
-        for iter_, () in enumerate(self.dataloader['train']):
+        for iter_, (images, haptics, audios) in enumerate(self.dataloader['train']):
             self.net.zero_grad()
-            actions = torch.zeros(images.shape[0], images.shape[1], 5).to(self.device)
-            states = torch.zeros_like(actions).to(self.device)
-            images = images.permute([1, 0, 2, 3, 4]).unbind(0)
-            actions = actions.permute([1, 0, 2]).unbind(0)
-            states = states.permute([1, 0, 2]).unbind(0)
+            if not self.opt.use_haptic:
+                haptics = torch.zeros(images.shape[0], 10, 48, 7)
+            haptics = haptics.float().to(self.device)
 
-            gen_images, _ = self.net(images, actions, states[0])
+            audios = torch.zeros_like(haptics).to(self.device)
+            images = images.permute([1, 0, 2, 3, 4]).unbind(0)
+            haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
+            # audios = audios.permute([1, 0, 2]).unbind(0)
+
+
+            gen_images = self.net(images, haptics, audios)
 
             loss, psnr = 0.0, 0.0
 
