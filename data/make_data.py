@@ -10,8 +10,7 @@ from make_spectrogram import plotstft
 
 DATA_DIR = '../data/CY101'
 OUT_DIR = '../data/CY101NPY'
-IMG_WIDTH = 64
-IMG_HEIGHT = 64
+
 
 
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
@@ -25,7 +24,7 @@ CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'met
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 10
 STEP = 4
-
+IMG_SIZE = (64, 64)
 
 def read_dir():
     visons = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
@@ -46,7 +45,9 @@ def generate_npy_vision(path):
     files = sorted(glob.glob(os.path.join(path, '*.jpg')))
     imglist = []
     for file in files:
-        img = np.array(PIL.Image.open(file)).transpose([2, 0, 1])[np.newaxis, ...]
+        img = PIL.Image.open(file)
+        img = img.resize(IMG_SIZE)
+        img = np.array(img).transpose([2, 0, 1])[np.newaxis, ...]
         imglist.append(img)
     ret = []
     for i in range(0, len(imglist)-SEQUENCE_LENGTH, STEP):
