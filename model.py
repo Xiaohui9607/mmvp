@@ -30,13 +30,14 @@ class Model():
         self.net.to(self.device)
         self.mse_loss = nn.MSELoss()
         self.w_state = 1e-4
+
         if self.opt.pretrained_model:
             self.load_weight()
         self.optimizer = torch.optim.Adam(self.net.parameters(), self.opt.learning_rate)
 
     def train_epoch(self, epoch):
         print("--------------------start training epoch %2d--------------------" % epoch)
-        for iter_, images in enumerate(self.dataloader['train']):
+        for iter_, () in enumerate(self.dataloader['train']):
             self.net.zero_grad()
             actions = torch.zeros(images.shape[0], images.shape[1], 5).to(self.device)
             states = torch.zeros_like(actions).to(self.device)
@@ -72,7 +73,7 @@ class Model():
 
     def evaluate(self, epoch):
         with torch.no_grad():
-            recon_loss, state_loss = 0.0, 0.0
+            psnr, state_loss = 0.0, 0.0
             for iter_, images in enumerate(self.dataloader['valid']):
                 actions = torch.zeros(images.shape[0], images.shape[1], 5).to(self.device)
                 states = torch.zeros_like(actions).to(self.device)
@@ -84,11 +85,11 @@ class Model():
                 gen_images, _ = self.net(images, actions, states[0])
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
-                    recon_loss += self.mse_loss(image, gen_image)
+                    psnr += peak_signal_to_noise_ratio(image, gen_image)
 
-            recon_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
+            psnr /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
 
-            print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, recon_loss, state_loss))
+            print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, psnr, state_loss))
 
     def save_weight(self, epoch):
         torch.save(self.net.state_dict(), os.path.join(self.opt.output_dir, "net_epoch_%d.pth" % epoch))

@@ -6,7 +6,8 @@ from torch.nn import functional as F
 RELU_SHIFT = 1e-12
 DNA_KERN_SIZE = 5
 STATE_DIM = 5
-ACTION_DIM = 5
+HAPTIC_DIM = [48, 7]
+HAPTIC_LAYER = 7
 
 
 class ConvLSTM(nn.Module):
@@ -43,7 +44,7 @@ class network(nn.Module):
                  width=64,
                  iter_num=-1.0,
                  k=-1,
-                 use_state=True,
+                 use_haptic=True,
                  num_masks=10,
                  stp=False,
                  cdna=True,
@@ -57,7 +58,7 @@ class network(nn.Module):
         self.stp = stp
         self.cdna = cdna
         self.channels = channels
-        self.use_state = use_state
+        self.use_haptic = use_haptic
         self.num_masks = num_masks
         self.height = height
         self.width = width
@@ -65,11 +66,9 @@ class network(nn.Module):
         self.k = k
         self.iter_num = iter_num
 
-        self.STATE_DIM = STATE_DIM
-        self.ACTION_DIM = ACTION_DIM
-        if not self.use_state:
-            self.STATE_DIM = 0
-            self.ACTION_DIM = 0
+        # self.STATE_DIM = STATE_DIM
+        self.HAPTIC_DIM = HAPTIC_DIM
+        self.HAPTIC_LAYER = HAPTIC_LAYER
         # N * 3 * H * W -> N * 32 * H/2 * W/2
         self.enc0 = nn.Conv2d(in_channels=channels, out_channels=lstm_size[0], kernel_size=5, stride=2, padding=2)
         self.enc0_norm = nn.LayerNorm([lstm_size[0], self.height//2, self.width//2])
@@ -92,8 +91,10 @@ class network(nn.Module):
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/8 * W/8
         self.enc2 = nn.Conv2d(in_channels=lstm_size[3], out_channels=lstm_size[3], kernel_size=3, stride=2, padding=1)
+        self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
+
         # N * (10+64) * H/8 * W/8 -> N * 64 * H/8 * W/8
-        self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.STATE_DIM+self.ACTION_DIM, out_channels=lstm_size[3], kernel_size=1, stride=1)
+        self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
         # N * 64 * H/8 * W/8 -> N * 128 * H/8 * W/8
         self.lstm5 = ConvLSTM(in_channels=lstm_size[3], out_channels=lstm_size[4], kernel_size=5, padding=2)
         self.lstm5_norm = nn.LayerNorm([lstm_size[4], self.height//8, self.width//8])
@@ -129,9 +130,9 @@ class network(nn.Module):
                 self.fc_stp = nn.Linear(100, (self.num_masks-1) * 6)
         #  N * 32 * H * W -> N * 11 * H * W
         self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
-        self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
+        # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
-    def forward(self, images, actions, init_state):
+    def forward(self, images, haptics):
         '''
 
         :param inputs: T * N * C * H * W
@@ -142,27 +143,26 @@ class network(nn.Module):
 
         lstm_state1, lstm_state2, lstm_state3, lstm_state4 = None, None, None, None
         lstm_state5, lstm_state6, lstm_state7 = None, None, None
-        gen_images, gen_states = [], []
-        current_state = init_state
-        if self.k == -1:
-            feedself = True
-        else:
-            num_ground_truth = round(images[0].shape[1] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
-            feedself = False
+        gen_images = []
+        # if self.k == -1:
+        #     feedself = True
+        # else:
+        #     num_ground_truth = round(images[0].shape[1] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
+        #     feedself = False
 
-        for image, action in zip(images[:-1], actions[:-1]):
+        for image, haptic in zip(images[:-1], haptics[:-1]):
 
-            done_warm_start = len(gen_images) >= self.context_frames
+            # done_warm_start = len(gen_images) >= self.context_frames
 
-            if feedself and done_warm_start:
-                # Feed in generated image.
-                image = gen_images[-1]
-            elif done_warm_start:
-                # Scheduled sampling
-                image = self.scheduled_sample(image, gen_images[-1], num_ground_truth)
-            else:
+            # if feedself and done_warm_start:
+            #     # Feed in generated image.
+            #     image = gen_images[-1]
+            # elif done_warm_start:
+            #     # Scheduled sampling
+            #     image = self.scheduled_sample(image, gen_images[-1], num_ground_truth)
+            # else:
                 # Always feed in ground_truth
-                image = image
+            image = image
 
             enc0 = self.enc0_norm(torch.relu(self.enc0(image)))
 
@@ -182,12 +182,16 @@ class network(nn.Module):
 
             enc2 = torch.relu(self.enc2(lstm4))
 
-            # pass in state and action
-            state_action = torch.cat([action, current_state], dim=1)
-            smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])
-            smear = smear.repeat(1, 1, enc2.shape[2], enc2.shape[3])
-            if self.use_state:
+            # TODO: pass in state and action
+            haptic_feat = self.haptic_feat(haptic)
+            # state_action = torch.cat([action, current_state], dim=1)
+
+            # smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])
+            # smear = smear.repeat(1, 1, enc2.shape[2] , enc2.shape[3])
+
+            if self.use_haptic:
                 enc2 = torch.cat([enc2, smear], dim=1)
+
             enc3 = torch.relu(self.enc3(enc2))
 
             lstm5, lstm_state5 = self.lstm5(enc3, lstm_state5)
@@ -232,10 +236,10 @@ class network(nn.Module):
 
             gen_images.append(output)
 
-            current_state = self.stateout(state_action)
-            gen_states.append(current_state)
+            # current_state = self.stateout(state_action)
+            # gen_states.append(current_state)
 
-        return gen_images, gen_states
+        return gen_images
 
     def stp_transformation(self, image, stp_input):
         identity_params = torch.tensor([1.0, 0.0, 0.0, 0.0, 1.0, 0.0], dtype=torch.float32).unsqueeze(1).repeat(1, self.num_masks-1)
