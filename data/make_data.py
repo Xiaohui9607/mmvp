@@ -11,7 +11,10 @@ from make_spectrogram import plotstft
 DATA_DIR = '../data/CY101'
 OUT_DIR = '../data/CY101NPY'
 
-
+max = [-10.478915, 1.017272, 6.426756, 5.950242, 0.75426, -0.013009, 0.034224]
+min = [-39.090578, -21.720063, -10.159031, -4.562487, -1.456323, -1.893409, -0.080752]
+mean = [-25.03760727, -8.2802204, -5.49065186, 2.53891808, -0.6424120, -1.22525292, -0.04463354]
+std = [4.01142790e+01, 2.29780167e+01, 2.63156072e+01, 7.54091499e+00, 3.40810983e-01, 3.23891355e-01, 1.65208189e-03]
 
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
                     'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24 }
@@ -22,9 +25,10 @@ CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'met
 
 
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
-SEQUENCE_LENGTH = 10
+SEQUENCE_LENGTH = 5
 STEP = 4
 IMG_SIZE = (64, 64)
+
 
 def read_dir():
     visons = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
@@ -35,10 +39,9 @@ def convert_audio_to_image(audio_path):
     ims = plotstft(audio_path)
     return ims
 
+
 def generate_npy_vision(path):
-
     '''
-
     :param path: path to images folder,
     :return: numpy array with size [SUB_SAMPLE_SIZE, SEQ_LENGTH, ...]
     '''
@@ -184,6 +187,4 @@ def run():
 if __name__ == '__main__':
     if not os.path.exists(OUT_DIR):
         os.makedirs(OUT_DIR)
-        # for behavior in SEQUENCE_LENGTHS.keys():
-        #     os.mkdir(os.path.join(OUT_DIR, behavior))
     run()

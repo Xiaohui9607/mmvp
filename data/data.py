@@ -8,9 +8,12 @@ import numpy as np
 IMG_EXTENSIONS = ('.npy',)
 AUDIO_LENGTH = 16
 
-def make_dataset(path):
-     # = os.path.join(path)
+HAPTIC_MAX = [-10.478915, 1.017272, 6.426756, 5.950242, 0.75426, -0.013009, 0.034224]
+HAPTIC_MIN = [-39.090578, -21.720063, -10.159031, -4.562487, -1.456323, -1.893409, -0.080752]
+HAPTIC_MEAN = [-25.03760727, -8.2802204, -5.49065186, 2.53891808, -0.6424120, -1.22525292, -0.04463354]
+HAPTIC_STD = [4.01142790e+01, 2.29780167e+01, 2.63156072e+01, 7.54091499e+00, 3.40810983e-01, 3.23891355e-01, 1.65208189e-03]
 
+def make_dataset(path):
     if not os.path.exists(path):
         raise FileExistsError('some subfolders from data set do not exists!')
 
@@ -93,7 +96,6 @@ class CY101Dataset(Dataset):
         return len(self.samples)
 
 def build_dataloader(opt):
-
     image_transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.Resize((opt.height, opt.width)),
