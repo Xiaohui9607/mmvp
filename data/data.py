@@ -78,7 +78,6 @@ class CY101Dataset(Dataset):
 
     def __getitem__(self, index):
         modalities = self.loader(self.samples[index])
-
         vision = modalities['vision']
         haptic = modalities['haptic']
         audio = modalities['audio']
@@ -130,8 +129,8 @@ def build_dataloader_CY101(opt):
     def padding(au):
         length = au.shape[1]
         if length < AUDIO_LENGTH:
-            au = F.pad(au, (0,0,0,1), mode='constant', value=torch.tensor(au[-1,-1,:]))
-        au = au[:,:AUDIO_LENGTH,:]
+            au = F.pad(au, (0,0,0,AUDIO_LENGTH-length), mode='constant', value=0)
+        au = au[:, :AUDIO_LENGTH,:]
         return au
 
     image_transform = transforms.Compose([
@@ -171,5 +170,4 @@ if __name__ == '__main__':
     tr, va = build_dataloader_CY101(opt)
     for a, b, c in tr:
         pass
-    pass
 
