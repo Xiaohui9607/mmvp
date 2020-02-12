@@ -26,8 +26,9 @@ def make_dataset(path):
 def npy_loader(path):
     samples = np.load(path, allow_pickle=True).item()
     samples['vision'] = torch.from_numpy(samples['vision'])
-    samples['haptic'] = torch.from_numpy(samples['haptic'])
+    samples['haptic'] = torch.from_numpy(samples['haptic']).float()
     samples['audio'] = torch.from_numpy(samples['audio'])
+    print(path, samples['haptic'].dtype)
     return samples
 
 
@@ -136,6 +137,8 @@ def build_dataloader_CY101(opt):
 
     class Standardizer:
         def __init__(self, mean, std):
+            if not isinstance(mean, torch.Tensor) and not isinstance(std, torch.Tensor):
+                raise TypeError("Expecte mean and std to be  torch.Tensor")
             self.mean = mean
             self.std = std
 
@@ -154,7 +157,8 @@ def build_dataloader_CY101(opt):
     ])
 
     haptic_transform = transforms.Compose([
-        transforms.Lambda(Standardizer(mean=HAPTIC_MEAN, std=HAPTIC_STD))
+        transforms.Lambda(Standardizer(mean=torch.Tensor(HAPTIC_MEAN, device=opt.device),
+                                       std=torch.Tensor(HAPTIC_STD, device=opt.device)))
     ])
 
     train_ds = CY101Dataset(

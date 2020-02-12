@@ -80,9 +80,8 @@ def generate_npy_haptic(path, n_frames):
     haplist = [np.pad(ht, [[0, 48-ht.shape[0]],[0, 0]] ,mode='edge')[np.newaxis,...] for ht in haplist]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
-        ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0))
+        ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32))
     return ret
-
 
 def generate_npy_audio(path, n_frames_vision_image):
     '''

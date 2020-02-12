@@ -14,5 +14,5 @@ pretrained_model:
 print_interval: 10
 schedsamp_k: 600.0
 sequence_length: 10
-use_state: False
+use_haptic: False
 width: 64
