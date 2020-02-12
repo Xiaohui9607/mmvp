@@ -134,6 +134,14 @@ def build_dataloader_CY101(opt):
         au = au[:, :AUDIO_LENGTH,:]
         return au
 
+    class Standardizer:
+        def __init__(self, mean, std):
+            self.mean = mean
+            self.std = std
+
+        def __call__(self, hp):
+            return (hp-self.mean)/self.std
+
     image_transform = transforms.Compose([
         transforms.Lambda(crop),
         transforms.ToPILImage(),
@@ -144,10 +152,16 @@ def build_dataloader_CY101(opt):
     audio_transform = transforms.Compose([
         transforms.Lambda(padding)
     ])
+
+    haptic_transform = transforms.Compose([
+        transforms.Lambda(Standardizer(mean=HAPTIC_MEAN, std=HAPTIC_STD))
+    ])
+
     train_ds = CY101Dataset(
         root=os.path.join(opt.data_dir+'/train'),
         image_transform=image_transform,
         audio_transform=audio_transform,
+        haptic_transform=haptic_transform,
         loader=npy_loader,
         device=opt.device
     )
@@ -156,6 +170,7 @@ def build_dataloader_CY101(opt):
         root=os.path.join(opt.data_dir+'/test'),
         image_transform=image_transform,
         audio_transform=audio_transform,
+        haptic_transform=haptic_transform,
         loader=npy_loader,
         device=opt.device
     )
