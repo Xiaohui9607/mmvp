@@ -76,15 +76,17 @@ class Model():
     def evaluate(self, epoch):
         with torch.no_grad():
             psnr, state_loss = 0.0, 0.0
-            for iter_, images in enumerate(self.dataloader['valid']):
-                actions = torch.zeros(images.shape[0], images.shape[1], 5).to(self.device)
-                states = torch.zeros_like(actions).to(self.device)
+            for iter_, (images, haptics, audios) in enumerate(self.dataloader['valid']):
+                print(iter_)
+                if not self.opt.use_haptic:
+                    haptics = torch.zeros(images.shape[0], 10, 48, 7)
+                haptics = haptics.float().to(self.device)
+
+                audios = torch.zeros_like(haptics).to(self.device)
                 images = images.permute([1, 0, 2, 3, 4]).unbind(0)
+                haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
 
-                actions = actions.permute([1, 0, 2]).unbind(0)
-                states = states.permute([1, 0, 2]).unbind(0)
-
-                gen_images, _ = self.net(images, actions, states[0])
+                gen_images = self.net(images, haptics, audios)
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
                     psnr += peak_signal_to_noise_ratio(image, gen_image)
@@ -100,5 +102,4 @@ class Model():
         if path:
             self.net.load_state_dict(torch.load(path))
         elif self.opt.pretrained_model:
-            self.net.load_state_dict(torch.load(self.opt.pretrained_model))
-
+            self.net.load_state_dict(torch.load(self.opt.pretrained_model, map_location=torch.device('cpu')))

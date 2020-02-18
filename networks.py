@@ -5,7 +5,7 @@ from torch.nn import functional as F
 
 RELU_SHIFT = 1e-12
 DNA_KERN_SIZE = 5
-STATE_DIM = 5
+# STATE_DIM = 5
 HAPTIC_DIM = [48, 7]
 HAPTIC_LAYER = 7
 

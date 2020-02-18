@@ -60,8 +60,11 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
 def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_name="spectrogram"):
     samplerate, samples = wav.read(audio_path)
-    samples = np.delete(samples, 1, 1)
-
+    # s1 = samples[:, 0]
+    # s2 = samples[:, 1]
+    # ss = [s1, s2]
+    # samples = np.delete(samples, 1, 1)
+    # for samples in ss:
     s = stft(samples, binsize)
 
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
@@ -70,7 +73,7 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
     print("timebins: ", timebins)
     print("freqbins: ", freqbins)
 
-    '''
+
     plt.figure(figsize=(15, 7.5))
     plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
     plt.colorbar()
@@ -92,8 +95,8 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
         plt.show()
 
     plt.clf()
-    '''
-    return ims
+
+    # return ims
 
 
 if __name__ == '__main__':

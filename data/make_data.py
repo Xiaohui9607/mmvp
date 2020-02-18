@@ -118,7 +118,6 @@ def generate_npy_audio(path, n_frames_vision_image):
 
 def generate_npy_vibro(path):
     '''
-
     :param path: path to .tsv, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
@@ -176,11 +175,10 @@ def process(visions):
             np.save(out_sample_dir+'_'+str(i), ret)
     print(fail_count)
 
-def run():
 
+def run():
     visons = read_dir()
     process(visons)
-
 
 
 if __name__ == '__main__':

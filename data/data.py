@@ -28,7 +28,6 @@ def npy_loader(path):
     samples['vision'] = torch.from_numpy(samples['vision'])
     samples['haptic'] = torch.from_numpy(samples['haptic']).float()
     samples['audio'] = torch.from_numpy(samples['audio'])
-    print(path, samples['haptic'].dtype)
     return samples
 
 
