@@ -22,7 +22,25 @@ SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc', 'cup',
               'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg', 'ball']
+OBJECTS = [
+    'ball_base', 'can_coke', 'egg_rough_styrofoam', 'noodle_3', 'timber_square', 'ball_basket','can_red_bull_large',
+    'egg_smooth_styrofoam', 'noodle_4', 'timber_squiggle', 'ball_blue','can_red_bull_small','egg_wood','noodle_5','tin_pokemon',
+    'ball_transparent', 'can_starbucks','eggcoloringcup_blue', 'pasta_cremette','tin_poker', 'ball_yellow_purple', 'cannedfood_chili',
+    'eggcoloringcup_green','pasta_macaroni','tin_snack_depot', 'basket_cylinder','cannedfood_cowboy_cookout','eggcoloringcup_orange',
+    'pasta_penne', 'tin_snowman', 'basket_funnel','cannedfood_soup', 'eggcoloringcup_pink','pasta_pipette','tin_tea', 'basket_green',
+    'cannedfood_tomato_paste','eggcoloringcup_yellow','pasta_rotini', 'tupperware_coffee_beans', 'basket_handle','cannedfood_tomatoes',
+    'medicine_ampicillin', 'pvc_1', 'tupperware_ground_coffee', 'basket_semicircle','cone_1','medicine_aspirin','pvc_2','tupperware_marbles',
+    'bigstuffedanimal_bear', 'cone_2', 'medicine_bilberry_extract', 'pvc_3','tupperware_pasta', 'bigstuffedanimal_bunny','cone_3',
+    'medicine_calcium','pvc_4', 'tupperware_rice', 'bigstuffedanimal_frog','cone_4','medicine_flaxseed_oil','pvc_5','weight_1',
+    'bigstuffedanimal_pink_dog', 'cone_5', 'metal_flower_cylinder','smallstuffedanimal_bunny','weight_2', 'bigstuffedanimal_tan_dog',
+    'cup_blue', 'metal_food_can', 'smallstuffedanimal_chick','weight_3', 'bottle_fuse','cup_isu','metal_mix_covered_cup',
+    'smallstuffedanimal_headband_bear', 'weight_4', 'bottle_google', 'cup_metal','metal_tea_jar','smallstuffedanimal_moose',
+    'weight_5', 'bottle_green', 'cup_paper_green','metal_thermos', 'smallstuffedanimal_otter', 'bottle_red','cup_yellow','no_object',
+    'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona','egg_plastic_wrap','noodle_2','timber_semicircle'
+]
 
+# split_base = CATEGORIES
+split_base = OBJECTS
 
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
 SEQUENCE_LENGTH = 5
@@ -70,7 +88,7 @@ def generate_npy_haptic(path1, path2, n_frames):
         return None
     haplist1 = open(path1, 'r').readlines()
     haplist2 = open(path2, 'r').readlines()
-    haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t'))) for v, w in zip(haplist1, haplist2)]
+    haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t')))[1:] for v, w in zip(haplist1, haplist2)]
     haplist = np.array(haplist)
     time_duration = (haplist[-1][0] - haplist[0][0])/n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
@@ -132,8 +150,8 @@ def process(visions):
 
     if not os.path.exists(os.path.join(OUT_DIR, test_subir)):
         os.makedirs(os.path.join(OUT_DIR, test_subir))
-
-    random.shuffle(CATEGORIES)
+    cutting = int(len(split_base)*0.2)
+    random.shuffle(split_base)
     fail_count = 0
     for vision in visions:
         save = False
@@ -142,10 +160,10 @@ def process(visions):
         if not save:
             continue
         subdir = ''
-        for ct in CATEGORIES[:5]:
+        for ct in split_base[:cutting]:
             if ct in vision:
                 subdir = test_subir
-        for ct in CATEGORIES[5:]:
+        for ct in split_base[cutting:]:
             if ct in vision:
                 subdir = train_subir
 
