@@ -58,8 +58,7 @@ def generate_npy_vision(path):
     return ret, len(imglist)
 
 
-def generate_npy_haptic(path, n_frames):
-
+def generate_npy_haptic(path1, path2, n_frames):
     '''
     :param path: path to ttrq0.txt, you need to open it before you process
     :param n_frames: # frames
@@ -67,10 +66,11 @@ def generate_npy_haptic(path, n_frames):
     :preprocess protocol: 48 bins for each single frame, given one frame, if #bin is less than 48,
                             we pad it in the tail with the last bin value. if #bin is more than 48, we take bin[:48]
     '''
-    if not os.path.exists(path):
+    if not os.path.exists(path1):
         return None
-    haplist = open(path, 'r').readlines()
-    haplist = [list(map(float, v.strip().split('\t'))) for v in haplist]
+    haplist1 = open(path1, 'r').readlines()
+    haplist2 = open(path2, 'r').readlines()
+    haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t'))) for v, w in zip(haplist1, haplist2)]
     haplist = np.array(haplist)
     time_duration = (haplist[-1][0] - haplist[0][0])/n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
@@ -151,12 +151,13 @@ def process(visions):
 
         out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
 
-        haptic = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
+        haptic1 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
+        haptic2 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'cpos0.txt')
         audio = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'hearing', '*.wav')
         vibro = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'vibro', '*.tsv')
         out_vision_npys, n_frames = generate_npy_vision(vision)
         out_audio_npys = generate_npy_audio(audio, n_frames)
-        out_haptic_npys = generate_npy_haptic(haptic, n_frames)
+        out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames)
         if out_audio_npys is None or out_haptic_npys is None:
             fail_count += 1
             continue

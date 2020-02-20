@@ -72,31 +72,31 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
     timebins, freqbins = np.shape(ims)
     print("timebins: ", timebins)
     print("freqbins: ", freqbins)
+    #
+    #
+    # plt.figure(figsize=(15, 7.5))
+    # plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
+    # plt.colorbar()
+    #
+    # plt.xlabel("time (s)")
+    # plt.ylabel("frequency (hz)")
+    # plt.xlim([0, timebins-1])
+    # plt.ylim([0, freqbins])
+    #
+    # xlocs = np.float32(np.linspace(0, timebins-1, 5))
+    # plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
+    # ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
+    # plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
+    #
+    # if plotpath:
+    #     plt.savefig("../../data/k",bbox_inches="tight")
+    #     plt.close()
+    # else:
+    #     plt.show()
+    #
+    # plt.clf()
 
-
-    plt.figure(figsize=(15, 7.5))
-    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
-    plt.colorbar()
-
-    plt.xlabel("time (s)")
-    plt.ylabel("frequency (hz)")
-    plt.xlim([0, timebins-1])
-    plt.ylim([0, freqbins])
-
-    xlocs = np.float32(np.linspace(0, timebins-1, 5))
-    plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
-    ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
-    plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
-
-    if plotpath:
-        plt.savefig("../../data/k",bbox_inches="tight")
-        plt.close()
-    else:
-        plt.show()
-
-    plt.clf()
-
-    # return ims
+    return ims
 
 
 if __name__ == '__main__':
