@@ -1,3 +1,4 @@
+
 import re
 import os
 import glob
@@ -13,26 +14,40 @@ OUT_DIR = '../data/CY101NPY'
 
 
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
-                    'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24 }
+                    'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24}
 
-
-CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc', 'cup',
-              'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg', 'ball']
+CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc',
+              'cup',
+              'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
+              'ball']
 OBJECTS = [
-    'ball_base', 'can_coke', 'egg_rough_styrofoam', 'noodle_3', 'timber_square', 'ball_basket','can_red_bull_large',
-    'egg_smooth_styrofoam', 'noodle_4', 'timber_squiggle', 'ball_blue','can_red_bull_small','egg_wood','noodle_5','tin_pokemon',
-    'ball_transparent', 'can_starbucks','eggcoloringcup_blue', 'pasta_cremette','tin_poker', 'ball_yellow_purple', 'cannedfood_chili',
-    'eggcoloringcup_green','pasta_macaroni','tin_snack_depot', 'basket_cylinder','cannedfood_cowboy_cookout','eggcoloringcup_orange',
-    'pasta_penne', 'tin_snowman', 'basket_funnel','cannedfood_soup', 'eggcoloringcup_pink','pasta_pipette','tin_tea', 'basket_green',
-    'cannedfood_tomato_paste','eggcoloringcup_yellow','pasta_rotini', 'tupperware_coffee_beans', 'basket_handle','cannedfood_tomatoes',
-    'medicine_ampicillin', 'pvc_1', 'tupperware_ground_coffee', 'basket_semicircle','cone_1','medicine_aspirin','pvc_2','tupperware_marbles',
-    'bigstuffedanimal_bear', 'cone_2', 'medicine_bilberry_extract', 'pvc_3','tupperware_pasta', 'bigstuffedanimal_bunny','cone_3',
-    'medicine_calcium','pvc_4', 'tupperware_rice', 'bigstuffedanimal_frog','cone_4','medicine_flaxseed_oil','pvc_5','weight_1',
-    'bigstuffedanimal_pink_dog', 'cone_5', 'metal_flower_cylinder','smallstuffedanimal_bunny','weight_2', 'bigstuffedanimal_tan_dog',
-    'cup_blue', 'metal_food_can', 'smallstuffedanimal_chick','weight_3', 'bottle_fuse','cup_isu','metal_mix_covered_cup',
-    'smallstuffedanimal_headband_bear', 'weight_4', 'bottle_google', 'cup_metal','metal_tea_jar','smallstuffedanimal_moose',
-    'weight_5', 'bottle_green', 'cup_paper_green','metal_thermos', 'smallstuffedanimal_otter', 'bottle_red','cup_yellow','no_object',
-    'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona','egg_plastic_wrap','noodle_2','timber_semicircle'
+    'ball_base', 'can_coke', 'egg_rough_styrofoam', 'noodle_3', 'timber_square', 'ball_basket', 'can_red_bull_large',
+    'egg_smooth_styrofoam', 'noodle_4', 'timber_squiggle', 'ball_blue', 'can_red_bull_small', 'egg_wood', 'noodle_5',
+    'tin_pokemon',
+    'ball_transparent', 'can_starbucks', 'eggcoloringcup_blue', 'pasta_cremette', 'tin_poker', 'ball_yellow_purple',
+    'cannedfood_chili',
+    'eggcoloringcup_green', 'pasta_macaroni', 'tin_snack_depot', 'basket_cylinder', 'cannedfood_cowboy_cookout',
+    'eggcoloringcup_orange',
+    'pasta_penne', 'tin_snowman', 'basket_funnel', 'cannedfood_soup', 'eggcoloringcup_pink', 'pasta_pipette', 'tin_tea',
+    'basket_green',
+    'cannedfood_tomato_paste', 'eggcoloringcup_yellow', 'pasta_rotini', 'tupperware_coffee_beans', 'basket_handle',
+    'cannedfood_tomatoes',
+    'medicine_ampicillin', 'pvc_1', 'tupperware_ground_coffee', 'basket_semicircle', 'cone_1', 'medicine_aspirin',
+    'pvc_2', 'tupperware_marbles',
+    'bigstuffedanimal_bear', 'cone_2', 'medicine_bilberry_extract', 'pvc_3', 'tupperware_pasta',
+    'bigstuffedanimal_bunny', 'cone_3',
+    'medicine_calcium', 'pvc_4', 'tupperware_rice', 'bigstuffedanimal_frog', 'cone_4', 'medicine_flaxseed_oil', 'pvc_5',
+    'weight_1',
+    'bigstuffedanimal_pink_dog', 'cone_5', 'metal_flower_cylinder', 'smallstuffedanimal_bunny', 'weight_2',
+    'bigstuffedanimal_tan_dog',
+    'cup_blue', 'metal_food_can', 'smallstuffedanimal_chick', 'weight_3', 'bottle_fuse', 'cup_isu',
+    'metal_mix_covered_cup',
+    'smallstuffedanimal_headband_bear', 'weight_4', 'bottle_google', 'cup_metal', 'metal_tea_jar',
+    'smallstuffedanimal_moose',
+    'weight_5', 'bottle_green', 'cup_paper_green', 'metal_thermos', 'smallstuffedanimal_otter', 'bottle_red',
+    'cup_yellow', 'no_object',
+    'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona',
+    'egg_plastic_wrap', 'noodle_2', 'timber_semicircle'
 ]
 
 # split_base = CATEGORIES
@@ -67,8 +82,8 @@ def generate_npy_vision(path):
         img = np.array(img).transpose([2, 0, 1])[np.newaxis, ...]
         imglist.append(img)
     ret = []
-    for i in range(0, len(imglist)-SEQUENCE_LENGTH, STEP):
-        ret.append(np.concatenate(imglist[i:i+SEQUENCE_LENGTH], axis=0))
+    for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
+        ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
     return ret, len(imglist)
 
 
@@ -84,18 +99,20 @@ def generate_npy_haptic(path1, path2, n_frames):
         return None
     haplist1 = open(path1, 'r').readlines()
     haplist2 = open(path2, 'r').readlines()
-    haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t')))[1:] for v, w in zip(haplist1, haplist2)]
+    haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t')))[1:] for v, w in
+               zip(haplist1, haplist2)]
     haplist = np.array(haplist)
-    time_duration = (haplist[-1][0] - haplist[0][0])/n_frames
+    time_duration = (haplist[-1][0] - haplist[0][0]) / n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
-    groups = np.digitize(haplist[:,0], bins, right=False)
+    groups = np.digitize(haplist[:, 0], bins, right=False)
 
-    haplist = [haplist[np.where(groups==idx)][...,1:][:48] for idx in range(1, n_frames+1)]
-    haplist = [np.pad(ht, [[0, 48-ht.shape[0]],[0, 0]] ,mode='edge')[np.newaxis,...] for ht in haplist]
+    haplist = [haplist[np.where(groups == idx)][..., 1:][:48] for idx in range(1, n_frames + 1)]
+    haplist = [np.pad(ht, [[0, 48 - ht.shape[0]], [0, 0]], mode='edge')[np.newaxis, ...] for ht in haplist]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32))
     return ret
+
 
 def generate_npy_audio(path, n_frames_vision_image):
     '''
@@ -103,25 +120,25 @@ def generate_npy_audio(path, n_frames_vision_image):
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
     audio_path = glob.glob(path)
-    if len(audio_path)==0:
+    if len(audio_path) == 0:
         print(audio_path)
         return None
     audio_path = audio_path[0]
     converted_image_array = convert_audio_to_image(audio_path)
 
-    #TODO delete these two lines
+    # TODO delete these two lines
     # path = "../../data/spectrogram/cone_1/trial_1/exec_1/crush/hearing/cone_1_trial_1_exec_1_crush_hearing.png"
     # img = np.array(PIL.Image.open(path))[np.newaxis, np.newaxis, ...] # create a new dimension
 
-    img = converted_image_array[np.newaxis, np.newaxis, ...] # create a new dimension
+    img = converted_image_array[np.newaxis, np.newaxis, ...]  # create a new dimension
     image_width = img.shape[2]
-    effective_each_frame_length = int(image_width/n_frames_vision_image)
+    effective_each_frame_length = int(image_width / n_frames_vision_image)
     # here we need to crop from width
     width_to_keep = effective_each_frame_length * n_frames_vision_image
-    cropped_image = img[:,:,:width_to_keep,:]
+    cropped_image = img[:, :, :width_to_keep, :]
     imglist = []
     for i in range(0, n_frames_vision_image):
-        imglist.append(cropped_image[:,:,i*effective_each_frame_length:(i+1)*effective_each_frame_length,:])
+        imglist.append(cropped_image[:, :, i * effective_each_frame_length:(i + 1) * effective_each_frame_length, :])
 
     ret = []
     for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
@@ -146,7 +163,7 @@ def process(visions):
 
     if not os.path.exists(os.path.join(OUT_DIR, test_subir)):
         os.makedirs(os.path.join(OUT_DIR, test_subir))
-    cutting = int(len(split_base)*0.2)
+    cutting = int(len(split_base) * 0.2)
     random.shuffle(split_base)
     fail_count = 0
     for vision in visions:
@@ -164,6 +181,8 @@ def process(visions):
                 subdir = train_subir
 
         out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
+        behavior = out_sample_dir.split('_')[-1]
+        print(behavior)
 
         haptic1 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
         haptic2 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'cpos0.txt')
@@ -182,12 +201,13 @@ def process(visions):
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
                 out_vision_npys, out_haptic_npys, out_audio_npys)):
             ret = {
+                'behavior': behavior,
                 'vision': out_vision_npy,
                 'haptic': out_haptic_npy,
                 'audio': out_audio_npy,
                 # 'vibro': out_vibro_npy
             }
-            np.save(out_sample_dir+'_'+str(i), ret)
+            # np.save(out_sample_dir + '_' + str(i), ret)
     print(fail_count)
 
 
@@ -199,5 +219,4 @@ def run():
 if __name__ == '__main__':
     if not os.path.exists(OUT_DIR):
         os.makedirs(OUT_DIR)
-
     run()
