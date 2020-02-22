@@ -201,13 +201,13 @@ def process(visions):
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
                 out_vision_npys, out_haptic_npys, out_audio_npys)):
             ret = {
-                'behavior': behavior,
+                # 'behavior': behavior,
                 'vision': out_vision_npy,
                 'haptic': out_haptic_npy,
                 'audio': out_audio_npy,
                 # 'vibro': out_vibro_npy
             }
-            # np.save(out_sample_dir + '_' + str(i), ret)
+            np.save(out_sample_dir + '_' + str(i), ret)
     print(fail_count)
 
 
