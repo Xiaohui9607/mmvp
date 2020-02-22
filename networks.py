@@ -54,6 +54,7 @@ class network(nn.Module):
         if stp + cdna + dna != 1:
             raise ValueError('More than one, or no network option specified.')
         lstm_size = [32, 32, 64, 64, 128, 64, 32]
+        lstm_size = [l//2 for l in lstm_size]   # ligthen network
         self.dna = dna
         self.stp = stp
         self.cdna = cdna
@@ -73,7 +74,7 @@ class network(nn.Module):
         self.enc0 = nn.Conv2d(in_channels=channels, out_channels=lstm_size[0], kernel_size=5, stride=2, padding=2)
         self.enc0_norm = nn.LayerNorm([lstm_size[0], self.height//2, self.width//2])
         # N * 32 * H/2 * W/2 -> N * 32 * H/2 * W/2
-        self.lstm1 = ConvLSTM(in_channels=32, out_channels=lstm_size[0], kernel_size=5, padding=2)
+        self.lstm1 = ConvLSTM(in_channels=lstm_size[0], out_channels=lstm_size[0], kernel_size=5, padding=2)
         self.lstm1_norm = nn.LayerNorm([lstm_size[0], self.height//2, self.width//2])
         # N * 32 * H/2 * W/2 -> N * 32 * H/2 * W/2
         self.lstm2 = ConvLSTM(in_channels=lstm_size[0], out_channels=lstm_size[1], kernel_size=5, padding=2)
@@ -91,8 +92,8 @@ class network(nn.Module):
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/8 * W/8
         self.enc2 = nn.Conv2d(in_channels=lstm_size[3], out_channels=lstm_size[3], kernel_size=3, stride=2, padding=1)
-        self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
-
+        # self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
+        self.haptic_feat = lambda x: torch.mean(x, dim=1, keepdim=True)
         # N * (10+64) * H/8 * W/8 -> N * 64 * H/8 * W/8
         self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
         # N * 64 * H/8 * W/8 -> N * 128 * H/8 * W/8
@@ -188,7 +189,7 @@ class network(nn.Module):
             # state_action = torch.cat([action, current_state], dim=1)
 
             # smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])
-            smear = smear.repeat(1, 1, 1 , enc2.shape[3])
+            smear = smear.repeat(1, 1, enc2.shape[2]//smear.shape[2], enc2.shape[3]//smear.shape[3])
 
             enc2 = torch.cat([enc2, smear], dim=1)
 
