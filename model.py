@@ -37,17 +37,19 @@ class Model():
 
     def train_epoch(self, epoch):
         print("--------------------start training epoch %2d--------------------" % epoch)
-        for iter_, (images, haptics, audios) in enumerate(self.dataloader['train']):
+        for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['train']):
             self.net.zero_grad()
             if not self.opt.use_haptic:
                 haptics = torch.zeros(images.shape[0], 10, 48, 10)
-            haptics = haptics.float().to(self.device)
+            haptics = haptics.to(self.device)
 
+            behaviors = behaviors.unsqueeze(-1).unsqueeze(-1)
             audios = torch.zeros_like(haptics).to(self.device)
             images = images.permute([1, 0, 2, 3, 4]).unbind(0)
             haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
 
-            gen_images = self.net(images, haptics, audios)
+
+            gen_images = self.net(images, haptics, audios, behaviors)
 
             loss, psnr = 0.0, 0.0
 
@@ -76,16 +78,18 @@ class Model():
     def evaluate(self, epoch):
         with torch.no_grad():
             psnr, state_loss = 0.0, 0.0
-            for iter_, (images, haptics, audios) in enumerate(self.dataloader['valid']):
+            for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
                     haptics = torch.zeros(images.shape[0], 10, 48, 10)
-                haptics = haptics.float().to(self.device)
+                haptics = haptics.to(self.device)
 
+                behaviors = behaviors.unsqueeze(-1).unsqueeze(-1)
                 audios = torch.zeros_like(haptics).to(self.device)
                 images = images.permute([1, 0, 2, 3, 4]).unbind(0)
                 haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
 
-                gen_images = self.net(images, haptics, audios)
+                gen_images = self.net(images, haptics, audios, behaviors)
+
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
                     psnr += peak_signal_to_noise_ratio(image, gen_image)

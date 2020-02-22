@@ -8,6 +8,7 @@ DNA_KERN_SIZE = 5
 # STATE_DIM = 5
 HAPTIC_DIM = [48, 10]
 HAPTIC_LAYER = 10
+BEHAVIOR_LAYER = 3
 
 
 class ConvLSTM(nn.Module):
@@ -59,7 +60,7 @@ class network(nn.Module):
         self.stp = stp
         self.cdna = cdna
         self.channels = channels
-        self.use_haptic = use_haptic
+        # self.use_haptic = use_haptic
         self.num_masks = num_masks
         self.height = height
         self.width = width
@@ -70,6 +71,7 @@ class network(nn.Module):
         # self.STATE_DIM = STATE_DIM
         self.HAPTIC_DIM = HAPTIC_DIM
         self.HAPTIC_LAYER = HAPTIC_LAYER
+        self.BEHAVIOR_LAYER = BEHAVIOR_LAYER
         # N * 3 * H * W -> N * 32 * H/2 * W/2
         self.enc0 = nn.Conv2d(in_channels=channels, out_channels=lstm_size[0], kernel_size=5, stride=2, padding=2)
         self.enc0_norm = nn.LayerNorm([lstm_size[0], self.height//2, self.width//2])
@@ -95,7 +97,7 @@ class network(nn.Module):
         # self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
         self.haptic_feat = lambda x: torch.mean(x, dim=1, keepdim=True)
         # N * (10+64) * H/8 * W/8 -> N * 64 * H/8 * W/8
-        self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
+        self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER+self.BEHAVIOR_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
         # N * 64 * H/8 * W/8 -> N * 128 * H/8 * W/8
         self.lstm5 = ConvLSTM(in_channels=lstm_size[3], out_channels=lstm_size[4], kernel_size=5, padding=2)
         self.lstm5_norm = nn.LayerNorm([lstm_size[4], self.height//8, self.width//8])
@@ -133,7 +135,7 @@ class network(nn.Module):
         self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
-    def forward(self, images, haptics, audios):
+    def forward(self, images, haptics, audios, behaviors):
         '''
 
         :param inputs: T * N * C * H * W
@@ -185,7 +187,8 @@ class network(nn.Module):
 
             # TODO: pass in state and action
             haptic_feat = self.haptic_feat(haptic).permute([0,2,1]).unsqueeze(-1)
-            smear = haptic_feat
+
+            smear = torch.cat([haptic_feat, behaviors], dim=1)
             # state_action = torch.cat([action, current_state], dim=1)
 
             # smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])

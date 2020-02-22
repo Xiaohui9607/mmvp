@@ -8,6 +8,8 @@ import pickle
 import pandas as pd
 import PIL.Image
 from make_spectrogram import plotstft
+from sklearn.preprocessing import OneHotEncoder
+
 
 DATA_DIR = '../data/CY101'
 OUT_DIR = '../data/CY101NPY'
@@ -194,6 +196,8 @@ def process(visions):
         if out_audio_npys is None or out_haptic_npys is None:
             fail_count += 1
             continue
+        out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
+        out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
 
         print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
         # out_vibro_npys = generate_npy_vibro(vibro)
@@ -201,7 +205,7 @@ def process(visions):
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
                 out_vision_npys, out_haptic_npys, out_audio_npys)):
             ret = {
-                # 'behavior': behavior,
+                'behavior': out_behavior_npys,
                 'vision': out_vision_npy,
                 'haptic': out_haptic_npy,
                 'audio': out_audio_npy,

@@ -8,3 +8,4 @@ do
   rm -r ../data/CY101NPY
   python ./data/make_data.py
 done
+

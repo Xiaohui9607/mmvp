@@ -29,6 +29,7 @@ def npy_loader(path):
     samples['vision'] = torch.from_numpy(samples['vision'])
     samples['haptic'] = torch.from_numpy(samples['haptic']).float()
     samples['audio'] = torch.from_numpy(samples['audio'])
+    samples['behavior'] = torch.from_numpy(samples['behavior']).float()
     return samples
 
 
@@ -48,8 +49,8 @@ class PushDataset(Dataset):
         self.loader = loader
         self.device = device
     def __getitem__(self, index):
-        image, action, state = self.samples[index]
-        image, action, state = self.loader(image), self.loader(action), self.loader(state)
+        image, action, state, behaivor = self.samples[index]
+        image, action, state, behaivor = self.loader(image), self.loader(action), self.loader(state), self.loader(behaivor)
 
         if self.image_transform is not None:
             image = torch.cat([self.image_transform(single_image).unsqueeze(0) for single_image in image.unbind(0)], dim=0)
@@ -85,13 +86,14 @@ class CY101Dataset(Dataset):
         vision = modalities['vision']
         haptic = modalities['haptic']
         audio = modalities['audio']
+        behavior = modalities['behavior']
         if self.image_transform is not None:
             vision = torch.cat([self.image_transform(single_image).unsqueeze(0) for single_image in vision.unbind(0)], dim=0)
         if self.haptic_transform is not None:
             haptic = torch.cat([self.haptic_transform(single_haptic).unsqueeze(0) for single_haptic in haptic.unbind(0)], dim=0)
         if self.audio_transform is not None:
             audio = torch.cat([self.audio_transform(single_audio).unsqueeze(0) for single_audio in audio.unbind(0)], dim=0)
-        return vision.to(self.device), haptic.to(self.device), audio.to(self.device)
+        return vision.to(self.device), haptic.to(self.device), audio.to(self.device), behavior.to(self.device)
 
     def __len__(self):
         return len(self.samples)
@@ -190,6 +192,6 @@ if __name__ == '__main__':
     opt = Options().parse()
     opt.data_dir = '../'+opt.data_dir
     tr, va = build_dataloader_CY101(opt)
-    for a, b, c in tr:
+    for a, b, c, d in tr:
         pass
 
