@@ -141,6 +141,8 @@ def build_dataloader_CY101(opt):
                 raise TypeError("Expecte mean and std to be  torch.Tensor")
             self.mean = mean
             self.std = std
+            self.std.to(opt.device)
+            self.mean.to(opt.device)
 
         def __call__(self, hp):
             return (hp-self.mean)/self.std
@@ -157,8 +159,8 @@ def build_dataloader_CY101(opt):
     ])
 
     haptic_transform = transforms.Compose([
-        transforms.Lambda(Standardizer(mean=torch.Tensor(HAPTIC_MEAN, device=opt.device),
-                                       std=torch.Tensor(HAPTIC_STD, device=opt.device)))
+        transforms.Lambda(Standardizer(mean=torch.Tensor(HAPTIC_MEAN),
+                                       std=torch.Tensor(HAPTIC_STD)))
     ])
 
     train_ds = CY101Dataset(

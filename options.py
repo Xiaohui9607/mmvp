@@ -23,10 +23,10 @@ class Options():
         self.parser.add_argument('--pretrained_model', default='', help='filepath of a pretrained model to initialize from.')
         self.parser.add_argument('--sequence_length', type=int, default=5, help='sequence length, including context frames.')
         self.parser.add_argument('--context_frames', type=int, default=4, help= '# of frames before predictions.')
-        self.parser.add_argument('--use_haptic',  default=False, action='store_true', help='Whether or not to give the state+action to the model')
+        self.parser.add_argument('--use_haptic', action='store_true', help='Whether or not to give the state+action to the model')
         self.parser.add_argument('--model', default='CDNA', help='model architecture to use - CDNA, DNA, or STP')
         self.parser.add_argument('--num_masks', type=int, default=10, help='number of masks, usually 1 for DNA, 10 for CDNA, STN.')
-        self.parser.add_argument('--device', default='cpu', help='cuda:[d] | cpu')
+        self.parser.add_argument('--device', default='cuda', help='cuda:[d] | cpu')
 
         # training details
         self.parser.add_argument('--print_interval', type=int, default=10, help='# iterations to output loss')

@@ -21,7 +21,7 @@ class Model():
     def __init__(self, opt):
         self.opt = opt
         self.device = self.opt.device
-
+        print(opt.use_haptic)
         train_dataloader, valid_dataloader = build_dataloader_CY101(opt)
         self.dataloader = {'train': train_dataloader, 'valid': valid_dataloader}
 
@@ -40,7 +40,7 @@ class Model():
         for iter_, (images, haptics, audios) in enumerate(self.dataloader['train']):
             self.net.zero_grad()
             if not self.opt.use_haptic:
-                haptics = torch.zeros(images.shape[0], 10, 48, 7)
+                haptics = torch.zeros(images.shape[0], 10, 48, 10)
             haptics = haptics.float().to(self.device)
 
             audios = torch.zeros_like(haptics).to(self.device)
@@ -77,9 +77,8 @@ class Model():
         with torch.no_grad():
             psnr, state_loss = 0.0, 0.0
             for iter_, (images, haptics, audios) in enumerate(self.dataloader['valid']):
-                print(iter_)
                 if not self.opt.use_haptic:
-                    haptics = torch.zeros(images.shape[0], 10, 48, 7)
+                    haptics = torch.zeros(images.shape[0], 10, 48, 10)
                 haptics = haptics.float().to(self.device)
 
                 audios = torch.zeros_like(haptics).to(self.device)

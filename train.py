@@ -4,6 +4,7 @@ from model import Model
 
 def train():
     opt = Options().parse()
+    print("----------%s----------"%opt.output_dir)
     model = Model(opt)
     model.train()
 

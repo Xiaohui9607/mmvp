@@ -1,8 +1,16 @@
 #!/bin/bash
 
-for VARIABLE in 1 2 3 4 5 .. 20
+for VARIABLE in 1 2 3 4 5
 do
+  python ./train.py --output_dir weight_use_haptic_$VARIABLE --use_haptic
   rm -r ../data/CY101NPY
   python ./data/make_data.py
-  python ./train.py --output_dir weight_$VARIABLE > log_$VARIABLE
+done
+
+
+for VARIABLE in 1 2 3 4 5
+do
+  python ./train.py --output_dir weight_baseline_$VARIABLE
+  rm -r ../data/CY101NPY
+  python ./data/make_data.py
 done
