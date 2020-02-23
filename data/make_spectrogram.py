@@ -70,8 +70,8 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
     ims = 20. * np.log10(np.abs(sshow) / 10e-6)  # amplitude to decibel
     timebins, freqbins = np.shape(ims)
-    print("timebins: ", timebins)
-    print("freqbins: ", freqbins)
+    # print("timebins: ", timebins)
+    # print("freqbins: ", freqbins)
     #
     #
     # plt.figure(figsize=(15, 7.5))

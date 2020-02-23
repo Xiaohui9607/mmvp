@@ -4,8 +4,6 @@ import os
 import glob
 import random
 import numpy as np
-import pickle
-import pandas as pd
 import PIL.Image
 from make_spectrogram import plotstft
 from sklearn.preprocessing import OneHotEncoder
@@ -184,7 +182,7 @@ def process(visions):
 
         out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
         behavior = out_sample_dir.split('_')[-1]
-        print(behavior)
+        # print(behavior)
 
         haptic1 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
         haptic2 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'cpos0.txt')
@@ -199,7 +197,7 @@ def process(visions):
         out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
         out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
 
-        print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
+        # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
         # out_vibro_npys = generate_npy_vibro(vibro)
         # make sure that all the lists are in the same length!
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
@@ -212,12 +210,14 @@ def process(visions):
                 # 'vibro': out_vibro_npy
             }
             np.save(out_sample_dir + '_' + str(i), ret)
-    print(fail_count)
+    print("fail: ",fail_count)
 
 
 def run():
+    print("start making data")
     visons = read_dir()
     process(visons)
+    print("done!")
 
 
 if __name__ == '__main__':
