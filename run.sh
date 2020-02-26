@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -r ../data/CY101NPY
 python ./data/make_data.py
 for VARIABLE in 1 2 3 4 5
 do

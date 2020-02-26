@@ -29,11 +29,10 @@ class Model():
                                self.opt.use_haptic, self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
         self.net.to(self.device)
         self.mse_loss = nn.MSELoss()
-        self.w_state = 1e-4
 
         if self.opt.pretrained_model:
             self.load_weight()
-        self.optimizer = torch.optim.Adam(self.net.parameters(), self.opt.learning_rate)
+        self.optimizer = torch.optim.Adam(self.net.parameters(), self.opt.learning_rate, weight_decay=1e-4)
 
     def train_epoch(self, epoch):
         print("--------------------start training epoch %2d--------------------" % epoch)
@@ -77,7 +76,7 @@ class Model():
 
     def evaluate(self, epoch):
         with torch.no_grad():
-            psnr, state_loss = 0.0, 0.0
+            mse_loss, psnr, state_loss = 0.0, 0.0, 0.0
             for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
                     haptics = torch.zeros(images.shape[0], 10, 48, 10)
@@ -93,8 +92,10 @@ class Model():
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
                     psnr += peak_signal_to_noise_ratio(image, gen_image)
+                    mse_loss += self.mse_loss(image, gen_image)
+		
 
-            psnr /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
+            mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
 
             print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, psnr, state_loss))
 
