@@ -21,7 +21,7 @@ class Options():
         self.parser.add_argument('--width', type=int, default=64, help='width of image')
         self.parser.add_argument('--output_dir', default='weight', help='directory for model weight.')
         self.parser.add_argument('--pretrained_model', default='', help='filepath of a pretrained model to initialize from.')
-        self.parser.add_argument('--sequence_length', type=int, default=5, help='sequence length, including context frames.')
+        self.parser.add_argument('--sequence_length', type=int, default=10, help='sequence length, including context frames.')
         self.parser.add_argument('--context_frames', type=int, default=4, help= '# of frames before predictions.')
         self.parser.add_argument('--use_haptic', action='store_true', help='Whether or not to give the state+action to the model')
         self.parser.add_argument('--model', default='CDNA', help='model architecture to use - CDNA, DNA, or STP')
@@ -33,7 +33,7 @@ class Options():
         self.parser.add_argument('--schedsamp_k', type=float, default=600.0, help='The k hyperparameter for scheduled sampling, -1 for no scheduled sampling.')
         self.parser.add_argument('--batch_size', type=int, default=32, help='batch size for training')
         self.parser.add_argument('--learning_rate', type=float, default=0.001, help='the base learning rate of the generator')
-        self.parser.add_argument('--epochs', type=int, default=20, help='# total training epoch')
+        self.parser.add_argument('--epochs', type=int, default=15, help='# total training epoch')
         self.opt = None
 
     def parse(self):

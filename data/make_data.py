@@ -54,8 +54,8 @@ OBJECTS = [
 split_base = OBJECTS
 
 CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
-SEQUENCE_LENGTH = 5
-STEP = 2
+SEQUENCE_LENGTH = 10
+STEP = 4
 IMG_SIZE = (64, 64)
 
 

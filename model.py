@@ -97,7 +97,7 @@ class Model():
 
             mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
 
-            print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, psnr, state_loss))
+            print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, mse_loss, state_loss))
 
     def save_weight(self, epoch):
         torch.save(self.net.state_dict(), os.path.join(self.opt.output_dir, "net_epoch_%d.pth" % epoch))
