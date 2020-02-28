@@ -1,2 +1,14 @@
-And a brief summary about yesterday’s work:
-1. ligthen the network
+evaluation epoch:  14, recon_loss: 15586.187500, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 15625.736328, state_loss: 0.000000
+
+evaluation epoch:  14, recon_loss: 15579.221680, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 15581.287109, state_loss: 0.000000
+
+evaluation epoch:  14, recon_loss: 14653.499023, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 14649.018555, state_loss: 0.000000
+
+evaluation epoch:  14, recon_loss: 14838.487305, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 14784.614258, state_loss: 0.000000
+
+
+evaluation epoch:  14, recon_loss: 15157.245117, state_loss: 0.000000

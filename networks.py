@@ -137,9 +137,8 @@ class network(nn.Module):
 
     def forward(self, images, haptics, audios, behaviors):
         '''
-
         :param inputs: T * N * C * H * W
-        :param state: T * N  * C
+        :param state: T * N * C
         :param action: T * N * C
         :return:
         '''
@@ -147,25 +146,25 @@ class network(nn.Module):
         lstm_state1, lstm_state2, lstm_state3, lstm_state4 = None, None, None, None
         lstm_state5, lstm_state6, lstm_state7 = None, None, None
         gen_images = []
-        # if self.k == -1:
-        #     feedself = True
-        # else:
-        #     num_ground_truth = round(images[0].shape[1] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
-        #     feedself = False
+        if self.k == -1:
+            feedself = True
+        else:
+            num_ground_truth = round(images[0].shape[0] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
+            feedself = False
 
         for image, haptic in zip(images[:-1], haptics[:-1]):
 
-            # done_warm_start = len(gen_images) >= self.context_frames
-
-            # if feedself and done_warm_start:
-            #     # Feed in generated image.
-            #     image = gen_images[-1]
-            # elif done_warm_start:
-            #     # Scheduled sampling
-            #     image = self.scheduled_sample(image, gen_images[-1], num_ground_truth)
-            # else:
+            done_warm_start = len(gen_images) >= self.context_frames
+            #
+            if feedself and done_warm_start:
+                # Feed in generated image.
+                image = gen_images[-1]
+            elif done_warm_start:
+                # Scheduled sampling
+                image = self.scheduled_sample(image, gen_images[-1], num_ground_truth)
+            else:
                 # Always feed in ground_truth
-            image = image
+                image = image
 
             enc0 = self.enc0_norm(torch.relu(self.enc0(image)))
 
@@ -240,9 +239,7 @@ class network(nn.Module):
 
             gen_images.append(output)
 
-            # current_state = self.stateout(state_action)
-            # gen_states.append(current_state)
-
+        self.iter_num += 1
         return gen_images
 
     def stp_transformation(self, image, stp_input):

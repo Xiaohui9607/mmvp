@@ -45,7 +45,7 @@ OBJECTS = [
     'smallstuffedanimal_headband_bear', 'weight_4', 'bottle_google', 'cup_metal', 'metal_tea_jar',
     'smallstuffedanimal_moose',
     'weight_5', 'bottle_green', 'cup_paper_green', 'metal_thermos', 'smallstuffedanimal_otter', 'bottle_red',
-    'cup_yellow', 'no_object',
+    'cup_yellow',
     'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona',
     'egg_plastic_wrap', 'noodle_2', 'timber_semicircle'
 ]
@@ -121,7 +121,6 @@ def generate_npy_audio(path, n_frames_vision_image):
     '''
     audio_path = glob.glob(path)
     if len(audio_path) == 0:
-        print(audio_path)
         return None
     audio_path = audio_path[0]
     converted_image_array = convert_audio_to_image(audio_path)

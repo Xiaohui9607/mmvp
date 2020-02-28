@@ -5,16 +5,17 @@ from networks import network
 from data import build_dataloader_CY101
 from torch.nn import functional as F
 
-def peak_signal_to_noise_ratio(true, pred):
-  """Image quality metric based on maximal signal power vs. power of the noise.
 
-  Args:
+def peak_signal_to_noise_ratio(true, pred):
+    """Image quality metric based on maximal signal power vs. power of the noise.
+
+    Args:
     true: the ground truth image.
     pred: the predicted image.
-  Returns:
+    Returns:
     peak signal to noise ratio (PSNR)
-  """
-  return 10.0 * torch.log(torch.tensor(1.0) / F.mse_loss(true, pred)) / torch.log(torch.tensor(10.0))
+    """
+    return 10.0 * torch.log(torch.tensor(1.0) / F.mse_loss(true, pred)) / torch.log(torch.tensor(10.0))
 
 
 class Model():
@@ -39,14 +40,15 @@ class Model():
         for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['train']):
             self.net.zero_grad()
             if not self.opt.use_haptic:
-                haptics = torch.zeros(images.shape[0], 10, 48, 10)
-            haptics = haptics.to(self.device)
+                haptics = torch.zeros_like(haptics).to(self.device)
+            if not self.opt.use_behavior:
+                behaviors = torch.zeros_like(behaviors).to(self.device)
+
+            audios = torch.zeros_like(haptics).to(self.device)
 
             behaviors = behaviors.unsqueeze(-1).unsqueeze(-1)
-            audios = torch.zeros_like(haptics).to(self.device)
             images = images.permute([1, 0, 2, 3, 4]).unbind(0)
             haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
-
 
             gen_images = self.net(images, haptics, audios, behaviors)
 
@@ -65,8 +67,6 @@ class Model():
             if iter_ % self.opt.print_interval == 0:
                 print("training epoch: %3d, iterations: %3d/%3d loss: %6f" %
                       (epoch, iter_, len(self.dataloader['train'].dataset)//self.opt.batch_size, loss))
-
-            self.net.iter_num += 1
 
     def train(self):
         for epoch_i in range(0, self.opt.epochs):
@@ -93,10 +93,8 @@ class Model():
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
                     psnr += peak_signal_to_noise_ratio(image, gen_image)
                     mse_loss += self.mse_loss(image, gen_image)
-		
 
             mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
-
             print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, mse_loss, state_loss))
 
     def save_weight(self, epoch):
