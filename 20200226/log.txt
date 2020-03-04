@@ -5653,3 +5653,22 @@ training epoch:   7, iterations: 190/354 loss: 0.000747
 training epoch:   7, iterations: 200/354 loss: 0.000867
 training epoch:   7, iterations: 210/354 loss: 0.000869
 training epoch:   7, iterations: 220/354 loss: 0.001067
+training epoch:   7, iterations: 230/354 loss: 0.000868
+training epoch:   7, iterations: 240/354 loss: 0.000979
+training epoch:   7, iterations: 250/354 loss: 0.000712
+training epoch:   7, iterations: 260/354 loss: 0.000889
+training epoch:   7, iterations: 270/354 loss: 0.000854
+training epoch:   7, iterations: 280/354 loss: 0.000926
+training epoch:   7, iterations: 290/354 loss: 0.001064
+training epoch:   7, iterations: 300/354 loss: 0.000889
+training epoch:   7, iterations: 310/354 loss: 0.000753
+training epoch:   7, iterations: 320/354 loss: 0.000954
+training epoch:   7, iterations: 330/354 loss: 0.000867
+training epoch:   7, iterations: 340/354 loss: 0.000849
+training epoch:   7, iterations: 350/354 loss: 0.000810
+evaluation epoch:   7, recon_loss: 15181.970703, state_loss: 0.000000
+start making data
+[]
+[]
+fail:  2
+done!
