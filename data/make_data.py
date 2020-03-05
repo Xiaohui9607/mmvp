@@ -179,7 +179,7 @@ def process(visions):
                 train_list.append(object)
 
     split_base = train_list + test_list
-    cutting = int(len(split_base) * 0.2)
+    cutting = int(len(split_base) * 0.8)
 
     fail_count = 0
     for vision in visions:
@@ -191,10 +191,10 @@ def process(visions):
         subdir = ''
         for ct in split_base[:cutting]:
             if ct in vision:
-                subdir = test_subir
+                subdir = train_subir
         for ct in split_base[cutting:]:
             if ct in vision:
-                subdir = train_subir
+                subdir = test_subir
 
         out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
         behavior = out_sample_dir.split('_')[-1]
