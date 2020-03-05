@@ -1,25 +1,22 @@
-
 import re
 import os
 import glob
 import random
-import shutil
 import numpy as np
 import PIL.Image
 from make_spectrogram import plotstft
 from sklearn.preprocessing import OneHotEncoder
 
 
-DATA_DIR = '../data/CY101'
-OUT_DIR = '../data/CY101NPY'
+DATA_DIR = '../../data/CY101'
+OUT_DIR = '../../data/CY101NPY'
 
 
 SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
                     'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24}
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc',
-              'cup',
-              'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
+              'cup', 'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
               'ball']
 OBJECTS = [
     'ball_base', 'can_coke', 'egg_rough_styrofoam', 'noodle_3', 'timber_square', 'ball_basket', 'can_red_bull_large',
@@ -46,32 +43,24 @@ OBJECTS = [
     'smallstuffedanimal_headband_bear', 'weight_4', 'bottle_google', 'cup_metal', 'metal_tea_jar',
     'smallstuffedanimal_moose',
     'weight_5', 'bottle_green', 'cup_paper_green', 'metal_thermos', 'smallstuffedanimal_otter', 'bottle_red',
-    'cup_yellow',
-    'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona',
+    'cup_yellow', 'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona',
     'egg_plastic_wrap', 'noodle_2', 'timber_semicircle'
 ]
 
-# split_base = CATEGORIES
-split_base = OBJECTS
 
-CHOOSEN_BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push']
-crop_stategy = {
-    'crush': [16, -5],
-    'grasp': [0, -13],
-    'lift_slow': [0, -3],
-    'shake': [0, -1],
-    'poke': [2, -16],
-    'push': [2, -13]
-}
-SEQUENCE_LENGTH = 10
-STEP = 4
+# CATEGORIES
+SORTED_OBJECTS = sorted(OBJECTS)
+
+
+CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
+SEQUENCE_LENGTH = 5
+STEP = 2
 IMG_SIZE = (64, 64)
 
 
 def read_dir():
-    wtf = os.path.join(DATA_DIR, 'vision*/*/*/*/*')
-    visons = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
-    return visons
+    visions = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
+    return visions
 
 
 def convert_audio_to_image(audio_path):
@@ -79,14 +68,13 @@ def convert_audio_to_image(audio_path):
     return ims
 
 
-def generate_npy_vision(path, behavior):
+def generate_npy_vision(path):
     '''
     :param path: path to images folder,
     :return: numpy array with size [SUB_SAMPLE_SIZE, SEQ_LENGTH, ...]
     '''
+
     files = sorted(glob.glob(os.path.join(path, '*.jpg')))
-    img_length = len(files)
-    files = files[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     imglist = []
     for file in files:
         img = PIL.Image.open(file)
@@ -96,10 +84,10 @@ def generate_npy_vision(path, behavior):
     ret = []
     for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
-    return ret, img_length
+    return ret, len(imglist)
 
 
-def generate_npy_haptic(path1, path2, n_frames, behavior):
+def generate_npy_haptic(path1, path2, n_frames):
     '''
     :param path: path to ttrq0.txt, you need to open it before you process
     :param n_frames: # frames
@@ -114,37 +102,36 @@ def generate_npy_haptic(path1, path2, n_frames, behavior):
     haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t')))[1:] for v, w in
                zip(haplist1, haplist2)]
     haplist = np.array(haplist)
-
-    # haplist = haplist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     time_duration = (haplist[-1][0] - haplist[0][0]) / n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
     groups = np.digitize(haplist[:, 0], bins, right=False)
 
     haplist = [haplist[np.where(groups == idx)][..., 1:][:48] for idx in range(1, n_frames + 1)]
     haplist = [np.pad(ht, [[0, 48 - ht.shape[0]], [0, 0]], mode='edge')[np.newaxis, ...] for ht in haplist]
-    haplist = haplist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32))
     return ret
 
 
-def generate_npy_audio(path, n_frames_vision_image, behavior):
+def generate_npy_audio(path, n_frames_vision_image):
     '''
     :param path: path to audio, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
     audio_path = glob.glob(path)
     if len(audio_path) == 0:
+        print(audio_path)
         return None
     audio_path = audio_path[0]
     converted_image_array = convert_audio_to_image(audio_path)
-
     # TODO delete these two lines
     # path = "../../data/spectrogram/cone_1/trial_1/exec_1/crush/hearing/cone_1_trial_1_exec_1_crush_hearing.png"
     # img = np.array(PIL.Image.open(path))[np.newaxis, np.newaxis, ...] # create a new dimension
 
+    a = converted_image_array[np.newaxis, np.newaxis]
     img = converted_image_array[np.newaxis, np.newaxis, ...]  # create a new dimension
+
     image_width = img.shape[2]
     effective_each_frame_length = int(image_width / n_frames_vision_image)
     # here we need to crop from width
@@ -153,7 +140,7 @@ def generate_npy_audio(path, n_frames_vision_image, behavior):
     imglist = []
     for i in range(0, n_frames_vision_image):
         imglist.append(cropped_image[:, :, i * effective_each_frame_length:(i + 1) * effective_each_frame_length, :])
-    imglist = imglist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
+
     ret = []
     for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
@@ -170,6 +157,7 @@ def generate_npy_vibro(path):
 
 
 def process(visions):
+
     train_subir = 'train'
     test_subir = 'test'
     if not os.path.exists(os.path.join(OUT_DIR, train_subir)):
@@ -177,17 +165,27 @@ def process(visions):
 
     if not os.path.exists(os.path.join(OUT_DIR, test_subir)):
         os.makedirs(os.path.join(OUT_DIR, test_subir))
+
+    train_list = []
+    test_list = []
+    for i in range(len(SORTED_OBJECTS)//5):
+        random_number = np.random.randint(low=0, high=5)
+        np.random.shuffle(SORTED_OBJECTS[5*i:5*i+5])
+        shuffled_category = SORTED_OBJECTS[5*i:5*i+5]
+        for item, object in enumerate(shuffled_category):
+            if item == random_number:
+                test_list.append(object)
+            else:
+                train_list.append(object)
+
+    split_base = train_list + test_list
     cutting = int(len(split_base) * 0.2)
-    random.shuffle(split_base)
+
     fail_count = 0
     for vision in visions:
         save = False
-        behavior = ''
-        for _bh in CHOOSEN_BEHAVIORS:
-            if _bh in vision.split('/'):
-                behavior = _bh
-                save = True
-                break
+        for bh in CHOOSEN_BEHAVIORS:
+            save = save or (bh in vision.split('/'))
         if not save:
             continue
         subdir = ''
@@ -199,24 +197,26 @@ def process(visions):
                 subdir = train_subir
 
         out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
-        # behavior = out_sample_dir.split('_')[-1]
-        # print(behavior)
+        behavior = out_sample_dir.split('_')[-1]
 
         haptic1 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
         haptic2 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'cpos0.txt')
         audio = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'hearing', '*.wav')
         vibro = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'vibro', '*.tsv')
-        out_vision_npys, n_frames = generate_npy_vision(vision, behavior)
-        out_audio_npys = generate_npy_audio(audio, n_frames, behavior)
-        out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames, behavior)
+
+        out_vision_npys, n_frames = generate_npy_vision(vision)
+        out_audio_npys = generate_npy_audio(audio, n_frames)
+        out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames)
+
         if out_audio_npys is None or out_haptic_npys is None:
             fail_count += 1
             continue
         out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
         out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
+        # out_vibro_npys = generate_npy_vibro(vibro)
 
         # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
-        # out_vibro_npys = generate_npy_vibro(vibro)
+
         # make sure that all the lists are in the same length!
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
                 out_vision_npys, out_haptic_npys, out_audio_npys)):
@@ -239,10 +239,6 @@ def run():
 
 
 if __name__ == '__main__':
-    # DATA_DIR = '../../data/CY101'
-    # OUT_DIR = '../../data/CY101NPY'
-    import shutil
-    if os.path.exists(OUT_DIR):
-        shutil.rmtree(OUT_DIR)
-    os.makedirs(OUT_DIR)
+    if not os.path.exists(OUT_DIR):
+        os.makedirs(OUT_DIR)
     run()
