@@ -48,7 +48,7 @@ OBJECTS = [
 ]
 
 
-# CATEGORIES
+# Objects
 SORTED_OBJECTS = sorted(OBJECTS)
 
 
