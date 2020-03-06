@@ -79,11 +79,13 @@ class Model():
             mse_loss, psnr, state_loss = 0.0, 0.0, 0.0
             for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
-                    haptics = torch.zeros(images.shape[0], 10, 48, 10)
-                haptics = haptics.to(self.device)
+                    haptics = torch.zeros_like(haptics).to(self.device)
+                if not self.opt.use_behavior:
+                    behaviors = torch.zeros_like(behaviors).to(self.device)
+
+                audios = torch.zeros_like(haptics).to(self.device)
 
                 behaviors = behaviors.unsqueeze(-1).unsqueeze(-1)
-                audios = torch.zeros_like(haptics).to(self.device)
                 images = images.permute([1, 0, 2, 3, 4]).unbind(0)
                 haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
 
