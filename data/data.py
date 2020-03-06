@@ -195,7 +195,7 @@ if __name__ == '__main__':
     import cv2
     for a, b, c, d in tr:
         imgs = a[0].unbind(0)
-        imgs = list(map(lambda x:(x.permute([1,2,0]).numpy()*255).astype(np.uint8), imgs))
+        imgs = list(map(lambda x:(x.permute([1,2,0]).cpu().numpy()*255).astype(np.uint8), imgs))
         for img in imgs:
             cv2.imshow('l', img)
             cv2.waitKey(0)

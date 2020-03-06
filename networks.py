@@ -4,11 +4,11 @@ from torch import nn
 from torch.nn import functional as F
 
 RELU_SHIFT = 1e-12
-DNA_KERN_SIZE = 7
+DNA_KERN_SIZE = 5
 # STATE_DIM = 5
 HAPTIC_DIM = [48, 10]
 HAPTIC_LAYER = 10
-BEHAVIOR_LAYER = 3
+BEHAVIOR_LAYER = 6
 
 
 class ConvLSTM(nn.Module):
@@ -55,7 +55,7 @@ class network(nn.Module):
         if stp + cdna + dna != 1:
             raise ValueError('More than one, or no network option specified.')
         lstm_size = [32, 32, 64, 64, 128, 64, 32]
-        lstm_size = [l//2 for l in lstm_size]   # ligthen network
+        # lstm_size = [l//2 for l in lstm_size]   # ligthen network
         self.dna = dna
         self.stp = stp
         self.cdna = cdna

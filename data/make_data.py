@@ -8,12 +8,9 @@ from make_spectrogram import plotstft
 from sklearn.preprocessing import OneHotEncoder
 
 
-DATA_DIR = '../../data/CY101'
-OUT_DIR = '../../data/CY101NPY'
+DATA_DIR = '../data/CY101'
+OUT_DIR = '../data/CY101NPY'
 
-
-SEQUENCE_LENGTHS = {'crush': 49, 'grasp': 18, 'hold': 12, 'lift_slow': 43, 'look': 2, 'low_drop': 22,
-                    'poke': 33, 'post_tap_look': 2, 'pre_tap_look': 2, 'push': 53, 'shake': 61, 'tap': 24}
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc',
               'cup', 'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
@@ -52,9 +49,18 @@ OBJECTS = [
 SORTED_OBJECTS = sorted(OBJECTS)
 
 
-CHOOSEN_BEHAVIORS = ['crush', 'poke', 'push']
-SEQUENCE_LENGTH = 5
-STEP = 2
+CHOOSEN_BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push']
+crop_stategy = {
+    'crush': [16, -5],
+    'grasp': [0, -13],
+    'lift_slow': [0, -3],
+    'shake': [0, -1],
+    'poke': [2, -16],
+    'push': [2, -13]
+}
+
+SEQUENCE_LENGTH = 10
+STEP = 4
 IMG_SIZE = (64, 64)
 
 
@@ -68,13 +74,14 @@ def convert_audio_to_image(audio_path):
     return ims
 
 
-def generate_npy_vision(path):
+def generate_npy_vision(path, behavior):
     '''
     :param path: path to images folder,
     :return: numpy array with size [SUB_SAMPLE_SIZE, SEQ_LENGTH, ...]
     '''
-
     files = sorted(glob.glob(os.path.join(path, '*.jpg')))
+    img_length = len(files)
+    files = files[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     imglist = []
     for file in files:
         img = PIL.Image.open(file)
@@ -84,10 +91,10 @@ def generate_npy_vision(path):
     ret = []
     for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
-    return ret, len(imglist)
+    return ret, img_length
 
 
-def generate_npy_haptic(path1, path2, n_frames):
+def generate_npy_haptic(path1, path2, n_frames, behavior):
     '''
     :param path: path to ttrq0.txt, you need to open it before you process
     :param n_frames: # frames
@@ -108,20 +115,20 @@ def generate_npy_haptic(path1, path2, n_frames):
 
     haplist = [haplist[np.where(groups == idx)][..., 1:][:48] for idx in range(1, n_frames + 1)]
     haplist = [np.pad(ht, [[0, 48 - ht.shape[0]], [0, 0]], mode='edge')[np.newaxis, ...] for ht in haplist]
+    haplist = haplist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32))
     return ret
 
 
-def generate_npy_audio(path, n_frames_vision_image):
+def generate_npy_audio(path, n_frames_vision_image, behavior):
     '''
     :param path: path to audio, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
     audio_path = glob.glob(path)
     if len(audio_path) == 0:
-        print(audio_path)
         return None
     audio_path = audio_path[0]
     converted_image_array = convert_audio_to_image(audio_path)
@@ -140,7 +147,7 @@ def generate_npy_audio(path, n_frames_vision_image):
     imglist = []
     for i in range(0, n_frames_vision_image):
         imglist.append(cropped_image[:, :, i * effective_each_frame_length:(i + 1) * effective_each_frame_length, :])
-
+    imglist = imglist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     ret = []
     for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
         ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
@@ -179,13 +186,17 @@ def process(visions):
                 train_list.append(object)
 
     split_base = train_list + test_list
-    cutting = int(len(split_base) * 0.8)
+    cutting = len(train_list)
 
     fail_count = 0
     for vision in visions:
         save = False
-        for bh in CHOOSEN_BEHAVIORS:
-            save = save or (bh in vision.split('/'))
+        behavior = ''
+        for _bh in CHOOSEN_BEHAVIORS:
+            if _bh in vision.split('/'):
+                behavior = _bh
+                save = True
+                break
         if not save:
             continue
         subdir = ''
@@ -197,26 +208,24 @@ def process(visions):
                 subdir = test_subir
 
         out_sample_dir = os.path.join(OUT_DIR, subdir, '_'.join(vision.split('/')[-4:]))
-        behavior = out_sample_dir.split('_')[-1]
+        # behavior = out_sample_dir.split('_')[-1]
+        # print(behavior)
 
         haptic1 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'ttrq0.txt')
         haptic2 = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'proprioception', 'cpos0.txt')
         audio = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'hearing', '*.wav')
         vibro = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'vibro', '*.tsv')
-
-        out_vision_npys, n_frames = generate_npy_vision(vision)
-        out_audio_npys = generate_npy_audio(audio, n_frames)
-        out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames)
-
+        out_vision_npys, n_frames = generate_npy_vision(vision, behavior)
+        out_audio_npys = generate_npy_audio(audio, n_frames, behavior)
+        out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames, behavior)
         if out_audio_npys is None or out_haptic_npys is None:
             fail_count += 1
             continue
         out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
         out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
-        # out_vibro_npys = generate_npy_vibro(vibro)
 
         # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
-
+        # out_vibro_npys = generate_npy_vibro(vibro)
         # make sure that all the lists are in the same length!
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
                 out_vision_npys, out_haptic_npys, out_audio_npys)):
@@ -225,10 +234,9 @@ def process(visions):
                 'vision': out_vision_npy,
                 'haptic': out_haptic_npy,
                 'audio': out_audio_npy,
-                # 'vibro': out_vibro_npy
             }
             np.save(out_sample_dir + '_' + str(i), ret)
-    print("fail: ",fail_count)
+    print("fail: ", fail_count)
 
 
 def run():
@@ -239,6 +247,7 @@ def run():
 
 
 if __name__ == '__main__':
+
     if not os.path.exists(OUT_DIR):
         os.makedirs(OUT_DIR)
     run()

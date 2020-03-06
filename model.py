@@ -22,7 +22,7 @@ class Model():
     def __init__(self, opt):
         self.opt = opt
         self.device = self.opt.device
-        print(opt.use_haptic)
+        print(opt.use_haptic, opt.use_behavior)
         train_dataloader, valid_dataloader = build_dataloader_CY101(opt)
         self.dataloader = {'train': train_dataloader, 'valid': valid_dataloader}
 
