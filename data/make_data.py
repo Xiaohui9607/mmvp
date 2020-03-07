@@ -5,6 +5,7 @@ import random
 import numpy as np
 import PIL.Image
 from make_spectrogram import plotstft
+import argparse
 from sklearn.preprocessing import OneHotEncoder
 
 
@@ -49,7 +50,9 @@ OBJECTS = [
 SORTED_OBJECTS = sorted(OBJECTS)
 
 
-CHOOSEN_BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push']
+#CHOOSEN_BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push']
+CHOOSEN_BEHAVIORS = []
+
 crop_stategy = {
     'crush': [16, -5],
     'grasp': [0, -13],
@@ -158,8 +161,8 @@ def generate_npy_vibro(path):
     return [np.zeros([SEQUENCE_LENGTH, 7])]
 
 
-def process(visions):
-
+def process(visions, chosen_behavior):
+    CHOOSEN_BEHAVIORS.append(chosen_behavior)
     train_subir = 'train'
     test_subir = 'test'
     if not os.path.exists(os.path.join(OUT_DIR, train_subir)):
@@ -234,15 +237,21 @@ def process(visions):
     print("fail: ", fail_count)
 
 
-def run():
+def run(chosen_behavior):
     print("start making data")
     visons = read_dir()
-    process(visons)
+    process(visons, chosen_behavior)
     print("done!")
 
 
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--behavior', default='crush', help='which behavior?')
+    args = parser.parse_args()
+
+    print("behavior: ", args.behavior)
+
     if not os.path.exists(OUT_DIR):
         os.makedirs(OUT_DIR)
-    run()
+    run(chosen_behavior=args.behavior)
