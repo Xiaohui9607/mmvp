@@ -4,7 +4,7 @@ from torch import nn
 from torch.nn import functional as F
 
 RELU_SHIFT = 1e-12
-DNA_KERN_SIZE = 5
+DNA_KERN_SIZE = 7
 # STATE_DIM = 5
 HAPTIC_DIM = [48, 10]
 AUDIO_DIM = [16, 513]
@@ -285,7 +285,7 @@ class network(nn.Module):
         cdna_kerns = cdna_kerns.view(batch_size*self.num_masks, 1, DNA_KERN_SIZE,DNA_KERN_SIZE)
         image = image.permute([1, 0, 2, 3])
 
-        transformed = torch.conv2d(image, cdna_kerns, stride=1, padding=[2, 2], groups=batch_size)
+        transformed = torch.conv2d(image, cdna_kerns, stride=1, padding=[(DNA_KERN_SIZE-1)//2, (DNA_KERN_SIZE-1)//2], groups=batch_size)
 
         transformed = transformed.view(self.channels, batch_size, self.num_masks, height, width)
         transformed = transformed.permute([1, 0, 3, 4, 2])
@@ -312,6 +312,3 @@ class network(nn.Module):
     def scheduled_sample(self, ground_truth_x, generated_x, num_ground_truth):
         generated_examps = torch.cat([ground_truth_x[:num_ground_truth, ...], generated_x[num_ground_truth:, :]], dim=0)
         return generated_examps
-
-
-

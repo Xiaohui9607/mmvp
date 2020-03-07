@@ -1,24 +1,11 @@
-haptic
-evaluation epoch:  14, recon_loss: 0.002837, state_loss: 0.000000
-baseline
-evaluation epoch:  14, recon_loss: 0.002662, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002656, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002581, state_loss: 0.000000
 
-haptic
-evaluation epoch:  14, recon_loss: 0.002775, state_loss: 0.000000
-baseline
-evaluation epoch:  14, recon_loss: 0.002577, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002596, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002845, state_loss: 0.000000
 
-haptic
-evaluation epoch:  14, recon_loss: 0.002764, state_loss: 0.000000
-baseline
-evaluation epoch:  14, recon_loss: 0.002691, state_loss: 0.000000
-
-haptic
-evaluation epoch:  14, recon_loss: 0.002757, state_loss: 0.000000
-baseline
-evaluation epoch:  14, recon_loss: 0.002606, state_loss: 0.000000
-
-haptic
-evaluation epoch:  14, recon_loss: 0.002838, state_loss: 0.000000
-baseline
-evaluation epoch:  14, recon_loss: 0.002679, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002656, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002581, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002596, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002845, state_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002673, state_loss: 0.000000
