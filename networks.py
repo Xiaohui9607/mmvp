@@ -19,7 +19,6 @@ class ConvLSTM(nn.Module):
         self.out_channels = out_channels
         self.conv = nn.Conv2d(in_channels=out_channels + in_channels, out_channels=4 * out_channels, kernel_size=kernel_size, stride=1, padding=padding)
         self.forget_bias = forget_bias
-
     def forward(self, inputs, states):
         if states is None:
             states = (torch.zeros([inputs.shape[0], self.out_channels, inputs.shape[2], inputs.shape[3]], device=inputs.device),
@@ -39,9 +38,6 @@ class ConvLSTM(nn.Module):
         new_h = torch.tanh(new_c) * torch.sigmoid(o)
 
         return new_h, (new_c, new_h)
-
-
-
 
 
 class network(nn.Module):
