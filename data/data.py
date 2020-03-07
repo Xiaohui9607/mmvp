@@ -133,7 +133,7 @@ def build_dataloader_CY101(opt):
     def padding(au):
         length = au.shape[1]
         if length < AUDIO_LENGTH:
-            au = F.pad(au, (0,0,0,AUDIO_LENGTH-length), mode='constant', value=0)
+            au = F.pad(au, (0, 0, 0, AUDIO_LENGTH-length), mode='constant', value=0)
         au = au[:, :AUDIO_LENGTH,:]
         return au
 
@@ -157,7 +157,9 @@ def build_dataloader_CY101(opt):
     ])
 
     audio_transform = transforms.Compose([
-        transforms.Lambda(padding)
+        transforms.Lambda(padding),
+        transforms.Lambda(Standardizer(mean=torch.Tensor([0.0]),
+                                       std=torch.Tensor([255.0])))
     ])
 
     haptic_transform = transforms.Compose([
@@ -194,8 +196,8 @@ if __name__ == '__main__':
     tr, va = build_dataloader_CY101(opt)
     import cv2
     for a, b, c, d in tr:
-        imgs = a[0].unbind(0)
-        imgs = list(map(lambda x:(x.permute([1,2,0]).cpu().numpy()*255).astype(np.uint8), imgs))
+        imgs = c[0].unbind(0)
+        imgs = list(map(lambda x:(x.permute([1, 2, 0]).cpu().numpy()*255).squeeze().astype(np.uint8), imgs))
         for img in imgs:
             cv2.imshow('l', img)
             cv2.waitKey(0)

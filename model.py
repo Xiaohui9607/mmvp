@@ -43,12 +43,13 @@ class Model():
                 haptics = torch.zeros_like(haptics).to(self.device)
             if not self.opt.use_behavior:
                 behaviors = torch.zeros_like(behaviors).to(self.device)
-
-            audios = torch.zeros_like(haptics).to(self.device)
+            if not self.opt.use_audio:
+                audios = torch.zeros_like(audios).to(self.device)
 
             behaviors = behaviors.unsqueeze(-1).unsqueeze(-1)
             images = images.permute([1, 0, 2, 3, 4]).unbind(0)
-            haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
+            haptics = haptics.permute([1, 0, 2, 3, 4]).unbind(0)
+            audios = audios.permute([1, 0, 2, 3, 4]).unbind(0)
 
             gen_images = self.net(images, haptics, audios, behaviors)
 
@@ -82,12 +83,13 @@ class Model():
                     haptics = torch.zeros_like(haptics).to(self.device)
                 if not self.opt.use_behavior:
                     behaviors = torch.zeros_like(behaviors).to(self.device)
-
-                audios = torch.zeros_like(haptics).to(self.device)
+                if not self.opt.use_audio:
+                    audios = torch.zeros_like(audios).to(self.device)
 
                 behaviors = behaviors.unsqueeze(-1).unsqueeze(-1)
                 images = images.permute([1, 0, 2, 3, 4]).unbind(0)
-                haptics = haptics.permute([1, 0, 2, 3]).unbind(0)
+                haptics = haptics.permute([1, 0, 2, 3, 4]).unbind(0)
+                audios = audios.permute([1, 0, 2, 3, 4]).unbind(0)
 
                 gen_images = self.net(images, haptics, audios, behaviors)
 

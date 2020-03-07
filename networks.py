@@ -7,8 +7,10 @@ RELU_SHIFT = 1e-12
 DNA_KERN_SIZE = 5
 # STATE_DIM = 5
 HAPTIC_DIM = [48, 10]
-HAPTIC_LAYER = 10
+AUDIO_DIM = [16, 513]
+HAPTIC_LAYER = 16
 BEHAVIOR_LAYER = 6
+AUDIO_LAYER = 16
 
 
 class ConvLSTM(nn.Module):
@@ -70,6 +72,7 @@ class network(nn.Module):
 
         # self.STATE_DIM = STATE_DIM
         self.HAPTIC_DIM = HAPTIC_DIM
+        self.AUDIO_LAYER = AUDIO_LAYER
         self.HAPTIC_LAYER = HAPTIC_LAYER
         self.BEHAVIOR_LAYER = BEHAVIOR_LAYER
         # N * 3 * H * W -> N * 32 * H/2 * W/2
@@ -91,13 +94,13 @@ class network(nn.Module):
         self.lstm4 = ConvLSTM(in_channels=lstm_size[2], out_channels=lstm_size[3], kernel_size=5, padding=2)
         self.lstm4_norm = nn.LayerNorm([lstm_size[3], self.height//4, self.width//4])
         # pass in state and action
+        self.build_modalities_block()
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/8 * W/8
         self.enc2 = nn.Conv2d(in_channels=lstm_size[3], out_channels=lstm_size[3], kernel_size=3, stride=2, padding=1)
-        # self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
-        self.haptic_feat = lambda x: torch.mean(x, dim=1, keepdim=True)
+
         # N * (10+64) * H/8 * W/8 -> N * 64 * H/8 * W/8
-        self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER+self.BEHAVIOR_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
+        self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER + self.AUDIO_LAYER+self.BEHAVIOR_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
         # N * 64 * H/8 * W/8 -> N * 128 * H/8 * W/8
         self.lstm5 = ConvLSTM(in_channels=lstm_size[3], out_channels=lstm_size[4], kernel_size=5, padding=2)
         self.lstm5_norm = nn.LayerNorm([lstm_size[4], self.height//8, self.width//8])
@@ -135,6 +138,21 @@ class network(nn.Module):
         self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
+    def build_modalities_block(self):
+
+        # self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
+        # self.haptic_feat = lambda x: torch.mean(x, dim=1, keepdim=True)
+
+        self.haptic_feat = nn.Sequential()
+        self.haptic_feat.add_module("haptic_1", nn.Conv2d(1, 8, [5, 1], stride=[2, 1]))
+        self.haptic_feat.add_module("haptic_2", nn.Conv2d(8, 16, [3, 1], stride=[2, 1]))
+        self.haptic_feat.add_module("haptic_3", nn.Conv2d(16, self.HAPTIC_LAYER, [3, 3], stride=1))
+        self.audio_feat = nn.Sequential()
+        self.audio_feat.add_module("audio_1", nn.Conv2d(1, 8, [1, 7], stride=[1, 3]))
+        self.audio_feat.add_module("audio_2", nn.Conv2d(8, 8, [1, 7], stride=[1, 3]))
+        self.audio_feat.add_module("audio_3", nn.Conv2d(8, 16, [1, 7], stride=[1, 3]))
+        self.audio_feat.add_module("audio_4", nn.Conv2d(16, self.AUDIO_LAYER, [3, 3], stride=[2, 2], padding=[1, 0]))
+
     def forward(self, images, haptics, audios, behaviors):
         '''
         :param inputs: T * N * C * H * W
@@ -152,7 +170,7 @@ class network(nn.Module):
             num_ground_truth = round(images[0].shape[0] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
             feedself = False
 
-        for image, haptic in zip(images[:-1], haptics[:-1]):
+        for image, haptic, audio in zip(images[:-1], haptics[:-1], audios[:-1]):
 
             done_warm_start = len(gen_images) >= self.context_frames
             #
@@ -185,13 +203,15 @@ class network(nn.Module):
             enc2 = torch.relu(self.enc2(lstm4))
 
             # TODO: pass in state and action
-            haptic_feat = self.haptic_feat(haptic).permute([0,2,1]).unsqueeze(-1)
-
-            smear = torch.cat([haptic_feat, behaviors], dim=1)
+            # haptic_feat = self.haptic_feat(haptic).permute([0,2,1]).unsqueeze(-1)
+            haptic_feat = self.haptic_feat(haptic)
+            audio_feat = self.audio_feat(audio)
+            behavior_feat = behaviors.repeat(1, 1, enc2.shape[2]//behaviors.shape[2], enc2.shape[3]//behaviors.shape[3])
+            smear = torch.cat([haptic_feat, behavior_feat, audio_feat], dim=1)
             # state_action = torch.cat([action, current_state], dim=1)
 
             # smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])
-            smear = smear.repeat(1, 1, enc2.shape[2]//smear.shape[2], enc2.shape[3]//smear.shape[3])
+            # smear = smear.repeat(1, 1, enc2.shape[2]//smear.shape[2], enc2.shape[3]//smear.shape[3])
 
             enc2 = torch.cat([enc2, smear], dim=1)
 

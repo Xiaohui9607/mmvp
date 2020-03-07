@@ -118,7 +118,7 @@ def generate_npy_haptic(path1, path2, n_frames, behavior):
     haplist = haplist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     ret = []
     for i in range(0, len(haplist) - SEQUENCE_LENGTH, STEP):
-        ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32))
+        ret.append(np.concatenate(haplist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32)[:, np.newaxis, ...])
     return ret
 
 
@@ -132,26 +132,21 @@ def generate_npy_audio(path, n_frames_vision_image, behavior):
         return None
     audio_path = audio_path[0]
     converted_image_array = convert_audio_to_image(audio_path)
-    # TODO delete these two lines
-    # path = "../../data/spectrogram/cone_1/trial_1/exec_1/crush/hearing/cone_1_trial_1_exec_1_crush_hearing.png"
-    # img = np.array(PIL.Image.open(path))[np.newaxis, np.newaxis, ...] # create a new dimension
 
-    a = converted_image_array[np.newaxis, np.newaxis]
-    img = converted_image_array[np.newaxis, np.newaxis, ...]  # create a new dimension
+    img = converted_image_array[np.newaxis, ...]  # create a new dimension
 
-    image_width = img.shape[2]
+    image_width = img.shape[1]
     effective_each_frame_length = int(image_width / n_frames_vision_image)
     # here we need to crop from width
     width_to_keep = effective_each_frame_length * n_frames_vision_image
-    cropped_image = img[:, :, :width_to_keep, :]
+    cropped_image = img[:, :width_to_keep, :]
     imglist = []
     for i in range(0, n_frames_vision_image):
-        imglist.append(cropped_image[:, :, i * effective_each_frame_length:(i + 1) * effective_each_frame_length, :])
+        imglist.append(cropped_image[:, i * effective_each_frame_length:(i + 1) * effective_each_frame_length, :])
     imglist = imglist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     ret = []
     for i in range(0, len(imglist) - SEQUENCE_LENGTH, STEP):
-        ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0))
-
+        ret.append(np.concatenate(imglist[i:i + SEQUENCE_LENGTH], axis=0).astype(np.float32)[:, np.newaxis, ...])
     return ret
 
 

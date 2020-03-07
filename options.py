@@ -25,6 +25,7 @@ class Options():
         self.parser.add_argument('--context_frames', type=int, default=4, help= '# of frames before predictions.')
         self.parser.add_argument('--use_haptic', action='store_true', help='Whether or not to give the haptic to the model')
         self.parser.add_argument('--use_behavior', action='store_true', help='Whether or not to give the behavior to the model')
+        self.parser.add_argument('--use_audio', action='store_true', help='Whether or not to give the audio to the model')
         self.parser.add_argument('--model', default='CDNA', help='model architecture to use - CDNA, DNA, or STP')
         self.parser.add_argument('--num_masks', type=int, default=3, help='number of masks, usually 1 for DNA, 10 for CDNA, STN.')
         self.parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu', help='cuda:[d] | cpu')
