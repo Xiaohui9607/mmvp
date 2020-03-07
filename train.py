@@ -13,5 +13,3 @@ def train():
 
 if __name__ == '__main__':
     train()
-
-    # 0.001219

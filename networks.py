@@ -9,7 +9,7 @@ DNA_KERN_SIZE = 7
 HAPTIC_DIM = [48, 10]
 AUDIO_DIM = [16, 513]
 HAPTIC_LAYER = 16
-BEHAVIOR_LAYER = 1
+BEHAVIOR_LAYER = 6
 AUDIO_LAYER = 16
 
 
@@ -39,6 +39,9 @@ class ConvLSTM(nn.Module):
         new_h = torch.tanh(new_c) * torch.sigmoid(o)
 
         return new_h, (new_c, new_h)
+
+
+
 
 
 class network(nn.Module):
