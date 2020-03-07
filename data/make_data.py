@@ -76,7 +76,6 @@ def convert_audio_to_image(audio_path):
     ims = plotstft(audio_path)
     return ims
 
-
 def generate_npy_vision(path, behavior):
     '''
     :param path: path to images folder,
@@ -159,6 +158,7 @@ def generate_npy_vibro(path):
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
     return [np.zeros([SEQUENCE_LENGTH, 7])]
+
 
 
 def process(visions, chosen_behavior):
