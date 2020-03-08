@@ -22,12 +22,12 @@ class Model():
     def __init__(self, opt):
         self.opt = opt
         self.device = self.opt.device
-        print(opt.use_haptic, opt.use_behavior)
+        print(opt.use_haptic, opt.use_behavior, opt.use_audio)
         train_dataloader, valid_dataloader = build_dataloader_CY101(opt)
         self.dataloader = {'train': train_dataloader, 'valid': valid_dataloader}
 
         self.net = network(self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
-                               self.opt.use_haptic, self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
+                           self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
         self.net.to(self.device)
         self.mse_loss = nn.MSELoss()
 

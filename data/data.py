@@ -149,6 +149,15 @@ def build_dataloader_CY101(opt):
         def __call__(self, hp):
             return (hp-self.mean)/self.std
 
+    def addnoise_au(au):
+        au = au + torch.rand_like(au, device=opt.device)*10
+        au[au>255]=255
+        au[au<0]=0
+        return au
+
+    def addnoise_hp(hp):
+        hp = hp + torch.rand_like(hp, device=opt.device)
+        return hp
     image_transform = transforms.Compose([
         transforms.Lambda(crop),
         transforms.ToPILImage(),
@@ -158,13 +167,15 @@ def build_dataloader_CY101(opt):
 
     audio_transform = transforms.Compose([
         transforms.Lambda(padding),
+        transforms.Lambda(addnoise_au),
         transforms.Lambda(Standardizer(mean=torch.Tensor([0.0]),
                                        std=torch.Tensor([255.0])))
     ])
 
     haptic_transform = transforms.Compose([
         transforms.Lambda(Standardizer(mean=torch.Tensor(HAPTIC_MEAN),
-                                       std=torch.Tensor(HAPTIC_STD)))
+                                       std=torch.Tensor(HAPTIC_STD))),
+        transforms.Lambda(addnoise_hp)
     ])
 
     train_ds = CY101Dataset(

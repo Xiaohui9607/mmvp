@@ -35,7 +35,7 @@ class Options():
         self.parser.add_argument('--schedsamp_k', type=float, default=400.0, help='The k hyperparameter for scheduled sampling, -1 for no scheduled sampling.')
         self.parser.add_argument('--batch_size', type=int, default=32, help='batch size for training')
         self.parser.add_argument('--learning_rate', type=float, default=0.001, help='the base learning rate of the generator')
-        self.parser.add_argument('--epochs', type=int, default=15, help='# total training epoch')
+        self.parser.add_argument('--epochs', type=int, default=30, help='# total training epoch')
         self.opt = None
 
     def parse(self):

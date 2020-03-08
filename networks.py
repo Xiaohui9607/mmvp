@@ -46,7 +46,6 @@ class network(nn.Module):
                  width=64,
                  iter_num=-1.0,
                  k=-1,
-                 use_haptic=True,
                  num_masks=10,
                  stp=False,
                  cdna=True,
@@ -56,7 +55,7 @@ class network(nn.Module):
         if stp + cdna + dna != 1:
             raise ValueError('More than one, or no network option specified.')
         lstm_size = [32, 32, 64, 64, 128, 64, 32]
-        # lstm_size = [l//2 for l in lstm_size]   # ligthen network
+        lstm_size = [l//2 for l in lstm_size]   # ligthen network
         self.dna = dna
         self.stp = stp
         self.cdna = cdna
