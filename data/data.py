@@ -158,6 +158,7 @@ def build_dataloader_CY101(opt):
     def addnoise_hp(hp):
         hp = hp + torch.rand_like(hp, device=opt.device)
         return hp
+
     image_transform = transforms.Compose([
         transforms.Lambda(crop),
         transforms.ToPILImage(),

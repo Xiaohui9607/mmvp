@@ -42,7 +42,7 @@ OBJECTS = [
     'smallstuffedanimal_moose',
     'weight_5', 'bottle_green', 'cup_paper_green', 'metal_thermos', 'smallstuffedanimal_otter', 'bottle_red',
     'cup_yellow', 'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona',
-    'egg_plastic_wrap', 'noodle_2', 'timber_semicircle'
+    'egg_plastic_wrap', 'noodle_2', 'timber_semicircle', 'no_object'
 ]
 
 
@@ -50,15 +50,18 @@ OBJECTS = [
 SORTED_OBJECTS = sorted(OBJECTS)
 
 
-BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push']
+BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push', 'tap', 'low_drop', 'hold']
 
 crop_stategy = {
     'crush': [16, -5],
-    'grasp': [0, -13],
+    'grasp': [0, -10],
     'lift_slow': [0, -3],
     'shake': [0, -1],
-    'poke': [2, -16],
-    'push': [2, -13]
+    'poke': [2, -5],
+    'push': [2, -5],
+    'tap': [0, -5],
+    'low_drop': [0, -1],
+    'hold': [0, -1],
 }
 
 SEQUENCE_LENGTH = 10

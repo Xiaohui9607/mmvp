@@ -1,11 +1,19 @@
-evaluation epoch:  14, recon_loss: 0.002656, state_loss: 0.000000
-evaluation epoch:  14, recon_loss: 0.002581, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001916, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001690, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001646, state_loss: 0.000000
 
-evaluation epoch:  14, recon_loss: 0.002596, state_loss: 0.000000
-evaluation epoch:  14, recon_loss: 0.002845, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001163, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001081, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001219, state_loss: 0.000000
 
-evaluation epoch:  14, recon_loss: 0.002656, state_loss: 0.000000
-evaluation epoch:  14, recon_loss: 0.002581, state_loss: 0.000000
-evaluation epoch:  14, recon_loss: 0.002596, state_loss: 0.000000
-evaluation epoch:  14, recon_loss: 0.002845, state_loss: 0.000000
-evaluation epoch:  14, recon_loss: 0.002673, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001666, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001632, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001620, state_loss: 0.000000
+
+evaluation epoch:  29, recon_loss: 0.001298, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001272, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001301, state_loss: 0.000000
+
+evaluation epoch:  29, recon_loss: 0.002944, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.003209, state_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.003408, state_loss: 0.000000
