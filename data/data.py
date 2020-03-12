@@ -150,13 +150,13 @@ def build_dataloader_CY101(opt):
             return (hp-self.mean)/self.std
 
     def addnoise_au(au):
-        au = au + torch.rand_like(au, device=opt.device)*10
+        au = au + torch.rand_like(au, device=au.device)*10
         au[au>255]=255
         au[au<0]=0
         return au
 
     def addnoise_hp(hp):
-        hp = hp + torch.rand_like(hp, device=opt.device)
+        hp = hp + torch.rand_like(hp, device=hp.device)
         return hp
 
     image_transform = transforms.Compose([

@@ -2,9 +2,9 @@
 #
 for VARIABLE in 1 2 3 4 5
 do
-  rm -r ../data/CY101NPY
-  python ./data/make_data.py
-  python ./train.py --output_dir weight_use_haptic_$VARIABLE --use_haptic --use_behavior --use_audio
+#  rm -r ../data/CY101NPY
+#  python ./data/make_data.py
+#  python ./train.py --output_dir weight_use_haptic_$VARIABLE --use_haptic --use_behavior --use_audio
   python ./train.py --output_dir weight_baseline_$VARIABLE
 done
 
