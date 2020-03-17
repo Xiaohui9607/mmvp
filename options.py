@@ -32,7 +32,7 @@ class Options():
         self.parser.add_argument('--dna_kern_size', type=int, default=5, help='DNA_KERN_SIZE.')
         self.parser.add_argument('--haptic_layer', type=int, default=16, help='HAPTIC_LAYER.')
         self.parser.add_argument('--behavior_layer', type=int, default=9, help='number of chosen behavior.')
-        self.parser.add_argument('--audio_layer', type=int, default=16, help='HAPTIC_LAYER.')
+        self.parser.add_argument('--audio_layer', type=int, default=16, help='AUDIO_LAYER.')
         self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will overrider multi-modalities options' )
         self.parser.add_argument('--aux', action='store_true', help='employ auxiliary tasks during training' )
         # training details
