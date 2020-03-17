@@ -7,7 +7,7 @@ import numpy as np
 
 IMG_EXTENSIONS = ('.npy',)
 AUDIO_LENGTH = 16
-
+AUDIO_HEIGHT = 128
 HAPTIC_MAX = [-10.478915, 1.017272, 6.426756, 5.950242, 0.75426, -0.013009, 0.034224]
 HAPTIC_MIN = [-39.090578, -21.720063, -10.159031, -4.562487, -1.456323, -1.893409, -0.080752]
 # we do not normalize the cpos
@@ -154,10 +154,10 @@ def build_dataloader_CY101(opt):
         au[au>255]=255
         au[au<0]=0
         return au
-
     def addnoise_hp(hp):
         hp = hp + torch.rand_like(hp, device=hp.device)
         return hp
+
 
     image_transform = transforms.Compose([
         transforms.Lambda(crop),
@@ -167,10 +167,10 @@ def build_dataloader_CY101(opt):
     ])
 
     audio_transform = transforms.Compose([
-        transforms.Lambda(padding),
-        transforms.Lambda(addnoise_au),
-        transforms.Lambda(Standardizer(mean=torch.Tensor([0.0]),
-                                       std=torch.Tensor([255.0])))
+        transforms.Lambda(lambda x:x.byte()),
+        transforms.ToPILImage(),
+        transforms.Resize((AUDIO_LENGTH, AUDIO_HEIGHT)),
+        transforms.ToTensor()
     ])
 
     haptic_transform = transforms.Compose([

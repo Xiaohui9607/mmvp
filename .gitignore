@@ -1,4 +1,5 @@
 *.npy
+*.pyc
 **/.DS_Store
 *.tfrecord-*
 .idea

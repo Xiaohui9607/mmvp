@@ -78,6 +78,7 @@ def convert_audio_to_image(audio_path):
     ims = plotstft(audio_path)
     return ims
 
+
 def generate_npy_vision(path, behavior):
     '''
     :param path: path to images folder,

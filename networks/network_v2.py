@@ -2,46 +2,17 @@ import math
 import torch
 from torch import nn
 from torch.nn import functional as F
+from .layer import ConvLSTM, haptic_feat, audio_feat
 
 RELU_SHIFT = 1e-12
-DNA_KERN_SIZE = 7
-# STATE_DIM = 5
 HAPTIC_DIM = [48, 10]
 AUDIO_DIM = [16, 513]
-HAPTIC_LAYER = 16
-BEHAVIOR_LAYER = 9
-AUDIO_LAYER = 16
-
-
-class ConvLSTM(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size=5, forget_bias=1.0, padding=0):
-        super(ConvLSTM, self).__init__()
-        self.out_channels = out_channels
-        self.conv = nn.Conv2d(in_channels=out_channels + in_channels, out_channels=4 * out_channels, kernel_size=kernel_size, stride=1, padding=padding)
-        self.forget_bias = forget_bias
-    def forward(self, inputs, states):
-        if states is None:
-            states = (torch.zeros([inputs.shape[0], self.out_channels, inputs.shape[2], inputs.shape[3]], device=inputs.device),
-                      torch.zeros([inputs.shape[0], self.out_channels, inputs.shape[2], inputs.shape[3]], device=inputs.device))
-        if not isinstance(states, tuple):
-            raise TypeError("states type is not right")
-
-        c, h = states
-        if not (len(c.shape) == 4 and len(h.shape) == 4 and len(inputs.shape) == 4):
-            raise TypeError("")
-
-        inputs_h = torch.cat((inputs, h), dim=1)
-        i_j_f_o = self.conv(inputs_h)
-        i, j, f, o = torch.split(i_j_f_o,  self.out_channels, dim=1)
-
-        new_c = c * torch.sigmoid(f + self.forget_bias) + torch.sigmoid(i) * torch.tanh(j)
-        new_h = torch.tanh(new_c) * torch.sigmoid(o)
-
-        return new_h, (new_c, new_h)
 
 
 class network(nn.Module):
-    def __init__(self, channels=3,
+    def __init__(self,
+                 opt,
+                 channels=3,
                  height=64,
                  width=64,
                  iter_num=-1.0,
@@ -50,76 +21,94 @@ class network(nn.Module):
                  stp=False,
                  cdna=True,
                  dna=False,
-                 context_frames=2):
+                 context_frames=2,
+                 DNA_KERN_SIZE = 5,
+                 HAPTIC_LAYER = 16,
+                 BEHAVIOR_LAYER = 9,
+                 AUDIO_LAYER = 16,
+                 ):
         super(network, self).__init__()
         if stp + cdna + dna != 1:
             raise ValueError('More than one, or no network option specified.')
         lstm_size = [32, 32, 64, 64, 128, 64, 32]
-        lstm_size = [l//2 for l in lstm_size]   # ligthen network
+        # lstm_size = [l//2 for l in lstm_size]   # ligthen network
         self.dna = dna
         self.stp = stp
         self.cdna = cdna
         self.channels = channels
-        # self.use_haptic = use_haptic
         self.num_masks = num_masks
         self.height = height
         self.width = width
         self.context_frames = context_frames
         self.k = k
         self.iter_num = iter_num
+        self.opt = opt
+        self.RELU_SHIFT = RELU_SHIFT
 
         # self.STATE_DIM = STATE_DIM
+        self.DNA_KERN_SIZE = DNA_KERN_SIZE
         self.HAPTIC_DIM = HAPTIC_DIM
         self.AUDIO_LAYER = AUDIO_LAYER
         self.HAPTIC_LAYER = HAPTIC_LAYER
         self.BEHAVIOR_LAYER = BEHAVIOR_LAYER
         # N * 3 * H * W -> N * 32 * H/2 * W/2
         self.enc0 = nn.Conv2d(in_channels=channels, out_channels=lstm_size[0], kernel_size=5, stride=2, padding=2)
-        self.enc0_norm = nn.LayerNorm([lstm_size[0], self.height//2, self.width//2])
+        self.enc0_norm = nn.BatchNorm2d(lstm_size[0])
+        # self.enc0_norm = nn.BatchNorm2d(lstm_size[0], self.height//2, self.width//2])
         # N * 32 * H/2 * W/2 -> N * 32 * H/2 * W/2
         self.lstm1 = ConvLSTM(in_channels=lstm_size[0], out_channels=lstm_size[0], kernel_size=5, padding=2)
-        self.lstm1_norm = nn.LayerNorm([lstm_size[0], self.height//2, self.width//2])
+        self.lstm1_norm = nn.BatchNorm2d(lstm_size[0])
+        # self.lstm1_norm = nn.BatchNorm2d(lstm_size[0], self.height//2, self.width//2])
         # N * 32 * H/2 * W/2 -> N * 32 * H/2 * W/2
         self.lstm2 = ConvLSTM(in_channels=lstm_size[0], out_channels=lstm_size[1], kernel_size=5, padding=2)
-        self.lstm2_norm = nn.LayerNorm([lstm_size[1], self.height//2, self.width//2])
+        self.lstm2_norm = nn.BatchNorm2d(lstm_size[1])
+        # self.lstm2_norm = nn.BatchNorm2d(lstm_size[1], self.height//2, self.width//2])
 
         # N * 32 * H/4 * W/4 -> N * 32 * H/4 * W/4
         self.enc1 = nn.Conv2d(in_channels=lstm_size[1], out_channels=lstm_size[1], kernel_size=3, stride=2, padding=1)
         # N * 32 * H/4 * W/4 -> N * 64 * H/4 * W/4
         self.lstm3 = ConvLSTM(in_channels=lstm_size[1], out_channels=lstm_size[2], kernel_size=5, padding=2)
-        self.lstm3_norm = nn.LayerNorm([lstm_size[2], self.height//4, self.width//4])
+        self.lstm3_norm = nn.BatchNorm2d(lstm_size[2])
+        # self.lstm3_norm = nn.BatchNorm2d(lstm_size[2], self.height//4, self.width//4])
         # N * 64 * H/4 * W/4 -> N * 64 * H/4 * W/4
         self.lstm4 = ConvLSTM(in_channels=lstm_size[2], out_channels=lstm_size[3], kernel_size=5, padding=2)
-        self.lstm4_norm = nn.LayerNorm([lstm_size[3], self.height//4, self.width//4])
-        # pass in state and action
-        self.build_modalities_block()
+        self.lstm4_norm = nn.BatchNorm2d(lstm_size[3])
+        # self.lstm4_norm = nn.BatchNorm2d(lstm_size[3], self.height//4, self.width//4])
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/8 * W/8
         self.enc2 = nn.Conv2d(in_channels=lstm_size[3], out_channels=lstm_size[3], kernel_size=3, stride=2, padding=1)
 
+        # pass in state and action
+        self.build_modalities_block()
+
         # N * (10+64) * H/8 * W/8 -> N * 64 * H/8 * W/8
         self.enc3 = nn.Conv2d(in_channels=lstm_size[3]+self.HAPTIC_LAYER + self.AUDIO_LAYER+self.BEHAVIOR_LAYER, out_channels=lstm_size[3], kernel_size=1, stride=1)
+
         # N * 64 * H/8 * W/8 -> N * 128 * H/8 * W/8
         self.lstm5 = ConvLSTM(in_channels=lstm_size[3], out_channels=lstm_size[4], kernel_size=5, padding=2)
-        self.lstm5_norm = nn.LayerNorm([lstm_size[4], self.height//8, self.width//8])
+        self.lstm5_norm = nn.BatchNorm2d(lstm_size[4])
+        # self.lstm5_norm = nn.BatchNorm2d(lstm_size[4], self.height//8, self.width//8])
         # N * 128 * H/8 * W/8 -> N * 128 * H/4 * W/4
         self.enc4 = nn.ConvTranspose2d(in_channels=lstm_size[4], out_channels=lstm_size[4], kernel_size=3, stride=2, output_padding=1, padding=1)
         # N * 128 * H/4 * W/4 -> N * 64 * H/4 * W/4
         self.lstm6 = ConvLSTM(in_channels=lstm_size[4], out_channels=lstm_size[5], kernel_size=5, padding=2)
-        self.lstm6_norm = nn.LayerNorm([lstm_size[5], self.height//4, self.width//4])
+        self.lstm6_norm = nn.BatchNorm2d(lstm_size[5])
+        # self.lstm6_norm = nn.BatchNorm2d(lstm_size[5], self.height//4, self.width//4])
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/2 * W/2
         self.enc5 = nn.ConvTranspose2d(in_channels=lstm_size[5]+lstm_size[1], out_channels=lstm_size[5]+lstm_size[1], kernel_size=3, stride=2, output_padding=1, padding=1)
         # N * 64 * H/2 * W/2 -> N * 32 * H/2 * W/2
         self.lstm7 = ConvLSTM(in_channels=lstm_size[5]+lstm_size[1], out_channels=lstm_size[6], kernel_size=5, padding=2)
-        self.lstm7_norm = nn.LayerNorm([lstm_size[6], self.height//2, self.width//2])
+        self.lstm7_norm = nn.BatchNorm2d(lstm_size[6])
+        # self.lstm7_norm = nn.BatchNorm2d(lstm_size[6], self.height//2, self.width//2])
         # N * 32 * H/2 * W/2 -> N * 32 * H * W
         self.enc6 = nn.ConvTranspose2d(in_channels=lstm_size[6]+lstm_size[0], out_channels=lstm_size[6], kernel_size=3, stride=2, output_padding=1, padding=1)
-        self.enc6_norm = nn.LayerNorm([lstm_size[6], self.height, self.width])
+        self.enc6_norm = nn.BatchNorm2d(lstm_size[6])
+        # self.enc6_norm = nn.BatchNorm2d(lstm_size[6], self.height, self.width])
 
         if self.dna:
             # N * 32 * H * W -> N * (DNA_KERN_SIZE*DNA_KERN_SIZE) * H * W
-            self.enc7 = nn.ConvTranspose2d(in_channels=lstm_size[6], out_channels=DNA_KERN_SIZE**2, kernel_size=1, stride=1)
+            self.enc7 = nn.ConvTranspose2d(in_channels=lstm_size[6], out_channels=self.DNA_KERN_SIZE**2, kernel_size=1, stride=1)
         else:
             # N * 32 * H * W -> N * 3 * H * W
             self.enc7 = nn.ConvTranspose2d(in_channels=lstm_size[6], out_channels=channels, kernel_size=1, stride=1)
@@ -127,7 +116,7 @@ class network(nn.Module):
                 # a reshape from lstm5: N * 128 * H/8 * W/8 -> N * (128 * H/8 * W/8)
                 # N * (128 * H/8 * W/8) -> N * (10 * 5 * 5)
                 in_dim = int(lstm_size[4] * self.height * self.width / 64)
-                self.fc = nn.Linear(in_dim, DNA_KERN_SIZE * DNA_KERN_SIZE * self.num_masks)
+                self.fc = nn.Linear(in_dim, self.DNA_KERN_SIZE * self.DNA_KERN_SIZE * self.num_masks)
             else:
                 in_dim = int(lstm_size[4] * self.height * self.width / 64)
                 self.fc = nn.Linear(in_dim, 100)
@@ -138,18 +127,25 @@ class network(nn.Module):
 
     def build_modalities_block(self):
 
-        # self.haptic_feat = nn.Conv1d(HAPTIC_DIM[0], 8, 1, stride=1)
-        # self.haptic_feat = lambda x: torch.mean(x, dim=1, keepdim=True)
-
+        # self.haptic_feat = haptic_feat(self.HAPTIC_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
         self.haptic_feat = nn.Sequential()
         self.haptic_feat.add_module("haptic_1", nn.Conv2d(1, 8, [5, 1], stride=[2, 1]))
+        self.haptic_feat.add_module("hrelu_1", nn.ReLU())
         self.haptic_feat.add_module("haptic_2", nn.Conv2d(8, 16, [3, 1], stride=[2, 1]))
+        self.haptic_feat.add_module("hrelu_2", nn.ReLU())
         self.haptic_feat.add_module("haptic_3", nn.Conv2d(16, self.HAPTIC_LAYER, [3, 3], stride=1))
+        self.haptic_feat.add_module("hrelu_3", nn.ReLU())
+
+        # self.audio_feat = audio_feat(self.AUDIO_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
         self.audio_feat = nn.Sequential()
         self.audio_feat.add_module("audio_1", nn.Conv2d(1, 8, [1, 7], stride=[1, 3]))
+        self.audio_feat.add_module("arelu_1", nn.ReLU())
         self.audio_feat.add_module("audio_2", nn.Conv2d(8, 8, [1, 7], stride=[1, 3]))
+        self.audio_feat.add_module("arelu_2", nn.ReLU())
         self.audio_feat.add_module("audio_3", nn.Conv2d(8, 16, [1, 7], stride=[1, 3]))
+        self.audio_feat.add_module("arelu_3", nn.ReLU())
         self.audio_feat.add_module("audio_4", nn.Conv2d(16, self.AUDIO_LAYER, [3, 3], stride=[2, 2], padding=[1, 0]))
+        self.audio_feat.add_module("arelu_4", nn.ReLU())
 
     def forward(self, images, haptics, audios, behaviors):
         '''
@@ -161,17 +157,24 @@ class network(nn.Module):
 
         lstm_state1, lstm_state2, lstm_state3, lstm_state4 = None, None, None, None
         lstm_state5, lstm_state6, lstm_state7 = None, None, None
+        # haptic_feat_state, audio_feat_state = None, None
+        # haptic_feat_old = self.haptic_feat.feature(haptics[0])
+        # audio_feat_old = self.audio_feat.feature(audios[0])
+        # haptic_feat_old, audio_feat_old = None, None
+
         gen_images = []
+        gen_haptics = []
+        gen_audios = []
         if self.k == -1:
             feedself = True
         else:
             num_ground_truth = round(images[0].shape[0] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
             feedself = False
 
-        for image, haptic, audio in zip(images[:-1], haptics[:-1], audios[:-1]):
+        for image, haptic, audio in zip(images[:-1], haptics[1:], audios[1:]):
 
             done_warm_start = len(gen_images) >= self.context_frames
-            #
+
             if feedself and done_warm_start:
                 # Feed in generated image.
                 image = gen_images[-1]
@@ -201,15 +204,22 @@ class network(nn.Module):
             enc2 = torch.relu(self.enc2(lstm4))
 
             # TODO: pass in state and action
-            # haptic_feat = self.haptic_feat(haptic).permute([0,2,1]).unsqueeze(-1)
+            # enc2, haptic_feat, hv_lstm_feat, haptic_feat_state, audio_feat, av_lstm_feat, audio_feat_state = \
+            #     self.interaction(enc2, haptic, audio, behaviors, haptic_feat_state, audio_feat_state)
+
+            # step 1
+            # gen_haptic = f(haptic_feat_old, av_lstm_feat)
+            # gen_audio = f(audio_feat_old, hv_lstm_feat)
+            # step 2
+            # haptic_feat_old = haptic_feat
+            # audio_feat_old = audio_feat
+
             haptic_feat = self.haptic_feat(haptic)
             audio_feat = self.audio_feat(audio)
             behavior_feat = behaviors.repeat(1, 1, enc2.shape[2]//behaviors.shape[2], enc2.shape[3]//behaviors.shape[3])
-            smear = torch.cat([haptic_feat, behavior_feat, audio_feat], dim=1)
-            # state_action = torch.cat([action, current_state], dim=1)
 
-            # smear = torch.reshape(state_action, list(state_action.shape)+[1, 1])
-            # smear = smear.repeat(1, 1, enc2.shape[2]//smear.shape[2], enc2.shape[3]//smear.shape[3])
+            smear = torch.cat([haptic_feat, behavior_feat, audio_feat], dim=1)
+
 
             enc2 = torch.cat([enc2, smear], dim=1)
 
@@ -258,7 +268,22 @@ class network(nn.Module):
             gen_images.append(output)
 
         self.iter_num += 1
-        return gen_images
+        return gen_images, None, None
+
+    def interaction(self, enc2, haptic, audio, behaviors, haptic_feat_state, audio_feat_state):
+        n_channels = enc2.shape[1] //4
+        hap_specific, vis_specific, aud_specific = enc2.split([n_channels, n_channels*2, n_channels], dim=1)
+        behavior_feat = behaviors.repeat(1, 1, enc2.shape[2] // behaviors.shape[2], enc2.shape[3] // behaviors.shape[3])
+
+        hv_lstm_feat, haptic_feat, hv_lstm_feat_state = self.haptic_feat(haptic, hap_specific, behavior_feat, haptic_feat_state)
+
+        av_lstm_feat, audio_feat, av_lstm_feat_state = self.audio_feat(audio, aud_specific, behavior_feat, audio_feat_state)
+        enc2 = torch.cat([hv_lstm_feat, vis_specific, av_lstm_feat], dim=1)
+        return enc2, \
+               haptic_feat, hv_lstm_feat, haptic_feat_state, \
+               audio_feat, av_lstm_feat, audio_feat_state
+
+
 
     def stp_transformation(self, image, stp_input):
         identity_params = torch.tensor([1.0, 0.0, 0.0, 0.0, 1.0, 0.0], dtype=torch.float32).unsqueeze(1).repeat(1, self.num_masks-1)
@@ -275,15 +300,15 @@ class network(nn.Module):
         batch_size, height, width = image.shape[0], image.shape[2], image.shape[3]
 
         cdna_kerns = self.fc(cdna_input)
-        cdna_kerns = cdna_kerns.view(batch_size, self.num_masks, 1, DNA_KERN_SIZE, DNA_KERN_SIZE)
-        cdna_kerns = torch.relu(cdna_kerns - RELU_SHIFT) + RELU_SHIFT
+        cdna_kerns = cdna_kerns.view(batch_size, self.num_masks, 1, self.DNA_KERN_SIZE, self.DNA_KERN_SIZE)
+        cdna_kerns = torch.relu(cdna_kerns - self.RELU_SHIFT) + self.RELU_SHIFT
         norm_factor = torch.sum(cdna_kerns, dim=[2,3,4], keepdim=True)
         cdna_kerns /= norm_factor
 
-        cdna_kerns = cdna_kerns.view(batch_size*self.num_masks, 1, DNA_KERN_SIZE,DNA_KERN_SIZE)
+        cdna_kerns = cdna_kerns.view(batch_size*self.num_masks, 1, self.DNA_KERN_SIZE, self.DNA_KERN_SIZE)
         image = image.permute([1, 0, 2, 3])
 
-        transformed = torch.conv2d(image, cdna_kerns, stride=1, padding=[(DNA_KERN_SIZE-1)//2, (DNA_KERN_SIZE-1)//2], groups=batch_size)
+        transformed = torch.conv2d(image, cdna_kerns, stride=1, padding=[(self.DNA_KERN_SIZE-1)//2, (self.DNA_KERN_SIZE-1)//2], groups=batch_size)
 
         transformed = transformed.view(self.channels, batch_size, self.num_masks, height, width)
         transformed = transformed.permute([1, 0, 3, 4, 2])
@@ -297,12 +322,12 @@ class network(nn.Module):
 
         inputs = []
 
-        for xkern in range(DNA_KERN_SIZE):
-            for ykern in range(DNA_KERN_SIZE):
+        for xkern in range(self.DNA_KERN_SIZE):
+            for ykern in range(self.DNA_KERN_SIZE):
                 inputs.append(image_pad[:, :, xkern:xkern+height, ykern:ykern+width].clone().unsqueeze(dim=1))
         inputs = torch.cat(inputs, dim=4)
 
-        kernel = torch.relu(dna_input-RELU_SHIFT)+RELU_SHIFT
+        kernel = torch.relu(dna_input-self.RELU_SHIFT)+self.RELU_SHIFT
         kernel = kernel / torch.sum(kernel, dim=1, keepdim=True).unsqueeze(2)
 
         return torch.sum(kernel*inputs, dim=1, keepdim=False)
