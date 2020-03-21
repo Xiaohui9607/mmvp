@@ -1,0 +1,2 @@
+1. Add crop strategy
+2. Limited behaviors (6)

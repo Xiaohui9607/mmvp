@@ -27,7 +27,6 @@ def predict(net, data, save_path=None):
     with torch.no_grad():
         gen_images, gen_states = net(images, actions, states[0])
         save_images = images[:opt.context_frames] + gen_images[opt.context_frames-1:]
-        # save_images = images
         if save_path:
             save_to_local(save_images, save_path)
 

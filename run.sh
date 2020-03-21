@@ -1,14 +1,14 @@
 #!/bin/bash
-#
-#rm -r ../data/CY101NPY
-#python ./data/make_data.py
+
+# --------------- verison 1.0 ---------------
 #for VARIABLE in 1 2 3 4 5
 #do
 #  python ./train.py --output_dir weight_use_haptic_$VARIABLE --use_haptic --use_behavior --use_audio
 #  python ./train.py --output_dir weight_baseline_$VARIABLE
-#  rm -r ../data/CY101NPY
-#  python ./data/make_data.py
-declare -a BEHAVIOR_ARRAY=('crush' 'poke' 'push')
+#done
+
+# --------------- version 2.0 ---------------
+declare -a BEHAVIOR_ARRAY=('crush' 'poke' 'hold' 'lift_slow' 'shake' 'push' 'low_drop' 'tap' 'grasp')
 for BEHAVIOR in ${BEHAVIOR_ARRAY[@]};do
   python ./data/make_data.py --behavior $BEHAVIOR
   for VARIABLE in 1 2 3 4 5
@@ -16,8 +16,22 @@ for BEHAVIOR in ${BEHAVIOR_ARRAY[@]};do
     python ./train.py --output_dir weight_use_haptic_audio_$(VARIABLE)_$(BEHAVIOR) --use_haptic --use_behavior --use_audio
     python ./train.py --output_dir weight_use_haptic_$(VARIABLE)_$(BEHAVIOR) --use_haptic --use_behavior
     python ./train.py --output_dir weight_baseline_$(VARIABLE)_$(BEHAVIOR)
+
+#  python ./data/make_data.py --behavior $BEHAVIOR
+for VARIABLE in 1 2 3 4 5
+do
+>>>>>>> db6b2c57d3d766302e73265ba3ce3106411a1353
     rm -r ../data/CY101NPY
-  done
+    python ./data/make_data.py --behavior ${BEHAVIOR}
+    python ./train.py --output_dir weight_use_haptic_audio_${VARIABLE}_${BEHAVIOR} --behavior_layer 1 --use_haptic --use_behavior --use_audio  --aux
+    python ./train.py --output_dir weight_baseline_${VARIABLE}_${BEHAVIOR} --behavior_layer 0 --baseline
+done
 done
 
+# --------------- version 3.0 ---------------
 
+#for VARIABLE in 1 2 3 4 5
+#do
+#  python ./train.py --output_dir weight_use_haptic_$VARIABLE --use_haptic --use_behavior --use_audio  --aux
+#  python ./train.py --output_dir weight_baseline_$VARIABLE --baseline
+#done

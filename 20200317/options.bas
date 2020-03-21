@@ -1,7 +1,7 @@
 ------------ Options -------------
 audio_layer: 16
 aux: False
-baseline: False
+baseline: True
 batch_size: 32
 behavior_layer: 9
 channels: 3
@@ -15,7 +15,7 @@ height: 64
 learning_rate: 0.001
 model: CDNA
 num_masks: 10
-output_dir: weight
+output_dir: weight_baseline_2
 pretrained_model: 
 print_interval: 10
 schedsamp_k: 400

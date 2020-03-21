@@ -1,6 +1,6 @@
 ------------ Options -------------
 audio_layer: 16
-aux: False
+aux: True
 baseline: False
 batch_size: 32
 behavior_layer: 9
@@ -15,12 +15,12 @@ height: 64
 learning_rate: 0.001
 model: CDNA
 num_masks: 10
-output_dir: weight
+output_dir: weight_use_haptic_1
 pretrained_model: 
 print_interval: 10
 schedsamp_k: 400
 sequence_length: 10
-use_audio: False
-use_behavior: False
-use_haptic: False
+use_audio: True
+use_behavior: True
+use_haptic: True
 width: 64

@@ -42,7 +42,7 @@ OBJECTS = [
     'smallstuffedanimal_moose',
     'weight_5', 'bottle_green', 'cup_paper_green', 'metal_thermos', 'smallstuffedanimal_otter', 'bottle_red',
     'cup_yellow', 'timber_pentagon', 'bottle_sobe', 'egg_cardboard', 'noodle_1', 'timber_rectangle', 'can_arizona',
-    'egg_plastic_wrap', 'noodle_2', 'timber_semicircle'
+    'egg_plastic_wrap', 'noodle_2', 'timber_semicircle', 'no_object'
 ]
 
 
@@ -50,16 +50,18 @@ OBJECTS = [
 SORTED_OBJECTS = sorted(OBJECTS)
 
 
-#CHOOSEN_BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push']
-CHOOSEN_BEHAVIORS = []
+BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push', 'tap', 'low_drop', 'hold']
 
 crop_stategy = {
     'crush': [16, -5],
-    'grasp': [0, -13],
+    'grasp': [0, -10],
     'lift_slow': [0, -3],
     'shake': [0, -1],
-    'poke': [2, -16],
-    'push': [2, -13]
+    'poke': [2, -5],
+    'push': [2, -5],
+    'tap': [0, -5],
+    'low_drop': [0, -1],
+    'hold': [0, -1],
 }
 
 SEQUENCE_LENGTH = 10
@@ -75,6 +77,7 @@ def read_dir():
 def convert_audio_to_image(audio_path):
     ims = plotstft(audio_path)
     return ims
+
 
 def generate_npy_vision(path, behavior):
     '''
@@ -160,9 +163,10 @@ def generate_npy_vibro(path):
     return [np.zeros([SEQUENCE_LENGTH, 7])]
 
 
-
 def process(visions, chosen_behavior):
-    CHOOSEN_BEHAVIORS.append(chosen_behavior)
+    CHOOSEN_BEHAVIORS = BEHAVIORS
+    if chosen_behavior in CHOOSEN_BEHAVIORS:
+        CHOOSEN_BEHAVIORS = [chosen_behavior]
     train_subir = 'train'
     test_subir = 'test'
     if not os.path.exists(os.path.join(OUT_DIR, train_subir)):
@@ -247,7 +251,7 @@ def run(chosen_behavior):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--behavior', default='crush', help='which behavior?')
+    parser.add_argument('--behavior', default='None', help='which behavior?')
     args = parser.parse_args()
 
     print("behavior: ", args.behavior)

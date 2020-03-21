@@ -1,7 +1,7 @@
 import os
 import torch
 from torch import nn
-from networks import network
+from networks import network, baseline
 from data import build_dataloader_CY101
 from torch.nn import functional as F
 
@@ -22,12 +22,17 @@ class Model():
     def __init__(self, opt):
         self.opt = opt
         self.device = self.opt.device
-        print(opt.use_haptic, opt.use_behavior)
+        print(opt.use_haptic, opt.use_behavior, opt.use_audio)
         train_dataloader, valid_dataloader = build_dataloader_CY101(opt)
         self.dataloader = {'train': train_dataloader, 'valid': valid_dataloader}
+        if self.opt.baseline:
+            self.net = baseline(self.opt, self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
+                            self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
+        else:
+            self.net = network(self.opt, self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
+                           self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames,
+                           self.opt.dna_kern_size, self.opt.haptic_layer, self.opt.behavior_layer, self.opt.audio_layer)
 
-        self.net = network(self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
-                               self.opt.use_haptic, self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
         self.net.to(self.device)
         self.mse_loss = nn.MSELoss()
 
@@ -39,10 +44,10 @@ class Model():
         print("--------------------start training epoch %2d--------------------" % epoch)
         for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['train']):
             self.net.zero_grad()
-            if not self.opt.use_haptic:
-                haptics = torch.zeros_like(haptics).to(self.device)
             if not self.opt.use_behavior:
                 behaviors = torch.zeros_like(behaviors).to(self.device)
+            if not self.opt.use_haptic:
+                haptics = torch.zeros_like(haptics).to(self.device)
             if not self.opt.use_audio:
                 audios = torch.zeros_like(audios).to(self.device)
 
@@ -51,23 +56,39 @@ class Model():
             haptics = haptics.permute([1, 0, 2, 3, 4]).unbind(0)
             audios = audios.permute([1, 0, 2, 3, 4]).unbind(0)
 
-            gen_images = self.net(images, haptics, audios, behaviors)
+            gen_images, gen_haptics, gen_audios = self.net(images, haptics, audios, behaviors)
 
+            recon_loss, haptic_loss, audio_loss = 0.0, 0.0, 0.0
             loss, psnr = 0.0, 0.0
 
-            for i, (image, gen_image) in enumerate(zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames-1:])):
-                recon_loss = self.mse_loss(image, gen_image)
+            for i, (image, gen_image) in enumerate(
+                    zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames-1:])):
+                recon_loss += self.mse_loss(image, gen_image)
                 psnr_i = peak_signal_to_noise_ratio(image, gen_image)
-                loss += recon_loss
                 psnr += psnr_i
 
-            loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
+            if gen_haptics is not None and self.opt.aux:
+                # add gen haptic loss
+                for i, (haptic, gen_haptic) in enumerate(
+                        zip(haptics[self.opt.context_frames:], gen_haptics[self.opt.context_frames - 1:])):
+                    haptic_loss += self.mse_loss(haptic, gen_haptic) * 1e-6
+            if gen_audios is not None and self.opt.aux:
+                # add gen audio loss
+                for i, (audio, gen_audio) in enumerate(
+                        zip(audios[self.opt.context_frames:], gen_audios[self.opt.context_frames - 1:])):
+                    audio_loss += self.mse_loss(audio, gen_audio) * 1e-3
+
+            recon_loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
+            haptic_loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
+            audio_loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
+
+            loss = recon_loss + haptic_loss + audio_loss
             loss.backward()
             self.optimizer.step()
 
             if iter_ % self.opt.print_interval == 0:
-                print("training epoch: %3d, iterations: %3d/%3d loss: %6f" %
-                      (epoch, iter_, len(self.dataloader['train'].dataset)//self.opt.batch_size, loss))
+                print("training epoch: %3d, iterations: %3d/%3d total_loss: %6f recon_loss: %6f haptic_loss： %6f audio_loss: %6f" %
+                      (epoch, iter_, len(self.dataloader['train'].dataset)//self.opt.batch_size, loss, recon_loss, haptic_loss, audio_loss))
 
     def train(self):
         for epoch_i in range(0, self.opt.epochs):
@@ -77,7 +98,7 @@ class Model():
 
     def evaluate(self, epoch):
         with torch.no_grad():
-            mse_loss, psnr, state_loss = 0.0, 0.0, 0.0
+            mse_loss, psnr = 0.0, 0.0
             for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
                     haptics = torch.zeros_like(haptics).to(self.device)
@@ -91,7 +112,7 @@ class Model():
                 haptics = haptics.permute([1, 0, 2, 3, 4]).unbind(0)
                 audios = audios.permute([1, 0, 2, 3, 4]).unbind(0)
 
-                gen_images = self.net(images, haptics, audios, behaviors)
+                gen_images, _, _ = self.net(images, haptics, audios, behaviors)
 
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
@@ -99,7 +120,7 @@ class Model():
                     mse_loss += self.mse_loss(image, gen_image)
 
             mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
-            print("evaluation epoch: %3d, recon_loss: %6f, state_loss: %6f" % (epoch, mse_loss, state_loss))
+            print("evaluation epoch: %3d, recon_loss: %6f" % (epoch, mse_loss))
 
     def save_weight(self, epoch):
         torch.save(self.net.state_dict(), os.path.join(self.opt.output_dir, "net_epoch_%d.pth" % epoch))
