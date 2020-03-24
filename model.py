@@ -1,9 +1,14 @@
 import os
 import torch
 from torch import nn
+import matplotlib.pyplot as plt
 from networks import network, baseline
 from data import build_dataloader_CY101
 from torch.nn import functional as F
+
+
+def mse_to_psnr(mse):
+    return 10.0 * torch.log(torch.tensor(1.0) / mse) / torch.log(torch.tensor(10.0))
 
 
 def peak_signal_to_noise_ratio(true, pred):
@@ -96,9 +101,12 @@ class Model():
             self.evaluate(epoch_i)
             self.save_weight(epoch_i)
 
-    def evaluate(self, epoch):
+    def evaluate(self, epoch, keep_frame=False):
         with torch.no_grad():
-            mse_loss, psnr = 0.0, 0.0
+            if keep_frame:
+                mse_loss = [0.0 for _ in range(self.opt.sequence_length - self.opt.context_frames)]
+            else:
+                mse_loss = 0.0
             for iter_, (images, haptics, audios, behaviors) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
                     haptics = torch.zeros_like(haptics).to(self.device)
@@ -112,15 +120,23 @@ class Model():
                 haptics = haptics.permute([1, 0, 2, 3, 4]).unbind(0)
                 audios = audios.permute([1, 0, 2, 3, 4]).unbind(0)
 
-                gen_images, _, _ = self.net(images, haptics, audios, behaviors)
+                gen_images, _, _ = self.net(images, haptics, audios, behaviors, train=False)
 
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
-                    psnr += peak_signal_to_noise_ratio(image, gen_image)
-                    mse_loss += self.mse_loss(image, gen_image)
+                    if keep_frame:
+                        mse_loss[i] += self.mse_loss(image, gen_image)
+                    else:
+                        mse_loss += self.mse_loss(image, gen_image)
 
-            mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
-            print("evaluation epoch: %3d, recon_loss: %6f" % (epoch, mse_loss))
+            if keep_frame:
+                mse_loss = [loss / len(self.dataloader['valid'].dataset) * self.opt.batch_size for loss in mse_loss]
+
+            else:
+                mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
+                print("evaluation epoch: %3d, recon_loss: %6f" % (epoch, mse_loss))
+            return mse_loss
+
 
     def save_weight(self, epoch):
         torch.save(self.net.state_dict(), os.path.join(self.opt.output_dir, "net_epoch_%d.pth" % epoch))

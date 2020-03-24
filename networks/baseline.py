@@ -98,7 +98,7 @@ class baseline(nn.Module):
         self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
-    def forward(self, images, haptics, audios, behaviors):
+    def forward(self, images, haptics, audios, behaviors, train=True):
         '''
         :param inputs: T * N * C * H * W
         :param state: T * N * C
@@ -109,11 +109,13 @@ class baseline(nn.Module):
         lstm_state1, lstm_state2, lstm_state3, lstm_state4 = None, None, None, None
         lstm_state5, lstm_state6, lstm_state7 = None, None, None
         gen_images = []
-        if self.k == -1:
+
+        if self.k == -1 or not train:
             feedself = True
         else:
             num_ground_truth = round(images[0].shape[0] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
             feedself = False
+            self.iter_num += 1
 
         for image in images[:-1]:
 
