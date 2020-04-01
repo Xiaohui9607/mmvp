@@ -27,7 +27,7 @@ class Model():
     def __init__(self, opt):
         self.opt = opt
         self.device = self.opt.device
-        print(opt.use_haptic, opt.use_behavior, opt.use_audio)
+        print("use haptic: ", opt.use_haptic, "    use behavior: ", opt.use_behavior, "    use audio: ", opt.use_audio)
         train_dataloader, valid_dataloader = build_dataloader_CY101(opt)
         self.dataloader = {'train': train_dataloader, 'valid': valid_dataloader}
         if self.opt.baseline:
@@ -76,7 +76,7 @@ class Model():
                 # add gen haptic loss
                 for i, (haptic, gen_haptic) in enumerate(
                         zip(haptics[self.opt.context_frames:], gen_haptics[self.opt.context_frames - 1:])):
-                    haptic_loss += self.mse_loss(haptic, gen_haptic) * 1e-6
+                    haptic_loss += self.mse_loss(haptic[..., -3:], gen_haptic[..., -3:]) * 1e-4
             if gen_audios is not None and self.opt.aux:
                 # add gen audio loss
                 for i, (audio, gen_audio) in enumerate(

@@ -12,6 +12,7 @@ from sklearn.preprocessing import OneHotEncoder
 DATA_DIR = '../data/CY101'
 OUT_DIR = '../data/CY101NPY'
 
+STRATEGY = 'object' # object | category | trail
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc',
               'cup', 'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
@@ -45,11 +46,13 @@ OBJECTS = [
     'egg_plastic_wrap', 'noodle_2', 'timber_semicircle', 'no_object'
 ]
 
+
 # Objects
 SORTED_OBJECTS = sorted(OBJECTS)
 
 BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push', 'tap', 'low_drop', 'hold']
 
+TRAILS = ['exec_1', 'exec_2', 'exec_3', 'exec_4', 'exec_5']
 
 crop_stategy = {
     'crush': [16, -5],
@@ -162,6 +165,36 @@ def generate_npy_vibro(path, sequence_length):
     return [np.zeros([sequence_length, 7])]
 
 
+def split(strategy):
+    '''
+
+    :param strategy: object | category | trail
+    :return: train -> list
+             test -> list
+    '''
+    train_list = []
+    test_list = []
+    if strategy == 'object':
+        for i in range(len(SORTED_OBJECTS) // 5):
+            random_number = np.random.randint(low=0, high=5)
+            np.random.shuffle(SORTED_OBJECTS[5 * i:5 * i + 5])
+            shuffled_category = SORTED_OBJECTS[5 * i:5 * i + 5]
+            for item, object in enumerate(shuffled_category):
+                if item == random_number:
+                    test_list.append(object)
+                else:
+                    train_list.append(object)
+    elif strategy == 'category':
+        random.shuffle(CATEGORIES)
+        train_list, test_list = CATEGORIES[:16], CATEGORIES[16:]
+
+    elif strategy == 'trail':
+        random.shuffle(TRAILS)
+        train_list, test_list = TRAILS[:4], TRAILS[4:]
+        train_list += ['exec_6', 'exec_7', 'exec_8', 'exec_9', 'exec_10']
+    return train_list, test_list
+
+
 def process(visions, chosen_behavior):
     CHOOSEN_BEHAVIORS = BEHAVIORS
     if chosen_behavior in CHOOSEN_BEHAVIORS:
@@ -178,17 +211,7 @@ def process(visions, chosen_behavior):
     if not os.path.exists(os.path.join(OUT_DIR, vis_subdir)):
         os.makedirs(os.path.join(OUT_DIR, vis_subdir))
 
-    train_list = []
-    test_list = []
-    for i in range(len(SORTED_OBJECTS)//5):
-        random_number = np.random.randint(low=0, high=5)
-        np.random.shuffle(SORTED_OBJECTS[5*i:5*i+5])
-        shuffled_category = SORTED_OBJECTS[5*i:5*i+5]
-        for item, object in enumerate(shuffled_category):
-            if item == random_number:
-                test_list.append(object)
-            else:
-                train_list.append(object)
+    train_list, test_list = split(strategy=STRATEGY)
 
     split_base = train_list + test_list
     cutting = len(train_list)

@@ -26,6 +26,8 @@ python ./data/make_data.py
 #VARIABLE = 1
 #for VARIABLE in 1 2 3 4 5
 #do
-python ./train.py --output_dir weight_use_haptic_1 --use_haptic --use_behavior --use_audio  --aux
+python ./train.py --output_dir weight_use_haptic_1 --use_haptic --use_behavior --aux
+python ./train.py --output_dir weight_use_audio_1 --use_behavior --use_audio  --aux
+python ./train.py --output_dir weight_use_haptic_audio_1 --use_haptic --use_behavior --use_audio  --aux
 python ./train.py --output_dir weight_baseline_1 --baseline
 #done
