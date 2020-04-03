@@ -149,7 +149,7 @@ class network(nn.Module):
         # self.audio_feat.add_module("audio_4", nn.Conv2d(16, self.AUDIO_LAYER, [3, 3], stride=[2, 2], padding=[1, 0]))
         # self.audio_feat.add_module("arelu_4", nn.ReLU())
 
-    def forward(self, images, haptics, audios, behaviors):
+    def forward(self, images, haptics, audios, behaviors, train=True):
         '''
         :param inputs: T * N * C * H * W
         :param state: T * N * C
@@ -167,11 +167,12 @@ class network(nn.Module):
         gen_images = []
         gen_haptics = []
         gen_audios = []
-        if self.k == -1:
+        if self.k == -1 or not train:
             feedself = True
         else:
             num_ground_truth = round(images[0].shape[0] * (self.k / (math.exp(self.iter_num/self.k) + self.k)))
             feedself = False
+            self.iter_num += 1
 
         for image, haptic, audio in zip(images[:-1], haptics[1:], audios[1:]):
 
@@ -271,7 +272,6 @@ class network(nn.Module):
 
             gen_images.append(output)
 
-        self.iter_num += 1
         return gen_images, gen_haptics, gen_audios
 
     def interaction(self, enc2, haptic, audio, behaviors, haptic_feat_state, audio_feat_state):

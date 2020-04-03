@@ -33,10 +33,10 @@ class Options():
         self.parser.add_argument('--haptic_layer', type=int, default=16, help='HAPTIC_LAYER.')
         self.parser.add_argument('--behavior_layer', type=int, default=9, help='number of chosen behavior.')
         self.parser.add_argument('--audio_layer', type=int, default=16, help='AUDIO_LAYER.')
-        self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will overrider multi-modalities options' )
+        self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will override multi-modalities options' )
         self.parser.add_argument('--aux', action='store_true', help='employ auxiliary tasks during training' )
         # training details
-        self.parser.add_argument('--print_interval', type=int, default=10, help='# iterations to output loss')
+        self.parser.add_argument('--print_interval', type=int, default=100, help='# iterations to output loss')
         self.parser.add_argument('--schedsamp_k', type=float, default=400, help='The k hyperparameter for scheduled sampling, -1 for no scheduled sampling.')
         self.parser.add_argument('--batch_size', type=int, default=32, help='batch size for training')
         self.parser.add_argument('--learning_rate', type=float, default=0.001, help='the base learning rate of the generator')

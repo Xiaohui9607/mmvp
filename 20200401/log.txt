@@ -1,0 +1,972 @@
+behavior:  None
+start making data
+fail:  14
+done!
+Model Config:  Namespace(audio_layer=16, aux=True, baseline=False, batch_size=32, behavior_layer=9, channels=3, context_frames=4, data_dir='../data/CY101NPY', device='cuda', dna_kern_size=5, epochs=30, haptic_layer=16, height=64, learning_rate=0.001, model='CDNA', num_masks=10, output_dir='weight_use_haptic_1', pretrained_model='', print_interval=100, schedsamp_k=400, sequence_length=10, use_audio=False, use_behavior=True, use_haptic=True, width=64)
+use haptic:  True     use behavior:  True     use audio:  False
+--------------------start training epoch  0--------------------
+training epoch:   0, iterations:   0/591 total_loss: 0.003959 recon_loss: 0.003856 haptic_loss： 0.000084 audio_loss: 0.000019
+training epoch:   0, iterations: 100/591 total_loss: 0.001169 recon_loss: 0.001089 haptic_loss： 0.000079 audio_loss: 0.000000
+training epoch:   0, iterations: 200/591 total_loss: 0.001068 recon_loss: 0.001010 haptic_loss： 0.000058 audio_loss: 0.000000
+training epoch:   0, iterations: 300/591 total_loss: 0.001074 recon_loss: 0.001040 haptic_loss： 0.000034 audio_loss: 0.000000
+training epoch:   0, iterations: 400/591 total_loss: 0.001020 recon_loss: 0.000990 haptic_loss： 0.000030 audio_loss: 0.000000
+training epoch:   0, iterations: 500/591 total_loss: 0.000955 recon_loss: 0.000927 haptic_loss： 0.000028 audio_loss: 0.000000
+evaluation epoch:   0, recon_loss: 0.002159
+--------------------start training epoch  1--------------------
+training epoch:   1, iterations:   0/591 total_loss: 0.000807 recon_loss: 0.000779 haptic_loss： 0.000028 audio_loss: 0.000000
+training epoch:   1, iterations: 100/591 total_loss: 0.001271 recon_loss: 0.001247 haptic_loss： 0.000024 audio_loss: 0.000000
+training epoch:   1, iterations: 200/591 total_loss: 0.001085 recon_loss: 0.001060 haptic_loss： 0.000024 audio_loss: 0.000000
+training epoch:   1, iterations: 300/591 total_loss: 0.001022 recon_loss: 0.000999 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:   1, iterations: 400/591 total_loss: 0.001062 recon_loss: 0.001042 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   1, iterations: 500/591 total_loss: 0.000885 recon_loss: 0.000862 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:   1, recon_loss: 0.002191
+--------------------start training epoch  2--------------------
+training epoch:   2, iterations:   0/591 total_loss: 0.000927 recon_loss: 0.000906 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   2, iterations: 100/591 total_loss: 0.001232 recon_loss: 0.001211 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   2, iterations: 200/591 total_loss: 0.001243 recon_loss: 0.001223 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:   2, iterations: 300/591 total_loss: 0.001054 recon_loss: 0.001033 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   2, iterations: 400/591 total_loss: 0.001194 recon_loss: 0.001171 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   2, iterations: 500/591 total_loss: 0.001136 recon_loss: 0.001114 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:   2, recon_loss: 0.002120
+--------------------start training epoch  3--------------------
+training epoch:   3, iterations:   0/591 total_loss: 0.001146 recon_loss: 0.001125 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   3, iterations: 100/591 total_loss: 0.001553 recon_loss: 0.001533 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   3, iterations: 200/591 total_loss: 0.001299 recon_loss: 0.001276 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:   3, iterations: 300/591 total_loss: 0.001323 recon_loss: 0.001302 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   3, iterations: 400/591 total_loss: 0.001258 recon_loss: 0.001237 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   3, iterations: 500/591 total_loss: 0.001324 recon_loss: 0.001302 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:   3, recon_loss: 0.001838
+--------------------start training epoch  4--------------------
+training epoch:   4, iterations:   0/591 total_loss: 0.001180 recon_loss: 0.001158 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   4, iterations: 100/591 total_loss: 0.001443 recon_loss: 0.001421 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   4, iterations: 200/591 total_loss: 0.001260 recon_loss: 0.001238 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   4, iterations: 300/591 total_loss: 0.001489 recon_loss: 0.001467 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:   4, iterations: 400/591 total_loss: 0.001723 recon_loss: 0.001702 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   4, iterations: 500/591 total_loss: 0.001550 recon_loss: 0.001527 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:   4, recon_loss: 0.001740
+--------------------start training epoch  5--------------------
+training epoch:   5, iterations:   0/591 total_loss: 0.001865 recon_loss: 0.001844 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   5, iterations: 100/591 total_loss: 0.001648 recon_loss: 0.001626 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   5, iterations: 200/591 total_loss: 0.001376 recon_loss: 0.001354 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   5, iterations: 300/591 total_loss: 0.001379 recon_loss: 0.001355 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:   5, iterations: 400/591 total_loss: 0.001551 recon_loss: 0.001531 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:   5, iterations: 500/591 total_loss: 0.001738 recon_loss: 0.001716 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:   5, recon_loss: 0.001616
+--------------------start training epoch  6--------------------
+training epoch:   6, iterations:   0/591 total_loss: 0.001278 recon_loss: 0.001257 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   6, iterations: 100/591 total_loss: 0.001660 recon_loss: 0.001638 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   6, iterations: 200/591 total_loss: 0.001690 recon_loss: 0.001668 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   6, iterations: 300/591 total_loss: 0.001406 recon_loss: 0.001385 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   6, iterations: 400/591 total_loss: 0.001319 recon_loss: 0.001296 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:   6, iterations: 500/591 total_loss: 0.001975 recon_loss: 0.001953 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:   6, recon_loss: 0.001572
+--------------------start training epoch  7--------------------
+training epoch:   7, iterations:   0/591 total_loss: 0.001471 recon_loss: 0.001449 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   7, iterations: 100/591 total_loss: 0.001510 recon_loss: 0.001488 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   7, iterations: 200/591 total_loss: 0.001676 recon_loss: 0.001653 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   7, iterations: 300/591 total_loss: 0.001409 recon_loss: 0.001386 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:   7, iterations: 400/591 total_loss: 0.001788 recon_loss: 0.001767 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   7, iterations: 500/591 total_loss: 0.001556 recon_loss: 0.001535 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:   7, recon_loss: 0.001550
+--------------------start training epoch  8--------------------
+training epoch:   8, iterations:   0/591 total_loss: 0.001633 recon_loss: 0.001613 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   8, iterations: 100/591 total_loss: 0.001584 recon_loss: 0.001563 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   8, iterations: 200/591 total_loss: 0.001950 recon_loss: 0.001929 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   8, iterations: 300/591 total_loss: 0.001745 recon_loss: 0.001723 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   8, iterations: 400/591 total_loss: 0.001885 recon_loss: 0.001863 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   8, iterations: 500/591 total_loss: 0.001384 recon_loss: 0.001363 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:   8, recon_loss: 0.001548
+--------------------start training epoch  9--------------------
+training epoch:   9, iterations:   0/591 total_loss: 0.001566 recon_loss: 0.001545 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   9, iterations: 100/591 total_loss: 0.001949 recon_loss: 0.001927 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   9, iterations: 200/591 total_loss: 0.001821 recon_loss: 0.001799 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:   9, iterations: 300/591 total_loss: 0.001723 recon_loss: 0.001702 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   9, iterations: 400/591 total_loss: 0.001781 recon_loss: 0.001761 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:   9, iterations: 500/591 total_loss: 0.001522 recon_loss: 0.001500 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:   9, recon_loss: 0.001530
+--------------------start training epoch 10--------------------
+training epoch:  10, iterations:   0/591 total_loss: 0.001432 recon_loss: 0.001410 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  10, iterations: 100/591 total_loss: 0.001782 recon_loss: 0.001762 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  10, iterations: 200/591 total_loss: 0.001333 recon_loss: 0.001311 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  10, iterations: 300/591 total_loss: 0.001791 recon_loss: 0.001770 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  10, iterations: 400/591 total_loss: 0.001473 recon_loss: 0.001451 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  10, iterations: 500/591 total_loss: 0.001466 recon_loss: 0.001444 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  10, recon_loss: 0.001530
+--------------------start training epoch 11--------------------
+training epoch:  11, iterations:   0/591 total_loss: 0.001691 recon_loss: 0.001669 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  11, iterations: 100/591 total_loss: 0.001581 recon_loss: 0.001558 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  11, iterations: 200/591 total_loss: 0.001423 recon_loss: 0.001402 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  11, iterations: 300/591 total_loss: 0.002066 recon_loss: 0.002046 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:  11, iterations: 400/591 total_loss: 0.001739 recon_loss: 0.001717 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  11, iterations: 500/591 total_loss: 0.001463 recon_loss: 0.001442 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  11, recon_loss: 0.001913
+--------------------start training epoch 12--------------------
+training epoch:  12, iterations:   0/591 total_loss: 0.002337 recon_loss: 0.002315 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  12, iterations: 100/591 total_loss: 0.001509 recon_loss: 0.001487 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  12, iterations: 200/591 total_loss: 0.001720 recon_loss: 0.001699 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  12, iterations: 300/591 total_loss: 0.001678 recon_loss: 0.001657 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  12, iterations: 400/591 total_loss: 0.001412 recon_loss: 0.001391 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  12, iterations: 500/591 total_loss: 0.001493 recon_loss: 0.001471 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  12, recon_loss: 0.001496
+--------------------start training epoch 13--------------------
+training epoch:  13, iterations:   0/591 total_loss: 0.001505 recon_loss: 0.001481 haptic_loss： 0.000024 audio_loss: 0.000000
+training epoch:  13, iterations: 100/591 total_loss: 0.001680 recon_loss: 0.001658 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  13, iterations: 200/591 total_loss: 0.001339 recon_loss: 0.001316 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  13, iterations: 300/591 total_loss: 0.001544 recon_loss: 0.001523 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  13, iterations: 400/591 total_loss: 0.001720 recon_loss: 0.001699 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  13, iterations: 500/591 total_loss: 0.001760 recon_loss: 0.001739 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  13, recon_loss: 0.001512
+--------------------start training epoch 14--------------------
+training epoch:  14, iterations:   0/591 total_loss: 0.001561 recon_loss: 0.001540 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  14, iterations: 100/591 total_loss: 0.001541 recon_loss: 0.001519 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  14, iterations: 200/591 total_loss: 0.001723 recon_loss: 0.001702 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  14, iterations: 300/591 total_loss: 0.001792 recon_loss: 0.001771 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  14, iterations: 400/591 total_loss: 0.001639 recon_loss: 0.001618 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  14, iterations: 500/591 total_loss: 0.001438 recon_loss: 0.001417 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.001494
+--------------------start training epoch 15--------------------
+training epoch:  15, iterations:   0/591 total_loss: 0.001277 recon_loss: 0.001254 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  15, iterations: 100/591 total_loss: 0.001927 recon_loss: 0.001905 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  15, iterations: 200/591 total_loss: 0.001738 recon_loss: 0.001717 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  15, iterations: 300/591 total_loss: 0.001661 recon_loss: 0.001640 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  15, iterations: 400/591 total_loss: 0.001893 recon_loss: 0.001871 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  15, iterations: 500/591 total_loss: 0.001972 recon_loss: 0.001951 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  15, recon_loss: 0.001568
+--------------------start training epoch 16--------------------
+training epoch:  16, iterations:   0/591 total_loss: 0.001523 recon_loss: 0.001501 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  16, iterations: 100/591 total_loss: 0.001400 recon_loss: 0.001377 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  16, iterations: 200/591 total_loss: 0.001679 recon_loss: 0.001659 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:  16, iterations: 300/591 total_loss: 0.001769 recon_loss: 0.001747 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  16, iterations: 400/591 total_loss: 0.001547 recon_loss: 0.001526 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  16, iterations: 500/591 total_loss: 0.001485 recon_loss: 0.001463 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  16, recon_loss: 0.001511
+--------------------start training epoch 17--------------------
+training epoch:  17, iterations:   0/591 total_loss: 0.001278 recon_loss: 0.001255 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  17, iterations: 100/591 total_loss: 0.001410 recon_loss: 0.001388 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  17, iterations: 200/591 total_loss: 0.001626 recon_loss: 0.001604 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  17, iterations: 300/591 total_loss: 0.001372 recon_loss: 0.001351 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  17, iterations: 400/591 total_loss: 0.001826 recon_loss: 0.001806 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:  17, iterations: 500/591 total_loss: 0.001551 recon_loss: 0.001530 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  17, recon_loss: 0.001552
+--------------------start training epoch 18--------------------
+training epoch:  18, iterations:   0/591 total_loss: 0.001930 recon_loss: 0.001908 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  18, iterations: 100/591 total_loss: 0.001589 recon_loss: 0.001567 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  18, iterations: 200/591 total_loss: 0.001717 recon_loss: 0.001696 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  18, iterations: 300/591 total_loss: 0.001451 recon_loss: 0.001428 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  18, iterations: 400/591 total_loss: 0.001845 recon_loss: 0.001824 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  18, iterations: 500/591 total_loss: 0.001428 recon_loss: 0.001406 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  18, recon_loss: 0.001510
+--------------------start training epoch 19--------------------
+training epoch:  19, iterations:   0/591 total_loss: 0.001471 recon_loss: 0.001450 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  19, iterations: 100/591 total_loss: 0.001608 recon_loss: 0.001587 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  19, iterations: 200/591 total_loss: 0.001568 recon_loss: 0.001546 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  19, iterations: 300/591 total_loss: 0.001428 recon_loss: 0.001407 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  19, iterations: 400/591 total_loss: 0.001264 recon_loss: 0.001242 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  19, iterations: 500/591 total_loss: 0.001545 recon_loss: 0.001524 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  19, recon_loss: 0.001491
+--------------------start training epoch 20--------------------
+training epoch:  20, iterations:   0/591 total_loss: 0.001869 recon_loss: 0.001849 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  20, iterations: 100/591 total_loss: 0.001708 recon_loss: 0.001688 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  20, iterations: 200/591 total_loss: 0.001643 recon_loss: 0.001621 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  20, iterations: 300/591 total_loss: 0.001293 recon_loss: 0.001272 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  20, iterations: 400/591 total_loss: 0.001626 recon_loss: 0.001605 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  20, iterations: 500/591 total_loss: 0.001524 recon_loss: 0.001502 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  20, recon_loss: 0.001529
+--------------------start training epoch 21--------------------
+training epoch:  21, iterations:   0/591 total_loss: 0.001770 recon_loss: 0.001750 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  21, iterations: 100/591 total_loss: 0.001524 recon_loss: 0.001503 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  21, iterations: 200/591 total_loss: 0.001569 recon_loss: 0.001547 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  21, iterations: 300/591 total_loss: 0.001842 recon_loss: 0.001820 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  21, iterations: 400/591 total_loss: 0.001237 recon_loss: 0.001215 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  21, iterations: 500/591 total_loss: 0.001629 recon_loss: 0.001607 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  21, recon_loss: 0.001532
+--------------------start training epoch 22--------------------
+training epoch:  22, iterations:   0/591 total_loss: 0.001400 recon_loss: 0.001379 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  22, iterations: 100/591 total_loss: 0.001358 recon_loss: 0.001336 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  22, iterations: 200/591 total_loss: 0.001625 recon_loss: 0.001603 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  22, iterations: 300/591 total_loss: 0.001545 recon_loss: 0.001523 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  22, iterations: 400/591 total_loss: 0.001636 recon_loss: 0.001616 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:  22, iterations: 500/591 total_loss: 0.001484 recon_loss: 0.001463 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  22, recon_loss: 0.001479
+--------------------start training epoch 23--------------------
+training epoch:  23, iterations:   0/591 total_loss: 0.001485 recon_loss: 0.001463 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  23, iterations: 100/591 total_loss: 0.001227 recon_loss: 0.001205 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  23, iterations: 200/591 total_loss: 0.001771 recon_loss: 0.001751 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  23, iterations: 300/591 total_loss: 0.001458 recon_loss: 0.001436 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  23, iterations: 400/591 total_loss: 0.001737 recon_loss: 0.001716 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  23, iterations: 500/591 total_loss: 0.001500 recon_loss: 0.001478 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  23, recon_loss: 0.001483
+--------------------start training epoch 24--------------------
+training epoch:  24, iterations:   0/591 total_loss: 0.001298 recon_loss: 0.001277 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  24, iterations: 100/591 total_loss: 0.001602 recon_loss: 0.001581 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  24, iterations: 200/591 total_loss: 0.001766 recon_loss: 0.001745 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  24, iterations: 300/591 total_loss: 0.001330 recon_loss: 0.001308 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  24, iterations: 400/591 total_loss: 0.001619 recon_loss: 0.001597 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  24, iterations: 500/591 total_loss: 0.001179 recon_loss: 0.001158 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  24, recon_loss: 0.001485
+--------------------start training epoch 25--------------------
+training epoch:  25, iterations:   0/591 total_loss: 0.001507 recon_loss: 0.001485 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  25, iterations: 100/591 total_loss: 0.001560 recon_loss: 0.001539 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  25, iterations: 200/591 total_loss: 0.001602 recon_loss: 0.001582 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  25, iterations: 300/591 total_loss: 0.001587 recon_loss: 0.001564 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  25, iterations: 400/591 total_loss: 0.001417 recon_loss: 0.001396 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  25, iterations: 500/591 total_loss: 0.001602 recon_loss: 0.001581 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  25, recon_loss: 0.001491
+--------------------start training epoch 26--------------------
+training epoch:  26, iterations:   0/591 total_loss: 0.001693 recon_loss: 0.001673 haptic_loss： 0.000020 audio_loss: 0.000000
+training epoch:  26, iterations: 100/591 total_loss: 0.001902 recon_loss: 0.001881 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  26, iterations: 200/591 total_loss: 0.001359 recon_loss: 0.001337 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  26, iterations: 300/591 total_loss: 0.001512 recon_loss: 0.001490 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  26, iterations: 400/591 total_loss: 0.001551 recon_loss: 0.001530 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  26, iterations: 500/591 total_loss: 0.001484 recon_loss: 0.001462 haptic_loss： 0.000021 audio_loss: 0.000000
+evaluation epoch:  26, recon_loss: 0.001504
+--------------------start training epoch 27--------------------
+training epoch:  27, iterations:   0/591 total_loss: 0.001522 recon_loss: 0.001501 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  27, iterations: 100/591 total_loss: 0.001432 recon_loss: 0.001411 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  27, iterations: 200/591 total_loss: 0.001146 recon_loss: 0.001123 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  27, iterations: 300/591 total_loss: 0.001436 recon_loss: 0.001414 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  27, iterations: 400/591 total_loss: 0.001315 recon_loss: 0.001293 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  27, iterations: 500/591 total_loss: 0.001218 recon_loss: 0.001196 haptic_loss： 0.000023 audio_loss: 0.000000
+evaluation epoch:  27, recon_loss: 0.001513
+--------------------start training epoch 28--------------------
+training epoch:  28, iterations:   0/591 total_loss: 0.001273 recon_loss: 0.001250 haptic_loss： 0.000023 audio_loss: 0.000000
+training epoch:  28, iterations: 100/591 total_loss: 0.001187 recon_loss: 0.001165 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  28, iterations: 200/591 total_loss: 0.001584 recon_loss: 0.001562 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  28, iterations: 300/591 total_loss: 0.001819 recon_loss: 0.001798 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  28, iterations: 400/591 total_loss: 0.001418 recon_loss: 0.001396 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  28, iterations: 500/591 total_loss: 0.001370 recon_loss: 0.001348 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  28, recon_loss: 0.001481
+--------------------start training epoch 29--------------------
+training epoch:  29, iterations:   0/591 total_loss: 0.001325 recon_loss: 0.001304 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  29, iterations: 100/591 total_loss: 0.001643 recon_loss: 0.001621 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  29, iterations: 200/591 total_loss: 0.001562 recon_loss: 0.001541 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  29, iterations: 300/591 total_loss: 0.001884 recon_loss: 0.001863 haptic_loss： 0.000021 audio_loss: 0.000000
+training epoch:  29, iterations: 400/591 total_loss: 0.001643 recon_loss: 0.001621 haptic_loss： 0.000022 audio_loss: 0.000000
+training epoch:  29, iterations: 500/591 total_loss: 0.001490 recon_loss: 0.001468 haptic_loss： 0.000022 audio_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.001495
+Model Config:  Namespace(audio_layer=16, aux=True, baseline=False, batch_size=32, behavior_layer=9, channels=3, context_frames=4, data_dir='../data/CY101NPY', device='cuda', dna_kern_size=5, epochs=30, haptic_layer=16, height=64, learning_rate=0.001, model='CDNA', num_masks=10, output_dir='weight_use_audio_1', pretrained_model='', print_interval=100, schedsamp_k=400, sequence_length=10, use_audio=True, use_behavior=True, use_haptic=False, width=64)
+use haptic:  False     use behavior:  True     use audio:  True
+--------------------start training epoch  0--------------------
+training epoch:   0, iterations:   0/591 total_loss: 0.004276 recon_loss: 0.004000 haptic_loss： 0.000018 audio_loss: 0.000259
+training epoch:   0, iterations: 100/591 total_loss: 0.000956 recon_loss: 0.000927 haptic_loss： 0.000006 audio_loss: 0.000022
+training epoch:   0, iterations: 200/591 total_loss: 0.000809 recon_loss: 0.000796 haptic_loss： 0.000003 audio_loss: 0.000010
+training epoch:   0, iterations: 300/591 total_loss: 0.000908 recon_loss: 0.000897 haptic_loss： 0.000002 audio_loss: 0.000010
+training epoch:   0, iterations: 400/591 total_loss: 0.001140 recon_loss: 0.001132 haptic_loss： 0.000001 audio_loss: 0.000007
+training epoch:   0, iterations: 500/591 total_loss: 0.001040 recon_loss: 0.001033 haptic_loss： 0.000000 audio_loss: 0.000007
+evaluation epoch:   0, recon_loss: 0.002020
+--------------------start training epoch  1--------------------
+training epoch:   1, iterations:   0/591 total_loss: 0.000901 recon_loss: 0.000894 haptic_loss： 0.000000 audio_loss: 0.000006
+training epoch:   1, iterations: 100/591 total_loss: 0.000814 recon_loss: 0.000808 haptic_loss： 0.000000 audio_loss: 0.000006
+training epoch:   1, iterations: 200/591 total_loss: 0.000938 recon_loss: 0.000933 haptic_loss： 0.000000 audio_loss: 0.000005
+training epoch:   1, iterations: 300/591 total_loss: 0.001102 recon_loss: 0.001097 haptic_loss： 0.000000 audio_loss: 0.000005
+training epoch:   1, iterations: 400/591 total_loss: 0.000977 recon_loss: 0.000973 haptic_loss： 0.000000 audio_loss: 0.000005
+training epoch:   1, iterations: 500/591 total_loss: 0.001358 recon_loss: 0.001353 haptic_loss： 0.000000 audio_loss: 0.000005
+evaluation epoch:   1, recon_loss: 0.002200
+--------------------start training epoch  2--------------------
+training epoch:   2, iterations:   0/591 total_loss: 0.000786 recon_loss: 0.000782 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   2, iterations: 100/591 total_loss: 0.000969 recon_loss: 0.000964 haptic_loss： 0.000000 audio_loss: 0.000005
+training epoch:   2, iterations: 200/591 total_loss: 0.001032 recon_loss: 0.001028 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   2, iterations: 300/591 total_loss: 0.001056 recon_loss: 0.001053 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   2, iterations: 400/591 total_loss: 0.001197 recon_loss: 0.001193 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   2, iterations: 500/591 total_loss: 0.001540 recon_loss: 0.001536 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:   2, recon_loss: 0.002128
+--------------------start training epoch  3--------------------
+training epoch:   3, iterations:   0/591 total_loss: 0.001251 recon_loss: 0.001247 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   3, iterations: 100/591 total_loss: 0.001365 recon_loss: 0.001361 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   3, iterations: 200/591 total_loss: 0.001080 recon_loss: 0.001076 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   3, iterations: 300/591 total_loss: 0.001489 recon_loss: 0.001486 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   3, iterations: 400/591 total_loss: 0.001386 recon_loss: 0.001382 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   3, iterations: 500/591 total_loss: 0.001426 recon_loss: 0.001422 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:   3, recon_loss: 0.001907
+--------------------start training epoch  4--------------------
+training epoch:   4, iterations:   0/591 total_loss: 0.001466 recon_loss: 0.001463 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   4, iterations: 100/591 total_loss: 0.001339 recon_loss: 0.001336 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   4, iterations: 200/591 total_loss: 0.001530 recon_loss: 0.001526 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   4, iterations: 300/591 total_loss: 0.001476 recon_loss: 0.001473 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   4, iterations: 400/591 total_loss: 0.001624 recon_loss: 0.001620 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   4, iterations: 500/591 total_loss: 0.001538 recon_loss: 0.001535 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:   4, recon_loss: 0.001815
+--------------------start training epoch  5--------------------
+training epoch:   5, iterations:   0/591 total_loss: 0.001612 recon_loss: 0.001608 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   5, iterations: 100/591 total_loss: 0.001492 recon_loss: 0.001489 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   5, iterations: 200/591 total_loss: 0.001397 recon_loss: 0.001394 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   5, iterations: 300/591 total_loss: 0.001577 recon_loss: 0.001573 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   5, iterations: 400/591 total_loss: 0.001780 recon_loss: 0.001776 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   5, iterations: 500/591 total_loss: 0.001746 recon_loss: 0.001743 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:   5, recon_loss: 0.001694
+--------------------start training epoch  6--------------------
+training epoch:   6, iterations:   0/591 total_loss: 0.001433 recon_loss: 0.001430 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   6, iterations: 100/591 total_loss: 0.002011 recon_loss: 0.002008 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   6, iterations: 200/591 total_loss: 0.001962 recon_loss: 0.001958 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   6, iterations: 300/591 total_loss: 0.001996 recon_loss: 0.001992 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   6, iterations: 400/591 total_loss: 0.002127 recon_loss: 0.002124 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   6, iterations: 500/591 total_loss: 0.001600 recon_loss: 0.001597 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:   6, recon_loss: 0.001715
+--------------------start training epoch  7--------------------
+training epoch:   7, iterations:   0/591 total_loss: 0.001608 recon_loss: 0.001605 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   7, iterations: 100/591 total_loss: 0.001629 recon_loss: 0.001626 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   7, iterations: 200/591 total_loss: 0.001345 recon_loss: 0.001341 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   7, iterations: 300/591 total_loss: 0.001773 recon_loss: 0.001770 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   7, iterations: 400/591 total_loss: 0.001975 recon_loss: 0.001971 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   7, iterations: 500/591 total_loss: 0.001921 recon_loss: 0.001918 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:   7, recon_loss: 0.001685
+--------------------start training epoch  8--------------------
+training epoch:   8, iterations:   0/591 total_loss: 0.002055 recon_loss: 0.002051 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   8, iterations: 100/591 total_loss: 0.001798 recon_loss: 0.001795 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   8, iterations: 200/591 total_loss: 0.002088 recon_loss: 0.002085 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   8, iterations: 300/591 total_loss: 0.001645 recon_loss: 0.001642 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   8, iterations: 400/591 total_loss: 0.001628 recon_loss: 0.001625 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   8, iterations: 500/591 total_loss: 0.001647 recon_loss: 0.001644 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:   8, recon_loss: 0.001647
+--------------------start training epoch  9--------------------
+training epoch:   9, iterations:   0/591 total_loss: 0.001994 recon_loss: 0.001990 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   9, iterations: 100/591 total_loss: 0.001379 recon_loss: 0.001375 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   9, iterations: 200/591 total_loss: 0.001926 recon_loss: 0.001923 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   9, iterations: 300/591 total_loss: 0.001800 recon_loss: 0.001796 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:   9, iterations: 400/591 total_loss: 0.001699 recon_loss: 0.001696 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:   9, iterations: 500/591 total_loss: 0.001225 recon_loss: 0.001222 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:   9, recon_loss: 0.001639
+--------------------start training epoch 10--------------------
+training epoch:  10, iterations:   0/591 total_loss: 0.001312 recon_loss: 0.001309 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  10, iterations: 100/591 total_loss: 0.001649 recon_loss: 0.001645 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  10, iterations: 200/591 total_loss: 0.001860 recon_loss: 0.001856 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  10, iterations: 300/591 total_loss: 0.001863 recon_loss: 0.001860 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  10, iterations: 400/591 total_loss: 0.002098 recon_loss: 0.002094 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  10, iterations: 500/591 total_loss: 0.001395 recon_loss: 0.001392 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  10, recon_loss: 0.001642
+--------------------start training epoch 11--------------------
+training epoch:  11, iterations:   0/591 total_loss: 0.001461 recon_loss: 0.001457 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  11, iterations: 100/591 total_loss: 0.001926 recon_loss: 0.001923 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  11, iterations: 200/591 total_loss: 0.001572 recon_loss: 0.001569 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  11, iterations: 300/591 total_loss: 0.001501 recon_loss: 0.001497 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  11, iterations: 400/591 total_loss: 0.001760 recon_loss: 0.001757 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  11, iterations: 500/591 total_loss: 0.002141 recon_loss: 0.002138 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  11, recon_loss: 0.001641
+--------------------start training epoch 12--------------------
+training epoch:  12, iterations:   0/591 total_loss: 0.001450 recon_loss: 0.001446 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  12, iterations: 100/591 total_loss: 0.001704 recon_loss: 0.001701 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  12, iterations: 200/591 total_loss: 0.001785 recon_loss: 0.001782 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  12, iterations: 300/591 total_loss: 0.001845 recon_loss: 0.001842 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  12, iterations: 400/591 total_loss: 0.001786 recon_loss: 0.001782 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  12, iterations: 500/591 total_loss: 0.001439 recon_loss: 0.001436 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  12, recon_loss: 0.001611
+--------------------start training epoch 13--------------------
+training epoch:  13, iterations:   0/591 total_loss: 0.001447 recon_loss: 0.001444 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  13, iterations: 100/591 total_loss: 0.001723 recon_loss: 0.001720 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  13, iterations: 200/591 total_loss: 0.001581 recon_loss: 0.001578 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  13, iterations: 300/591 total_loss: 0.001869 recon_loss: 0.001866 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  13, iterations: 400/591 total_loss: 0.001647 recon_loss: 0.001643 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  13, iterations: 500/591 total_loss: 0.001750 recon_loss: 0.001746 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:  13, recon_loss: 0.001630
+--------------------start training epoch 14--------------------
+training epoch:  14, iterations:   0/591 total_loss: 0.001152 recon_loss: 0.001149 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  14, iterations: 100/591 total_loss: 0.001937 recon_loss: 0.001933 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  14, iterations: 200/591 total_loss: 0.001890 recon_loss: 0.001887 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  14, iterations: 300/591 total_loss: 0.001693 recon_loss: 0.001690 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  14, iterations: 400/591 total_loss: 0.001614 recon_loss: 0.001611 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  14, iterations: 500/591 total_loss: 0.001803 recon_loss: 0.001799 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:  14, recon_loss: 0.001608
+--------------------start training epoch 15--------------------
+training epoch:  15, iterations:   0/591 total_loss: 0.001770 recon_loss: 0.001767 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  15, iterations: 100/591 total_loss: 0.002270 recon_loss: 0.002266 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  15, iterations: 200/591 total_loss: 0.001499 recon_loss: 0.001496 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  15, iterations: 300/591 total_loss: 0.001726 recon_loss: 0.001723 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  15, iterations: 400/591 total_loss: 0.001645 recon_loss: 0.001642 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  15, iterations: 500/591 total_loss: 0.001638 recon_loss: 0.001635 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:  15, recon_loss: 0.001647
+--------------------start training epoch 16--------------------
+training epoch:  16, iterations:   0/591 total_loss: 0.001430 recon_loss: 0.001427 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  16, iterations: 100/591 total_loss: 0.001764 recon_loss: 0.001761 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  16, iterations: 200/591 total_loss: 0.002008 recon_loss: 0.002004 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  16, iterations: 300/591 total_loss: 0.001477 recon_loss: 0.001474 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  16, iterations: 400/591 total_loss: 0.001538 recon_loss: 0.001535 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  16, iterations: 500/591 total_loss: 0.001627 recon_loss: 0.001624 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  16, recon_loss: 0.001641
+--------------------start training epoch 17--------------------
+training epoch:  17, iterations:   0/591 total_loss: 0.001829 recon_loss: 0.001826 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  17, iterations: 100/591 total_loss: 0.001471 recon_loss: 0.001467 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  17, iterations: 200/591 total_loss: 0.001325 recon_loss: 0.001322 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  17, iterations: 300/591 total_loss: 0.001613 recon_loss: 0.001610 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  17, iterations: 400/591 total_loss: 0.001569 recon_loss: 0.001566 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  17, iterations: 500/591 total_loss: 0.001854 recon_loss: 0.001850 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:  17, recon_loss: 0.001699
+--------------------start training epoch 18--------------------
+training epoch:  18, iterations:   0/591 total_loss: 0.001745 recon_loss: 0.001740 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  18, iterations: 100/591 total_loss: 0.001662 recon_loss: 0.001658 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  18, iterations: 200/591 total_loss: 0.001787 recon_loss: 0.001783 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  18, iterations: 300/591 total_loss: 0.001601 recon_loss: 0.001598 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  18, iterations: 400/591 total_loss: 0.001437 recon_loss: 0.001434 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  18, iterations: 500/591 total_loss: 0.001508 recon_loss: 0.001505 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  18, recon_loss: 0.001617
+--------------------start training epoch 19--------------------
+training epoch:  19, iterations:   0/591 total_loss: 0.001698 recon_loss: 0.001694 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  19, iterations: 100/591 total_loss: 0.001956 recon_loss: 0.001952 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  19, iterations: 200/591 total_loss: 0.001910 recon_loss: 0.001906 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  19, iterations: 300/591 total_loss: 0.001684 recon_loss: 0.001681 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  19, iterations: 400/591 total_loss: 0.001655 recon_loss: 0.001652 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  19, iterations: 500/591 total_loss: 0.001565 recon_loss: 0.001562 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  19, recon_loss: 0.001617
+--------------------start training epoch 20--------------------
+training epoch:  20, iterations:   0/591 total_loss: 0.001623 recon_loss: 0.001620 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  20, iterations: 100/591 total_loss: 0.001566 recon_loss: 0.001562 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  20, iterations: 200/591 total_loss: 0.001698 recon_loss: 0.001695 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  20, iterations: 300/591 total_loss: 0.001815 recon_loss: 0.001812 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  20, iterations: 400/591 total_loss: 0.001708 recon_loss: 0.001705 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  20, iterations: 500/591 total_loss: 0.001806 recon_loss: 0.001803 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  20, recon_loss: 0.001617
+--------------------start training epoch 21--------------------
+training epoch:  21, iterations:   0/591 total_loss: 0.001598 recon_loss: 0.001594 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  21, iterations: 100/591 total_loss: 0.001435 recon_loss: 0.001432 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  21, iterations: 200/591 total_loss: 0.001437 recon_loss: 0.001434 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  21, iterations: 300/591 total_loss: 0.001887 recon_loss: 0.001884 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  21, iterations: 400/591 total_loss: 0.001454 recon_loss: 0.001451 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  21, iterations: 500/591 total_loss: 0.001637 recon_loss: 0.001634 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  21, recon_loss: 0.001650
+--------------------start training epoch 22--------------------
+training epoch:  22, iterations:   0/591 total_loss: 0.001780 recon_loss: 0.001777 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  22, iterations: 100/591 total_loss: 0.001407 recon_loss: 0.001403 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  22, iterations: 200/591 total_loss: 0.001661 recon_loss: 0.001657 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  22, iterations: 300/591 total_loss: 0.001529 recon_loss: 0.001525 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  22, iterations: 400/591 total_loss: 0.001587 recon_loss: 0.001583 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  22, iterations: 500/591 total_loss: 0.001932 recon_loss: 0.001929 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  22, recon_loss: 0.001602
+--------------------start training epoch 23--------------------
+training epoch:  23, iterations:   0/591 total_loss: 0.001485 recon_loss: 0.001480 haptic_loss： 0.000000 audio_loss: 0.000005
+training epoch:  23, iterations: 100/591 total_loss: 0.001439 recon_loss: 0.001435 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  23, iterations: 200/591 total_loss: 0.001682 recon_loss: 0.001679 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  23, iterations: 300/591 total_loss: 0.001476 recon_loss: 0.001473 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  23, iterations: 400/591 total_loss: 0.001563 recon_loss: 0.001560 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  23, iterations: 500/591 total_loss: 0.001556 recon_loss: 0.001553 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  23, recon_loss: 0.001610
+--------------------start training epoch 24--------------------
+training epoch:  24, iterations:   0/591 total_loss: 0.001470 recon_loss: 0.001467 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  24, iterations: 100/591 total_loss: 0.001624 recon_loss: 0.001620 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  24, iterations: 200/591 total_loss: 0.001724 recon_loss: 0.001720 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  24, iterations: 300/591 total_loss: 0.001739 recon_loss: 0.001735 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  24, iterations: 400/591 total_loss: 0.001796 recon_loss: 0.001792 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  24, iterations: 500/591 total_loss: 0.001772 recon_loss: 0.001768 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  24, recon_loss: 0.001644
+--------------------start training epoch 25--------------------
+training epoch:  25, iterations:   0/591 total_loss: 0.001880 recon_loss: 0.001876 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  25, iterations: 100/591 total_loss: 0.001708 recon_loss: 0.001705 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  25, iterations: 200/591 total_loss: 0.001574 recon_loss: 0.001571 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  25, iterations: 300/591 total_loss: 0.001601 recon_loss: 0.001598 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  25, iterations: 400/591 total_loss: 0.001564 recon_loss: 0.001561 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  25, iterations: 500/591 total_loss: 0.001492 recon_loss: 0.001489 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  25, recon_loss: 0.001616
+--------------------start training epoch 26--------------------
+training epoch:  26, iterations:   0/591 total_loss: 0.001428 recon_loss: 0.001425 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  26, iterations: 100/591 total_loss: 0.001548 recon_loss: 0.001545 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  26, iterations: 200/591 total_loss: 0.002434 recon_loss: 0.002431 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  26, iterations: 300/591 total_loss: 0.001776 recon_loss: 0.001772 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  26, iterations: 400/591 total_loss: 0.001146 recon_loss: 0.001143 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  26, iterations: 500/591 total_loss: 0.001863 recon_loss: 0.001860 haptic_loss： 0.000000 audio_loss: 0.000004
+evaluation epoch:  26, recon_loss: 0.001612
+--------------------start training epoch 27--------------------
+training epoch:  27, iterations:   0/591 total_loss: 0.001489 recon_loss: 0.001485 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  27, iterations: 100/591 total_loss: 0.001934 recon_loss: 0.001930 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  27, iterations: 200/591 total_loss: 0.001434 recon_loss: 0.001431 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  27, iterations: 300/591 total_loss: 0.001533 recon_loss: 0.001529 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  27, iterations: 400/591 total_loss: 0.001323 recon_loss: 0.001320 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  27, iterations: 500/591 total_loss: 0.001790 recon_loss: 0.001787 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  27, recon_loss: 0.001595
+--------------------start training epoch 28--------------------
+training epoch:  28, iterations:   0/591 total_loss: 0.001576 recon_loss: 0.001572 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  28, iterations: 100/591 total_loss: 0.001505 recon_loss: 0.001501 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  28, iterations: 200/591 total_loss: 0.001704 recon_loss: 0.001701 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  28, iterations: 300/591 total_loss: 0.001388 recon_loss: 0.001384 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  28, iterations: 400/591 total_loss: 0.001468 recon_loss: 0.001465 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  28, iterations: 500/591 total_loss: 0.001524 recon_loss: 0.001521 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  28, recon_loss: 0.001606
+--------------------start training epoch 29--------------------
+training epoch:  29, iterations:   0/591 total_loss: 0.001952 recon_loss: 0.001949 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  29, iterations: 100/591 total_loss: 0.001826 recon_loss: 0.001823 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  29, iterations: 200/591 total_loss: 0.001281 recon_loss: 0.001277 haptic_loss： 0.000000 audio_loss: 0.000004
+training epoch:  29, iterations: 300/591 total_loss: 0.001533 recon_loss: 0.001529 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  29, iterations: 400/591 total_loss: 0.001627 recon_loss: 0.001624 haptic_loss： 0.000000 audio_loss: 0.000003
+training epoch:  29, iterations: 500/591 total_loss: 0.001186 recon_loss: 0.001183 haptic_loss： 0.000000 audio_loss: 0.000003
+evaluation epoch:  29, recon_loss: 0.001595
+Model Config:  Namespace(audio_layer=16, aux=True, baseline=False, batch_size=32, behavior_layer=9, channels=3, context_frames=4, data_dir='../data/CY101NPY', device='cuda', dna_kern_size=5, epochs=30, haptic_layer=16, height=64, learning_rate=0.001, model='CDNA', num_masks=10, output_dir='weight_use_haptic_audio_1', pretrained_model='', print_interval=100, schedsamp_k=400, sequence_length=10, use_audio=True, use_behavior=True, use_haptic=True, width=64)
+use haptic:  True     use behavior:  True     use audio:  True
+--------------------start training epoch  0--------------------
+training epoch:   0, iterations:   0/591 total_loss: 0.004046 recon_loss: 0.003904 haptic_loss： 0.000060 audio_loss: 0.000082
+training epoch:   0, iterations: 100/591 total_loss: 0.001212 recon_loss: 0.001164 haptic_loss： 0.000031 audio_loss: 0.000016
+training epoch:   0, iterations: 200/591 total_loss: 0.000897 recon_loss: 0.000868 haptic_loss： 0.000022 audio_loss: 0.000007
+training epoch:   0, iterations: 300/591 total_loss: 0.001196 recon_loss: 0.001168 haptic_loss： 0.000024 audio_loss: 0.000005
+training epoch:   0, iterations: 400/591 total_loss: 0.000797 recon_loss: 0.000770 haptic_loss： 0.000023 audio_loss: 0.000004
+training epoch:   0, iterations: 500/591 total_loss: 0.000840 recon_loss: 0.000809 haptic_loss： 0.000027 audio_loss: 0.000004
+evaluation epoch:   0, recon_loss: 0.002147
+--------------------start training epoch  1--------------------
+training epoch:   1, iterations:   0/591 total_loss: 0.000801 recon_loss: 0.000771 haptic_loss： 0.000026 audio_loss: 0.000004
+training epoch:   1, iterations: 100/591 total_loss: 0.000891 recon_loss: 0.000865 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:   1, iterations: 200/591 total_loss: 0.000920 recon_loss: 0.000893 haptic_loss： 0.000024 audio_loss: 0.000004
+training epoch:   1, iterations: 300/591 total_loss: 0.001174 recon_loss: 0.001150 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:   1, iterations: 400/591 total_loss: 0.000930 recon_loss: 0.000905 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   1, iterations: 500/591 total_loss: 0.001072 recon_loss: 0.001046 haptic_loss： 0.000022 audio_loss: 0.000004
+evaluation epoch:   1, recon_loss: 0.002216
+--------------------start training epoch  2--------------------
+training epoch:   2, iterations:   0/591 total_loss: 0.001261 recon_loss: 0.001237 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:   2, iterations: 100/591 total_loss: 0.000932 recon_loss: 0.000906 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:   2, iterations: 200/591 total_loss: 0.001047 recon_loss: 0.001023 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   2, iterations: 300/591 total_loss: 0.001229 recon_loss: 0.001204 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   2, iterations: 400/591 total_loss: 0.001259 recon_loss: 0.001234 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   2, iterations: 500/591 total_loss: 0.001313 recon_loss: 0.001288 haptic_loss： 0.000021 audio_loss: 0.000004
+evaluation epoch:   2, recon_loss: 0.002173
+--------------------start training epoch  3--------------------
+training epoch:   3, iterations:   0/591 total_loss: 0.001001 recon_loss: 0.000974 haptic_loss： 0.000023 audio_loss: 0.000004
+training epoch:   3, iterations: 100/591 total_loss: 0.001392 recon_loss: 0.001367 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:   3, iterations: 200/591 total_loss: 0.001314 recon_loss: 0.001288 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:   3, iterations: 300/591 total_loss: 0.001319 recon_loss: 0.001294 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   3, iterations: 400/591 total_loss: 0.001114 recon_loss: 0.001089 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   3, iterations: 500/591 total_loss: 0.001584 recon_loss: 0.001559 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:   3, recon_loss: 0.001882
+--------------------start training epoch  4--------------------
+training epoch:   4, iterations:   0/591 total_loss: 0.001627 recon_loss: 0.001601 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:   4, iterations: 100/591 total_loss: 0.001442 recon_loss: 0.001417 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   4, iterations: 200/591 total_loss: 0.001725 recon_loss: 0.001700 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:   4, iterations: 300/591 total_loss: 0.001894 recon_loss: 0.001871 haptic_loss： 0.000020 audio_loss: 0.000004
+training epoch:   4, iterations: 400/591 total_loss: 0.001685 recon_loss: 0.001660 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:   4, iterations: 500/591 total_loss: 0.001403 recon_loss: 0.001377 haptic_loss： 0.000022 audio_loss: 0.000003
+evaluation epoch:   4, recon_loss: 0.001762
+--------------------start training epoch  5--------------------
+training epoch:   5, iterations:   0/591 total_loss: 0.001411 recon_loss: 0.001385 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:   5, iterations: 100/591 total_loss: 0.001789 recon_loss: 0.001766 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:   5, iterations: 200/591 total_loss: 0.002065 recon_loss: 0.002041 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:   5, iterations: 300/591 total_loss: 0.001556 recon_loss: 0.001532 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:   5, iterations: 400/591 total_loss: 0.001699 recon_loss: 0.001674 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   5, iterations: 500/591 total_loss: 0.001559 recon_loss: 0.001534 haptic_loss： 0.000021 audio_loss: 0.000004
+evaluation epoch:   5, recon_loss: 0.001673
+--------------------start training epoch  6--------------------
+training epoch:   6, iterations:   0/591 total_loss: 0.001266 recon_loss: 0.001241 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:   6, iterations: 100/591 total_loss: 0.001878 recon_loss: 0.001854 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   6, iterations: 200/591 total_loss: 0.001729 recon_loss: 0.001705 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:   6, iterations: 300/591 total_loss: 0.001599 recon_loss: 0.001574 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   6, iterations: 400/591 total_loss: 0.001611 recon_loss: 0.001587 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   6, iterations: 500/591 total_loss: 0.001528 recon_loss: 0.001504 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:   6, recon_loss: 0.001732
+--------------------start training epoch  7--------------------
+training epoch:   7, iterations:   0/591 total_loss: 0.001895 recon_loss: 0.001869 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   7, iterations: 100/591 total_loss: 0.001823 recon_loss: 0.001798 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   7, iterations: 200/591 total_loss: 0.001806 recon_loss: 0.001780 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:   7, iterations: 300/591 total_loss: 0.001575 recon_loss: 0.001549 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   7, iterations: 400/591 total_loss: 0.001731 recon_loss: 0.001705 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:   7, iterations: 500/591 total_loss: 0.001788 recon_loss: 0.001764 haptic_loss： 0.000020 audio_loss: 0.000003
+evaluation epoch:   7, recon_loss: 0.001623
+--------------------start training epoch  8--------------------
+training epoch:   8, iterations:   0/591 total_loss: 0.001500 recon_loss: 0.001475 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   8, iterations: 100/591 total_loss: 0.001315 recon_loss: 0.001290 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   8, iterations: 200/591 total_loss: 0.001579 recon_loss: 0.001554 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   8, iterations: 300/591 total_loss: 0.001890 recon_loss: 0.001864 haptic_loss： 0.000023 audio_loss: 0.000004
+training epoch:   8, iterations: 400/591 total_loss: 0.001240 recon_loss: 0.001215 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:   8, iterations: 500/591 total_loss: 0.001957 recon_loss: 0.001933 haptic_loss： 0.000020 audio_loss: 0.000003
+evaluation epoch:   8, recon_loss: 0.001610
+--------------------start training epoch  9--------------------
+training epoch:   9, iterations:   0/591 total_loss: 0.001712 recon_loss: 0.001687 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   9, iterations: 100/591 total_loss: 0.001693 recon_loss: 0.001670 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   9, iterations: 200/591 total_loss: 0.001754 recon_loss: 0.001729 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:   9, iterations: 300/591 total_loss: 0.001954 recon_loss: 0.001929 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:   9, iterations: 400/591 total_loss: 0.001581 recon_loss: 0.001556 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:   9, iterations: 500/591 total_loss: 0.001787 recon_loss: 0.001761 haptic_loss： 0.000022 audio_loss: 0.000003
+evaluation epoch:   9, recon_loss: 0.001624
+--------------------start training epoch 10--------------------
+training epoch:  10, iterations:   0/591 total_loss: 0.001403 recon_loss: 0.001378 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  10, iterations: 100/591 total_loss: 0.001503 recon_loss: 0.001478 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  10, iterations: 200/591 total_loss: 0.001515 recon_loss: 0.001490 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  10, iterations: 300/591 total_loss: 0.001440 recon_loss: 0.001415 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  10, iterations: 400/591 total_loss: 0.001911 recon_loss: 0.001888 haptic_loss： 0.000020 audio_loss: 0.000004
+training epoch:  10, iterations: 500/591 total_loss: 0.001324 recon_loss: 0.001300 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:  10, recon_loss: 0.001636
+--------------------start training epoch 11--------------------
+training epoch:  11, iterations:   0/591 total_loss: 0.001546 recon_loss: 0.001520 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  11, iterations: 100/591 total_loss: 0.001510 recon_loss: 0.001485 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  11, iterations: 200/591 total_loss: 0.001780 recon_loss: 0.001754 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  11, iterations: 300/591 total_loss: 0.001727 recon_loss: 0.001702 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  11, iterations: 400/591 total_loss: 0.001560 recon_loss: 0.001535 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  11, iterations: 500/591 total_loss: 0.001576 recon_loss: 0.001550 haptic_loss： 0.000022 audio_loss: 0.000004
+evaluation epoch:  11, recon_loss: 0.001619
+--------------------start training epoch 12--------------------
+training epoch:  12, iterations:   0/591 total_loss: 0.001841 recon_loss: 0.001815 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  12, iterations: 100/591 total_loss: 0.001777 recon_loss: 0.001751 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  12, iterations: 200/591 total_loss: 0.001582 recon_loss: 0.001557 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  12, iterations: 300/591 total_loss: 0.001488 recon_loss: 0.001462 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  12, iterations: 400/591 total_loss: 0.001804 recon_loss: 0.001781 haptic_loss： 0.000019 audio_loss: 0.000004
+training epoch:  12, iterations: 500/591 total_loss: 0.001708 recon_loss: 0.001682 haptic_loss： 0.000023 audio_loss: 0.000004
+evaluation epoch:  12, recon_loss: 0.001600
+--------------------start training epoch 13--------------------
+training epoch:  13, iterations:   0/591 total_loss: 0.001444 recon_loss: 0.001418 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  13, iterations: 100/591 total_loss: 0.001570 recon_loss: 0.001545 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  13, iterations: 200/591 total_loss: 0.001612 recon_loss: 0.001587 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  13, iterations: 300/591 total_loss: 0.001663 recon_loss: 0.001637 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  13, iterations: 400/591 total_loss: 0.001595 recon_loss: 0.001570 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  13, iterations: 500/591 total_loss: 0.001674 recon_loss: 0.001648 haptic_loss： 0.000023 audio_loss: 0.000003
+evaluation epoch:  13, recon_loss: 0.001594
+--------------------start training epoch 14--------------------
+training epoch:  14, iterations:   0/591 total_loss: 0.001820 recon_loss: 0.001795 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  14, iterations: 100/591 total_loss: 0.001509 recon_loss: 0.001486 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:  14, iterations: 200/591 total_loss: 0.001913 recon_loss: 0.001889 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  14, iterations: 300/591 total_loss: 0.001920 recon_loss: 0.001895 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  14, iterations: 400/591 total_loss: 0.001585 recon_loss: 0.001559 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  14, iterations: 500/591 total_loss: 0.001682 recon_loss: 0.001658 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:  14, recon_loss: 0.001602
+--------------------start training epoch 15--------------------
+training epoch:  15, iterations:   0/591 total_loss: 0.001833 recon_loss: 0.001809 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  15, iterations: 100/591 total_loss: 0.001330 recon_loss: 0.001305 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  15, iterations: 200/591 total_loss: 0.001630 recon_loss: 0.001605 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  15, iterations: 300/591 total_loss: 0.001545 recon_loss: 0.001520 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  15, iterations: 400/591 total_loss: 0.001628 recon_loss: 0.001603 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  15, iterations: 500/591 total_loss: 0.001308 recon_loss: 0.001281 haptic_loss： 0.000023 audio_loss: 0.000004
+evaluation epoch:  15, recon_loss: 0.001630
+--------------------start training epoch 16--------------------
+training epoch:  16, iterations:   0/591 total_loss: 0.001832 recon_loss: 0.001809 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:  16, iterations: 100/591 total_loss: 0.001565 recon_loss: 0.001539 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  16, iterations: 200/591 total_loss: 0.001432 recon_loss: 0.001408 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  16, iterations: 300/591 total_loss: 0.002009 recon_loss: 0.001985 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  16, iterations: 400/591 total_loss: 0.001227 recon_loss: 0.001202 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  16, iterations: 500/591 total_loss: 0.001913 recon_loss: 0.001889 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:  16, recon_loss: 0.001618
+--------------------start training epoch 17--------------------
+training epoch:  17, iterations:   0/591 total_loss: 0.001355 recon_loss: 0.001328 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  17, iterations: 100/591 total_loss: 0.001391 recon_loss: 0.001366 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  17, iterations: 200/591 total_loss: 0.001626 recon_loss: 0.001602 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  17, iterations: 300/591 total_loss: 0.001437 recon_loss: 0.001413 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  17, iterations: 400/591 total_loss: 0.001443 recon_loss: 0.001417 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  17, iterations: 500/591 total_loss: 0.001436 recon_loss: 0.001411 haptic_loss： 0.000023 audio_loss: 0.000003
+evaluation epoch:  17, recon_loss: 0.001579
+--------------------start training epoch 18--------------------
+training epoch:  18, iterations:   0/591 total_loss: 0.001488 recon_loss: 0.001462 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  18, iterations: 100/591 total_loss: 0.001267 recon_loss: 0.001242 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  18, iterations: 200/591 total_loss: 0.001666 recon_loss: 0.001642 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  18, iterations: 300/591 total_loss: 0.001826 recon_loss: 0.001802 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  18, iterations: 400/591 total_loss: 0.001453 recon_loss: 0.001428 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  18, iterations: 500/591 total_loss: 0.001367 recon_loss: 0.001339 haptic_loss： 0.000024 audio_loss: 0.000004
+evaluation epoch:  18, recon_loss: 0.001613
+--------------------start training epoch 19--------------------
+training epoch:  19, iterations:   0/591 total_loss: 0.001535 recon_loss: 0.001508 haptic_loss： 0.000023 audio_loss: 0.000004
+training epoch:  19, iterations: 100/591 total_loss: 0.001576 recon_loss: 0.001550 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  19, iterations: 200/591 total_loss: 0.001717 recon_loss: 0.001692 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  19, iterations: 300/591 total_loss: 0.002063 recon_loss: 0.002039 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  19, iterations: 400/591 total_loss: 0.001601 recon_loss: 0.001576 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  19, iterations: 500/591 total_loss: 0.001494 recon_loss: 0.001468 haptic_loss： 0.000023 audio_loss: 0.000003
+evaluation epoch:  19, recon_loss: 0.001587
+--------------------start training epoch 20--------------------
+training epoch:  20, iterations:   0/591 total_loss: 0.001374 recon_loss: 0.001348 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  20, iterations: 100/591 total_loss: 0.001703 recon_loss: 0.001679 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  20, iterations: 200/591 total_loss: 0.001491 recon_loss: 0.001466 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  20, iterations: 300/591 total_loss: 0.001662 recon_loss: 0.001638 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  20, iterations: 400/591 total_loss: 0.001430 recon_loss: 0.001405 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  20, iterations: 500/591 total_loss: 0.001906 recon_loss: 0.001881 haptic_loss： 0.000021 audio_loss: 0.000004
+evaluation epoch:  20, recon_loss: 0.001590
+--------------------start training epoch 21--------------------
+training epoch:  21, iterations:   0/591 total_loss: 0.001776 recon_loss: 0.001752 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  21, iterations: 100/591 total_loss: 0.001668 recon_loss: 0.001643 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  21, iterations: 200/591 total_loss: 0.001560 recon_loss: 0.001535 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  21, iterations: 300/591 total_loss: 0.001572 recon_loss: 0.001546 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  21, iterations: 400/591 total_loss: 0.001631 recon_loss: 0.001606 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  21, iterations: 500/591 total_loss: 0.001255 recon_loss: 0.001229 haptic_loss： 0.000022 audio_loss: 0.000003
+evaluation epoch:  21, recon_loss: 0.001587
+--------------------start training epoch 22--------------------
+training epoch:  22, iterations:   0/591 total_loss: 0.001463 recon_loss: 0.001439 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  22, iterations: 100/591 total_loss: 0.001684 recon_loss: 0.001660 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  22, iterations: 200/591 total_loss: 0.001747 recon_loss: 0.001723 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  22, iterations: 300/591 total_loss: 0.001632 recon_loss: 0.001608 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  22, iterations: 400/591 total_loss: 0.001617 recon_loss: 0.001592 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  22, iterations: 500/591 total_loss: 0.001721 recon_loss: 0.001696 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:  22, recon_loss: 0.001583
+--------------------start training epoch 23--------------------
+training epoch:  23, iterations:   0/591 total_loss: 0.001678 recon_loss: 0.001653 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  23, iterations: 100/591 total_loss: 0.001505 recon_loss: 0.001481 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  23, iterations: 200/591 total_loss: 0.001609 recon_loss: 0.001583 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  23, iterations: 300/591 total_loss: 0.001531 recon_loss: 0.001506 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  23, iterations: 400/591 total_loss: 0.001818 recon_loss: 0.001793 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  23, iterations: 500/591 total_loss: 0.001375 recon_loss: 0.001349 haptic_loss： 0.000022 audio_loss: 0.000004
+evaluation epoch:  23, recon_loss: 0.001565
+--------------------start training epoch 24--------------------
+training epoch:  24, iterations:   0/591 total_loss: 0.001749 recon_loss: 0.001722 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  24, iterations: 100/591 total_loss: 0.001456 recon_loss: 0.001431 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  24, iterations: 200/591 total_loss: 0.001498 recon_loss: 0.001473 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  24, iterations: 300/591 total_loss: 0.001494 recon_loss: 0.001469 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  24, iterations: 400/591 total_loss: 0.001775 recon_loss: 0.001750 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  24, iterations: 500/591 total_loss: 0.001483 recon_loss: 0.001459 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:  24, recon_loss: 0.001585
+--------------------start training epoch 25--------------------
+training epoch:  25, iterations:   0/591 total_loss: 0.001492 recon_loss: 0.001464 haptic_loss： 0.000023 audio_loss: 0.000004
+training epoch:  25, iterations: 100/591 total_loss: 0.001573 recon_loss: 0.001546 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  25, iterations: 200/591 total_loss: 0.001290 recon_loss: 0.001265 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  25, iterations: 300/591 total_loss: 0.001955 recon_loss: 0.001930 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  25, iterations: 400/591 total_loss: 0.001416 recon_loss: 0.001389 haptic_loss： 0.000023 audio_loss: 0.000003
+training epoch:  25, iterations: 500/591 total_loss: 0.001790 recon_loss: 0.001763 haptic_loss： 0.000023 audio_loss: 0.000003
+evaluation epoch:  25, recon_loss: 0.001522
+--------------------start training epoch 26--------------------
+training epoch:  26, iterations:   0/591 total_loss: 0.001569 recon_loss: 0.001544 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  26, iterations: 100/591 total_loss: 0.001419 recon_loss: 0.001394 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  26, iterations: 200/591 total_loss: 0.001498 recon_loss: 0.001473 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  26, iterations: 300/591 total_loss: 0.001594 recon_loss: 0.001569 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  26, iterations: 400/591 total_loss: 0.001605 recon_loss: 0.001583 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:  26, iterations: 500/591 total_loss: 0.001835 recon_loss: 0.001810 haptic_loss： 0.000022 audio_loss: 0.000003
+evaluation epoch:  26, recon_loss: 0.001532
+--------------------start training epoch 27--------------------
+training epoch:  27, iterations:   0/591 total_loss: 0.001778 recon_loss: 0.001753 haptic_loss： 0.000021 audio_loss: 0.000004
+training epoch:  27, iterations: 100/591 total_loss: 0.001381 recon_loss: 0.001356 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  27, iterations: 200/591 total_loss: 0.001877 recon_loss: 0.001852 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  27, iterations: 300/591 total_loss: 0.001414 recon_loss: 0.001390 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  27, iterations: 400/591 total_loss: 0.001906 recon_loss: 0.001882 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  27, iterations: 500/591 total_loss: 0.001405 recon_loss: 0.001382 haptic_loss： 0.000020 audio_loss: 0.000003
+evaluation epoch:  27, recon_loss: 0.001536
+--------------------start training epoch 28--------------------
+training epoch:  28, iterations:   0/591 total_loss: 0.001694 recon_loss: 0.001670 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  28, iterations: 100/591 total_loss: 0.001455 recon_loss: 0.001431 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  28, iterations: 200/591 total_loss: 0.001876 recon_loss: 0.001851 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  28, iterations: 300/591 total_loss: 0.001468 recon_loss: 0.001442 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  28, iterations: 400/591 total_loss: 0.001742 recon_loss: 0.001716 haptic_loss： 0.000023 audio_loss: 0.000004
+training epoch:  28, iterations: 500/591 total_loss: 0.001765 recon_loss: 0.001742 haptic_loss： 0.000021 audio_loss: 0.000003
+evaluation epoch:  28, recon_loss: 0.001541
+--------------------start training epoch 29--------------------
+training epoch:  29, iterations:   0/591 total_loss: 0.001616 recon_loss: 0.001593 haptic_loss： 0.000020 audio_loss: 0.000003
+training epoch:  29, iterations: 100/591 total_loss: 0.001342 recon_loss: 0.001317 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  29, iterations: 200/591 total_loss: 0.001439 recon_loss: 0.001414 haptic_loss： 0.000021 audio_loss: 0.000003
+training epoch:  29, iterations: 300/591 total_loss: 0.001512 recon_loss: 0.001488 haptic_loss： 0.000022 audio_loss: 0.000003
+training epoch:  29, iterations: 400/591 total_loss: 0.001570 recon_loss: 0.001544 haptic_loss： 0.000022 audio_loss: 0.000004
+training epoch:  29, iterations: 500/591 total_loss: 0.001492 recon_loss: 0.001466 haptic_loss： 0.000023 audio_loss: 0.000003
+evaluation epoch:  29, recon_loss: 0.001539
+Model Config:  Namespace(audio_layer=16, aux=False, baseline=True, batch_size=32, behavior_layer=9, channels=3, context_frames=4, data_dir='../data/CY101NPY', device='cuda', dna_kern_size=5, epochs=30, haptic_layer=16, height=64, learning_rate=0.001, model='CDNA', num_masks=10, output_dir='weight_baseline_1', pretrained_model='', print_interval=100, schedsamp_k=400, sequence_length=10, use_audio=False, use_behavior=False, use_haptic=False, width=64)
+use haptic:  False     use behavior:  False     use audio:  False
+--------------------start training epoch  0--------------------
+training epoch:   0, iterations:   0/591 total_loss: 0.003281 recon_loss: 0.003281 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   0, iterations: 100/591 total_loss: 0.001314 recon_loss: 0.001314 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   0, iterations: 200/591 total_loss: 0.000993 recon_loss: 0.000993 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   0, iterations: 300/591 total_loss: 0.001048 recon_loss: 0.001048 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   0, iterations: 400/591 total_loss: 0.001131 recon_loss: 0.001131 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   0, iterations: 500/591 total_loss: 0.001164 recon_loss: 0.001164 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   0, recon_loss: 0.002155
+--------------------start training epoch  1--------------------
+training epoch:   1, iterations:   0/591 total_loss: 0.000948 recon_loss: 0.000948 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   1, iterations: 100/591 total_loss: 0.001115 recon_loss: 0.001115 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   1, iterations: 200/591 total_loss: 0.001096 recon_loss: 0.001096 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   1, iterations: 300/591 total_loss: 0.001394 recon_loss: 0.001394 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   1, iterations: 400/591 total_loss: 0.001367 recon_loss: 0.001367 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   1, iterations: 500/591 total_loss: 0.001648 recon_loss: 0.001648 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   1, recon_loss: 0.002110
+--------------------start training epoch  2--------------------
+training epoch:   2, iterations:   0/591 total_loss: 0.001506 recon_loss: 0.001506 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   2, iterations: 100/591 total_loss: 0.001711 recon_loss: 0.001711 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   2, iterations: 200/591 total_loss: 0.002270 recon_loss: 0.002270 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   2, iterations: 300/591 total_loss: 0.002285 recon_loss: 0.002285 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   2, iterations: 400/591 total_loss: 0.002339 recon_loss: 0.002339 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   2, iterations: 500/591 total_loss: 0.002629 recon_loss: 0.002629 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   2, recon_loss: 0.002458
+--------------------start training epoch  3--------------------
+training epoch:   3, iterations:   0/591 total_loss: 0.002501 recon_loss: 0.002501 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   3, iterations: 100/591 total_loss: 0.002351 recon_loss: 0.002351 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   3, iterations: 200/591 total_loss: 0.002829 recon_loss: 0.002829 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   3, iterations: 300/591 total_loss: 0.002261 recon_loss: 0.002261 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   3, iterations: 400/591 total_loss: 0.002387 recon_loss: 0.002387 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   3, iterations: 500/591 total_loss: 0.002433 recon_loss: 0.002433 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   3, recon_loss: 0.002401
+--------------------start training epoch  4--------------------
+training epoch:   4, iterations:   0/591 total_loss: 0.002982 recon_loss: 0.002982 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   4, iterations: 100/591 total_loss: 0.002427 recon_loss: 0.002427 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   4, iterations: 200/591 total_loss: 0.002207 recon_loss: 0.002207 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   4, iterations: 300/591 total_loss: 0.002436 recon_loss: 0.002436 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   4, iterations: 400/591 total_loss: 0.002273 recon_loss: 0.002273 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   4, iterations: 500/591 total_loss: 0.002450 recon_loss: 0.002450 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   4, recon_loss: 0.002377
+--------------------start training epoch  5--------------------
+training epoch:   5, iterations:   0/591 total_loss: 0.001746 recon_loss: 0.001746 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   5, iterations: 100/591 total_loss: 0.001979 recon_loss: 0.001979 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   5, iterations: 200/591 total_loss: 0.002370 recon_loss: 0.002370 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   5, iterations: 300/591 total_loss: 0.002278 recon_loss: 0.002278 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   5, iterations: 400/591 total_loss: 0.001935 recon_loss: 0.001935 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   5, iterations: 500/591 total_loss: 0.002367 recon_loss: 0.002367 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   5, recon_loss: 0.002366
+--------------------start training epoch  6--------------------
+training epoch:   6, iterations:   0/591 total_loss: 0.002560 recon_loss: 0.002560 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   6, iterations: 100/591 total_loss: 0.002098 recon_loss: 0.002098 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   6, iterations: 200/591 total_loss: 0.002697 recon_loss: 0.002697 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   6, iterations: 300/591 total_loss: 0.002403 recon_loss: 0.002403 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   6, iterations: 400/591 total_loss: 0.002308 recon_loss: 0.002308 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   6, iterations: 500/591 total_loss: 0.002579 recon_loss: 0.002579 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   6, recon_loss: 0.002336
+--------------------start training epoch  7--------------------
+training epoch:   7, iterations:   0/591 total_loss: 0.001745 recon_loss: 0.001745 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   7, iterations: 100/591 total_loss: 0.002160 recon_loss: 0.002160 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   7, iterations: 200/591 total_loss: 0.002491 recon_loss: 0.002491 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   7, iterations: 300/591 total_loss: 0.002578 recon_loss: 0.002578 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   7, iterations: 400/591 total_loss: 0.002485 recon_loss: 0.002485 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   7, iterations: 500/591 total_loss: 0.002358 recon_loss: 0.002358 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   7, recon_loss: 0.002334
+--------------------start training epoch  8--------------------
+training epoch:   8, iterations:   0/591 total_loss: 0.002341 recon_loss: 0.002341 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   8, iterations: 100/591 total_loss: 0.002740 recon_loss: 0.002740 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   8, iterations: 200/591 total_loss: 0.002360 recon_loss: 0.002360 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   8, iterations: 300/591 total_loss: 0.002083 recon_loss: 0.002083 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   8, iterations: 400/591 total_loss: 0.002219 recon_loss: 0.002219 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   8, iterations: 500/591 total_loss: 0.002539 recon_loss: 0.002539 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   8, recon_loss: 0.002363
+--------------------start training epoch  9--------------------
+training epoch:   9, iterations:   0/591 total_loss: 0.002377 recon_loss: 0.002377 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   9, iterations: 100/591 total_loss: 0.002449 recon_loss: 0.002449 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   9, iterations: 200/591 total_loss: 0.002134 recon_loss: 0.002134 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   9, iterations: 300/591 total_loss: 0.002043 recon_loss: 0.002043 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   9, iterations: 400/591 total_loss: 0.002567 recon_loss: 0.002567 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:   9, iterations: 500/591 total_loss: 0.002367 recon_loss: 0.002367 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:   9, recon_loss: 0.002339
+--------------------start training epoch 10--------------------
+training epoch:  10, iterations:   0/591 total_loss: 0.002703 recon_loss: 0.002703 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  10, iterations: 100/591 total_loss: 0.002501 recon_loss: 0.002501 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  10, iterations: 200/591 total_loss: 0.002315 recon_loss: 0.002315 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  10, iterations: 300/591 total_loss: 0.002434 recon_loss: 0.002434 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  10, iterations: 400/591 total_loss: 0.002536 recon_loss: 0.002536 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  10, iterations: 500/591 total_loss: 0.002075 recon_loss: 0.002075 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  10, recon_loss: 0.002346
+--------------------start training epoch 11--------------------
+training epoch:  11, iterations:   0/591 total_loss: 0.002459 recon_loss: 0.002459 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  11, iterations: 100/591 total_loss: 0.002680 recon_loss: 0.002680 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  11, iterations: 200/591 total_loss: 0.002565 recon_loss: 0.002565 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  11, iterations: 300/591 total_loss: 0.001779 recon_loss: 0.001779 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  11, iterations: 400/591 total_loss: 0.002238 recon_loss: 0.002238 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  11, iterations: 500/591 total_loss: 0.002131 recon_loss: 0.002131 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  11, recon_loss: 0.002338
+--------------------start training epoch 12--------------------
+training epoch:  12, iterations:   0/591 total_loss: 0.002152 recon_loss: 0.002152 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  12, iterations: 100/591 total_loss: 0.001964 recon_loss: 0.001964 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  12, iterations: 200/591 total_loss: 0.002479 recon_loss: 0.002479 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  12, iterations: 300/591 total_loss: 0.002535 recon_loss: 0.002535 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  12, iterations: 400/591 total_loss: 0.002358 recon_loss: 0.002358 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  12, iterations: 500/591 total_loss: 0.002233 recon_loss: 0.002233 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  12, recon_loss: 0.002341
+--------------------start training epoch 13--------------------
+training epoch:  13, iterations:   0/591 total_loss: 0.001866 recon_loss: 0.001866 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  13, iterations: 100/591 total_loss: 0.002223 recon_loss: 0.002223 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  13, iterations: 200/591 total_loss: 0.002881 recon_loss: 0.002881 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  13, iterations: 300/591 total_loss: 0.002246 recon_loss: 0.002246 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  13, iterations: 400/591 total_loss: 0.002992 recon_loss: 0.002992 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  13, iterations: 500/591 total_loss: 0.002153 recon_loss: 0.002153 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  13, recon_loss: 0.002331
+--------------------start training epoch 14--------------------
+training epoch:  14, iterations:   0/591 total_loss: 0.002380 recon_loss: 0.002380 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  14, iterations: 100/591 total_loss: 0.002559 recon_loss: 0.002559 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  14, iterations: 200/591 total_loss: 0.002275 recon_loss: 0.002275 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  14, iterations: 300/591 total_loss: 0.002086 recon_loss: 0.002086 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  14, iterations: 400/591 total_loss: 0.002545 recon_loss: 0.002545 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  14, iterations: 500/591 total_loss: 0.002386 recon_loss: 0.002386 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  14, recon_loss: 0.002349
+--------------------start training epoch 15--------------------
+training epoch:  15, iterations:   0/591 total_loss: 0.002328 recon_loss: 0.002328 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  15, iterations: 100/591 total_loss: 0.002525 recon_loss: 0.002525 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  15, iterations: 200/591 total_loss: 0.002822 recon_loss: 0.002822 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  15, iterations: 300/591 total_loss: 0.002515 recon_loss: 0.002515 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  15, iterations: 400/591 total_loss: 0.002263 recon_loss: 0.002263 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  15, iterations: 500/591 total_loss: 0.002309 recon_loss: 0.002309 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  15, recon_loss: 0.002336
+--------------------start training epoch 16--------------------
+training epoch:  16, iterations:   0/591 total_loss: 0.002020 recon_loss: 0.002020 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  16, iterations: 100/591 total_loss: 0.001954 recon_loss: 0.001954 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  16, iterations: 200/591 total_loss: 0.003151 recon_loss: 0.003151 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  16, iterations: 300/591 total_loss: 0.002299 recon_loss: 0.002299 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  16, iterations: 400/591 total_loss: 0.002165 recon_loss: 0.002165 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  16, iterations: 500/591 total_loss: 0.001952 recon_loss: 0.001952 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  16, recon_loss: 0.002338
+--------------------start training epoch 17--------------------
+training epoch:  17, iterations:   0/591 total_loss: 0.001815 recon_loss: 0.001815 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  17, iterations: 100/591 total_loss: 0.002124 recon_loss: 0.002124 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  17, iterations: 200/591 total_loss: 0.002660 recon_loss: 0.002660 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  17, iterations: 300/591 total_loss: 0.002104 recon_loss: 0.002104 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  17, iterations: 400/591 total_loss: 0.002388 recon_loss: 0.002388 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  17, iterations: 500/591 total_loss: 0.002186 recon_loss: 0.002186 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  17, recon_loss: 0.002526
+--------------------start training epoch 18--------------------
+training epoch:  18, iterations:   0/591 total_loss: 0.002356 recon_loss: 0.002356 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  18, iterations: 100/591 total_loss: 0.002194 recon_loss: 0.002194 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  18, iterations: 200/591 total_loss: 0.002429 recon_loss: 0.002429 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  18, iterations: 300/591 total_loss: 0.002285 recon_loss: 0.002285 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  18, iterations: 400/591 total_loss: 0.002338 recon_loss: 0.002338 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  18, iterations: 500/591 total_loss: 0.002791 recon_loss: 0.002791 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  18, recon_loss: 0.002330
+--------------------start training epoch 19--------------------
+training epoch:  19, iterations:   0/591 total_loss: 0.002406 recon_loss: 0.002406 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  19, iterations: 100/591 total_loss: 0.002242 recon_loss: 0.002242 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  19, iterations: 200/591 total_loss: 0.002440 recon_loss: 0.002440 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  19, iterations: 300/591 total_loss: 0.002779 recon_loss: 0.002779 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  19, iterations: 400/591 total_loss: 0.002342 recon_loss: 0.002342 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  19, iterations: 500/591 total_loss: 0.002182 recon_loss: 0.002182 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  19, recon_loss: 0.002330
+--------------------start training epoch 20--------------------
+training epoch:  20, iterations:   0/591 total_loss: 0.002444 recon_loss: 0.002444 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  20, iterations: 100/591 total_loss: 0.002178 recon_loss: 0.002178 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  20, iterations: 200/591 total_loss: 0.002043 recon_loss: 0.002043 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  20, iterations: 300/591 total_loss: 0.002832 recon_loss: 0.002832 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  20, iterations: 400/591 total_loss: 0.002767 recon_loss: 0.002767 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  20, iterations: 500/591 total_loss: 0.001715 recon_loss: 0.001715 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  20, recon_loss: 0.002329
+--------------------start training epoch 21--------------------
+training epoch:  21, iterations:   0/591 total_loss: 0.002430 recon_loss: 0.002430 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  21, iterations: 100/591 total_loss: 0.002392 recon_loss: 0.002392 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  21, iterations: 200/591 total_loss: 0.002792 recon_loss: 0.002792 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  21, iterations: 300/591 total_loss: 0.002265 recon_loss: 0.002265 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  21, iterations: 400/591 total_loss: 0.002098 recon_loss: 0.002098 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  21, iterations: 500/591 total_loss: 0.002248 recon_loss: 0.002248 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  21, recon_loss: 0.002326
+--------------------start training epoch 22--------------------
+training epoch:  22, iterations:   0/591 total_loss: 0.002133 recon_loss: 0.002133 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  22, iterations: 100/591 total_loss: 0.002882 recon_loss: 0.002882 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  22, iterations: 200/591 total_loss: 0.002821 recon_loss: 0.002821 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  22, iterations: 300/591 total_loss: 0.002090 recon_loss: 0.002090 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  22, iterations: 400/591 total_loss: 0.002034 recon_loss: 0.002034 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  22, iterations: 500/591 total_loss: 0.002383 recon_loss: 0.002383 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  22, recon_loss: 0.002350
+--------------------start training epoch 23--------------------
+training epoch:  23, iterations:   0/591 total_loss: 0.002484 recon_loss: 0.002484 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  23, iterations: 100/591 total_loss: 0.002433 recon_loss: 0.002433 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  23, iterations: 200/591 total_loss: 0.002153 recon_loss: 0.002153 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  23, iterations: 300/591 total_loss: 0.002342 recon_loss: 0.002342 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  23, iterations: 400/591 total_loss: 0.002966 recon_loss: 0.002966 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  23, iterations: 500/591 total_loss: 0.002235 recon_loss: 0.002235 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  23, recon_loss: 0.002352
+--------------------start training epoch 24--------------------
+training epoch:  24, iterations:   0/591 total_loss: 0.002421 recon_loss: 0.002421 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  24, iterations: 100/591 total_loss: 0.001762 recon_loss: 0.001762 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  24, iterations: 200/591 total_loss: 0.002201 recon_loss: 0.002201 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  24, iterations: 300/591 total_loss: 0.002144 recon_loss: 0.002144 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  24, iterations: 400/591 total_loss: 0.002301 recon_loss: 0.002301 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  24, iterations: 500/591 total_loss: 0.002051 recon_loss: 0.002051 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  24, recon_loss: 0.002351
+--------------------start training epoch 25--------------------
+training epoch:  25, iterations:   0/591 total_loss: 0.002614 recon_loss: 0.002614 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  25, iterations: 100/591 total_loss: 0.002052 recon_loss: 0.002052 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  25, iterations: 200/591 total_loss: 0.002144 recon_loss: 0.002144 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  25, iterations: 300/591 total_loss: 0.002593 recon_loss: 0.002593 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  25, iterations: 400/591 total_loss: 0.002167 recon_loss: 0.002167 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  25, iterations: 500/591 total_loss: 0.002407 recon_loss: 0.002407 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  25, recon_loss: 0.002333
+--------------------start training epoch 26--------------------
+training epoch:  26, iterations:   0/591 total_loss: 0.002478 recon_loss: 0.002478 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  26, iterations: 100/591 total_loss: 0.002488 recon_loss: 0.002488 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  26, iterations: 200/591 total_loss: 0.002036 recon_loss: 0.002036 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  26, iterations: 300/591 total_loss: 0.002213 recon_loss: 0.002213 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  26, iterations: 400/591 total_loss: 0.002715 recon_loss: 0.002715 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  26, iterations: 500/591 total_loss: 0.002463 recon_loss: 0.002463 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  26, recon_loss: 0.002341
+--------------------start training epoch 27--------------------
+training epoch:  27, iterations:   0/591 total_loss: 0.001927 recon_loss: 0.001927 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  27, iterations: 100/591 total_loss: 0.002181 recon_loss: 0.002181 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  27, iterations: 200/591 total_loss: 0.002669 recon_loss: 0.002669 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  27, iterations: 300/591 total_loss: 0.002288 recon_loss: 0.002288 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  27, iterations: 400/591 total_loss: 0.002099 recon_loss: 0.002099 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  27, iterations: 500/591 total_loss: 0.002303 recon_loss: 0.002303 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  27, recon_loss: 0.002688
+--------------------start training epoch 28--------------------
+training epoch:  28, iterations:   0/591 total_loss: 0.002846 recon_loss: 0.002846 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  28, iterations: 100/591 total_loss: 0.002660 recon_loss: 0.002660 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  28, iterations: 200/591 total_loss: 0.002425 recon_loss: 0.002425 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  28, iterations: 300/591 total_loss: 0.002660 recon_loss: 0.002660 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  28, iterations: 400/591 total_loss: 0.002639 recon_loss: 0.002639 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  28, iterations: 500/591 total_loss: 0.002288 recon_loss: 0.002288 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  28, recon_loss: 0.002327
+--------------------start training epoch 29--------------------
+training epoch:  29, iterations:   0/591 total_loss: 0.002094 recon_loss: 0.002094 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  29, iterations: 100/591 total_loss: 0.002501 recon_loss: 0.002501 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  29, iterations: 200/591 total_loss: 0.002253 recon_loss: 0.002253 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  29, iterations: 300/591 total_loss: 0.002339 recon_loss: 0.002339 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  29, iterations: 400/591 total_loss: 0.002733 recon_loss: 0.002733 haptic_loss： 0.000000 audio_loss: 0.000000
+training epoch:  29, iterations: 500/591 total_loss: 0.002551 recon_loss: 0.002551 haptic_loss： 0.000000 audio_loss: 0.000000
+evaluation epoch:  29, recon_loss: 0.002320

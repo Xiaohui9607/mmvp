@@ -38,10 +38,13 @@ class haptic_feat(nn.Module):
         self.feature = nn.Sequential()
         self.feature.add_module("haptic_1", nn.Conv2d(1, 8, [5, 1], stride=[2, 1]))
         self.feature.add_module("relu_1", nn.ReLU())
+        self.feature.add_module("hbn_1", nn.BatchNorm2d(8))
         self.feature.add_module("haptic_2", nn.Conv2d(8, 16, [3, 1], stride=[2, 1]))
         self.feature.add_module("relu_2", nn.ReLU())
+        self.feature.add_module("hbn_2", nn.BatchNorm2d(16))
         self.feature.add_module("haptic_3", nn.Conv2d(16, self.HAPTIC_LAYER, [3, 3], stride=1))
         self.feature.add_module("relu_3", nn.ReLU())
+        self.feature.add_module("hbn_3", nn.BatchNorm2d(self.HAPTIC_LAYER))
         self.feature_fusion = nn.Conv2d(self.HAPTIC_LAYER + self.ENC_LAYER + self.BEHAVIOR_LAYER, self.HAPTIC_LAYER,
                                         [3, 3], stride=1, padding=1)
 
@@ -66,12 +69,19 @@ class audio_feat(nn.Module):
         self.feature = nn.Sequential()
         self.feature.add_module("audio_1", nn.Conv2d(1, 8, [1, 3], stride=[1, 2], padding=[0, 1]))
         self.feature.add_module("arelu_1", nn.ReLU())
+        self.feature.add_module("abn_1", nn.BatchNorm2d(8))
+
         self.feature.add_module("audio_2", nn.Conv2d(8, 8, [1, 3], stride=[1, 2], padding=[0, 1]))
         self.feature.add_module("arelu_2", nn.ReLU())
+        self.feature.add_module("abn_2", nn.BatchNorm2d(8))
+
         self.feature.add_module("audio_3", nn.Conv2d(8, 16, [1, 3], stride=[1, 2], padding=[0, 1]))
         self.feature.add_module("arelu_3", nn.ReLU())
+        self.feature.add_module("abn_3", nn.BatchNorm2d(16))
+
         self.feature.add_module("audio_4", nn.Conv2d(16, self.AUDIO_LAYER, [3, 3], stride=[2, 2], padding=[1, 1]))
         self.feature.add_module("arelu_4", nn.ReLU())
+        self.feature.add_module("abn_4", nn.BatchNorm2d(self.AUDIO_LAYER))
         self.feature_fusion = nn.Conv2d(self.AUDIO_LAYER + self.ENC_LAYER + self.BEHAVIOR_LAYER, self.AUDIO_LAYER,
                                         [3, 3], stride=1, padding=1)
 
