@@ -118,6 +118,7 @@ def generate_npy_haptic(path1, path2, n_frames, behavior, sequence_length):
     haplist = np.array(haplist)
     time_duration = (haplist[-1][0] - haplist[0][0]) / n_frames
     bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
+    end_time = haplist[-1][0]
     groups = np.digitize(haplist[:, 0], bins, right=False)
 
     haplist = [haplist[np.where(groups == idx)][..., 1:][:48] for idx in range(1, n_frames + 1)]
@@ -126,7 +127,7 @@ def generate_npy_haptic(path1, path2, n_frames, behavior, sequence_length):
     ret = []
     for i in range(0, len(haplist) - sequence_length, STEP):
         ret.append(np.concatenate(haplist[i:i + sequence_length], axis=0).astype(np.float32)[:, np.newaxis, ...])
-    return ret
+    return ret, (bins, end_time)
 
 
 def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
@@ -157,12 +158,39 @@ def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
     return ret
 
 
-def generate_npy_vibro(path, sequence_length):
+def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
     '''
     :param path: path to .tsv, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
-    return [np.zeros([sequence_length, 7])]
+    path = glob.glob(path)[0]
+    if not path:
+        return None
+    vibro_list = open(path).readlines()
+    vibro_list = [list(map(int, vibro.strip().split('\t'))) for vibro in vibro_list]
+    vibro_list = np.array(vibro_list)
+    vibro_time = vibro_list[:, 0]
+    vibro_data = vibro_list[:, 1:]
+    bins, end_time = bins
+    end_time -= bins[0]
+    bins -= bins[0]
+
+    v_h_ratio = vibro_time[-1] / end_time
+    bins = bins * v_h_ratio
+
+    groups = np.digitize(vibro_time, bins, right=False)
+
+    vibro_data = [vibro_data[np.where(groups == idx)] for idx in range(1, n_frames + 1)]
+    vibro_data = [np.vstack([np.resize(vibro[:, 0], (256,)),
+                             np.resize(vibro[:, 1], (256,)),
+                             np.resize(vibro[:, 2], (256,))]).T[np.newaxis, ...]
+                  for vibro in vibro_data]
+    # haplist = [np.pad(ht, [[0, 48 - ht.shape[0]], [0, 0]], mode='edge')[np.newaxis, ...] for ht in haplist]
+    vibro_data = vibro_data[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
+    ret = []
+    for i in range(0, len(vibro_data) - sequence_length, STEP):
+        ret.append(np.concatenate(vibro_data[i:i + sequence_length], axis=0).astype(np.float32)[:, np.newaxis, ...])
+    return ret
 
 
 def split(strategy):
@@ -247,7 +275,9 @@ def process(visions, chosen_behavior):
             vis_out_sample_dir = os.path.join(OUT_DIR, vis_subdir, '_'.join(vision.split('/')[-4:]))
             out_vision_npys, n_frames = generate_npy_vision(vision, behavior, SEQUENCE_LENGTH*2)
             out_audio_npys = generate_npy_audio(audio, n_frames, behavior, SEQUENCE_LENGTH*2)
-            out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH*2)
+            out_haptic_npys, bins = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH*2)
+            out_vibro_npys = generate_npy_vibro(vibro, n_frames, bins, behavior, SEQUENCE_LENGTH*2)
+
             if out_audio_npys is None or out_haptic_npys is None:
                 fail_count += 1
                 continue
@@ -257,19 +287,22 @@ def process(visions, chosen_behavior):
             # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
             # out_vibro_npys = generate_npy_vibro(vibro)
             # make sure that all the lists are in the same length!
-            for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
-                    out_vision_npys, out_haptic_npys, out_audio_npys)):
+            for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
+                    out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
                 ret = {
                     'behavior': out_behavior_npys,
                     'vision': out_vision_npy,
                     'haptic': out_haptic_npy,
                     'audio': out_audio_npy,
+                    'vibro': out_vibro_npy
                 }
                 np.save(vis_out_sample_dir + '_' + str(i), ret)
 
         out_vision_npys, n_frames = generate_npy_vision(vision, behavior, SEQUENCE_LENGTH)
         out_audio_npys = generate_npy_audio(audio, n_frames, behavior, SEQUENCE_LENGTH)
-        out_haptic_npys = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH)
+        out_haptic_npys, bins = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH)
+        out_vibro_npys = generate_npy_vibro(vibro, n_frames, bins, behavior, SEQUENCE_LENGTH)
+
         if out_audio_npys is None or out_haptic_npys is None:
             fail_count += 1
             continue
@@ -279,13 +312,14 @@ def process(visions, chosen_behavior):
         # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
         # out_vibro_npys = generate_npy_vibro(vibro)
         # make sure that all the lists are in the same length!
-        for i, (out_vision_npy, out_haptic_npy, out_audio_npy) in enumerate(zip(
-                out_vision_npys, out_haptic_npys, out_audio_npys)):
+        for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
+                out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
             ret = {
                 'behavior': out_behavior_npys,
                 'vision': out_vision_npy,
                 'haptic': out_haptic_npy,
                 'audio': out_audio_npy,
+                'vibro': out_vibro_npy
             }
             np.save(out_sample_dir + '_' + str(i), ret)
     print("fail: ", fail_count)
