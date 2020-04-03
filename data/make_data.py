@@ -11,6 +11,8 @@ from sklearn.preprocessing import OneHotEncoder
 
 DATA_DIR = '../data/CY101'
 OUT_DIR = '../data/CY101NPY'
+# added for VIS splits
+VIS_DIR = '../data/VIS/'
 
 STRATEGY = 'object' # object | category | trail
 
@@ -239,7 +241,19 @@ def process(visions, chosen_behavior):
     if not os.path.exists(os.path.join(OUT_DIR, vis_subdir)):
         os.makedirs(os.path.join(OUT_DIR, vis_subdir))
 
+    # added for VIS splits
+    if not os.path.exists(os.path.join(VIS_DIR, chosen_behavior)):
+        os.makedirs(os.path.join(VIS_DIR, chosen_behavior))
+
     train_list, test_list = split(strategy=STRATEGY)
+
+    train_test_split_dict = {
+        'train': train_list,
+        'test': test_list
+    }
+    with open(os.path.join(VIS_DIR, chosen_behavior, "train_test_split"), 'wt') as split_file:
+        for k, v in train_test_split_dict.items():
+            split_file.write('%s: %s\n' % (str(k), str(v)))
 
     split_base = train_list + test_list
     cutting = len(train_list)
