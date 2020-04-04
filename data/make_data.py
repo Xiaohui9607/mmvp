@@ -10,13 +10,13 @@ from sklearn.preprocessing import OneHotEncoder
 
 
 DATA_DIR = '../data/CY101'
-OUT_DIR = '../data/CY101NPY'
 
 STRATEGY = 'object' # object | category | trail
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc',
               'cup', 'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
               'ball']
+
 OBJECTS = [
     'ball_base', 'can_coke', 'egg_rough_styrofoam', 'noodle_3', 'timber_square', 'ball_basket', 'can_red_bull_large',
     'egg_smooth_styrofoam', 'noodle_4', 'timber_squiggle', 'ball_blue', 'can_red_bull_small', 'egg_wood', 'noodle_5',
@@ -46,7 +46,6 @@ OBJECTS = [
     'egg_plastic_wrap', 'noodle_2', 'timber_semicircle', 'no_object'
 ]
 
-
 # Objects
 SORTED_OBJECTS = sorted(OBJECTS)
 
@@ -65,6 +64,7 @@ crop_stategy = {
     'low_drop': [0, -1],
     'hold': [0, -1],
 }
+
 
 SEQUENCE_LENGTH = 10
 STEP = 4
@@ -110,7 +110,7 @@ def generate_npy_haptic(path1, path2, n_frames, behavior, sequence_length):
                             we pad it in the tail with the last bin value. if #bin is more than 48, we take bin[:48]
     '''
     if not os.path.exists(path1):
-        return None
+        return None, None
     haplist1 = open(path1, 'r').readlines()
     haplist2 = open(path2, 'r').readlines()
     haplist = [list(map(float, v.strip().split('\t'))) + list(map(float, w.strip().split('\t')))[1:] for v, w in
@@ -163,9 +163,10 @@ def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
     :param path: path to .tsv, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     '''
-    path = glob.glob(path)[0]
-    if not path:
+    path = glob.glob(path)
+    if not path and not bins:
         return None
+    path = path[0]
     vibro_list = open(path).readlines()
     vibro_list = [list(map(int, vibro.strip().split('\t'))) for vibro in vibro_list]
     vibro_list = np.array(vibro_list)
@@ -181,12 +182,13 @@ def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
     groups = np.digitize(vibro_time, bins, right=False)
 
     vibro_data = [vibro_data[np.where(groups == idx)] for idx in range(1, n_frames + 1)]
-    vibro_data = [np.vstack([np.resize(vibro[:, 0], (256,)),
-                             np.resize(vibro[:, 1], (256,)),
-                             np.resize(vibro[:, 2], (256,))]).T[np.newaxis, ...]
+    vibro_data = [np.vstack([np.resize(vibro[:, 0], (128,)),
+                             np.resize(vibro[:, 1], (128,)),
+                             np.resize(vibro[:, 2], (128,))]).T[np.newaxis, ...]
                   for vibro in vibro_data]
     # haplist = [np.pad(ht, [[0, 48 - ht.shape[0]], [0, 0]], mode='edge')[np.newaxis, ...] for ht in haplist]
     vibro_data = vibro_data[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
+
     ret = []
     for i in range(0, len(vibro_data) - sequence_length, STEP):
         ret.append(np.concatenate(vibro_data[i:i + sequence_length], axis=0).astype(np.float32)[:, np.newaxis, ...])
@@ -278,7 +280,7 @@ def process(visions, chosen_behavior):
             out_haptic_npys, bins = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH*2)
             out_vibro_npys = generate_npy_vibro(vibro, n_frames, bins, behavior, SEQUENCE_LENGTH*2)
 
-            if out_audio_npys is None or out_haptic_npys is None:
+            if out_audio_npys is None or out_haptic_npys is None or out_vibro_npys is None:
                 fail_count += 1
                 continue
             out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
@@ -303,7 +305,7 @@ def process(visions, chosen_behavior):
         out_haptic_npys, bins = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH)
         out_vibro_npys = generate_npy_vibro(vibro, n_frames, bins, behavior, SEQUENCE_LENGTH)
 
-        if out_audio_npys is None or out_haptic_npys is None:
+        if out_audio_npys is None or out_haptic_npys is None or out_vibro_npys is None:
             fail_count += 1
             continue
         out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))

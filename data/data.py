@@ -14,6 +14,9 @@ HAPTIC_MIN = [-39.090578, -21.720063, -10.159031, -4.562487, -1.456323, -1.89340
 HAPTIC_MEAN = [-25.03760727, -8.2802204, -5.49065186, 2.53891808, -0.6424120, -1.22525292, -0.04463354, 0.0, 0.0, 0.0]
 HAPTIC_STD = [4.01142790e+01, 2.29780167e+01, 2.63156072e+01, 7.54091499e+00, 3.40810983e-01, 3.23891355e-01, 1.65208189e-03, 1.0, 1.0, 1.0]
 
+VIBRO_MEAN = [55.32553454, -141.92273532, -26.08607739]
+VIBRO_STD = [109.59627816, 133.72501765, 163.39785803]
+
 def make_dataset(path):
     if not os.path.exists(path):
         raise FileExistsError('some subfolders from data set do not exists!')
@@ -30,6 +33,7 @@ def npy_loader(path):
     samples['haptic'] = torch.from_numpy(samples['haptic']).float()
     samples['audio'] = torch.from_numpy(samples['audio'])
     samples['behavior'] = torch.from_numpy(samples['behavior']).float()
+    samples['vibro'] = torch.from_numpy(samples['vibro'])
     return samples
 
 
@@ -66,13 +70,14 @@ class PushDataset(Dataset):
 
 
 class CY101Dataset(Dataset):
-    def __init__(self, root, image_transform=None, haptic_transform=None, audio_transform=None, loader=npy_loader, device='cpu'):
+    def __init__(self, root, image_transform=None, haptic_transform=None, audio_transform=None, vibro_transform=None, loader=npy_loader, device='cpu'):
         if not os.path.exists(root):
             raise FileExistsError('{0} does not exists!'.format(root))
 
         self.image_transform = image_transform
         self.haptic_transform = haptic_transform
         self.audio_transform = audio_transform
+        self.vibro_transform = vibro_transform
 
         self.samples = make_dataset(root)
         if len(self.samples) == 0:
@@ -87,40 +92,19 @@ class CY101Dataset(Dataset):
         haptic = modalities['haptic']
         audio = modalities['audio']
         behavior = modalities['behavior']
+        vibro = modalities['vibro']
         if self.image_transform is not None:
             vision = torch.cat([self.image_transform(single_image).unsqueeze(0) for single_image in vision.unbind(0)], dim=0)
         if self.haptic_transform is not None:
             haptic = torch.cat([self.haptic_transform(single_haptic).unsqueeze(0) for single_haptic in haptic.unbind(0)], dim=0)
         if self.audio_transform is not None:
             audio = torch.cat([self.audio_transform(single_audio).unsqueeze(0) for single_audio in audio.unbind(0)], dim=0)
-        return vision.to(self.device), haptic.to(self.device), audio.to(self.device), behavior.to(self.device)
+        if self.vibro_transform is not None:
+            vibro = torch.cat([self.vibro_transform(single_vibro).unsqueeze(0) for single_vibro in vibro.unbind(0)], dim=0)
+        return vision.to(self.device), haptic.to(self.device), audio.to(self.device), behavior.to(self.device), vibro.to(self.device)
 
     def __len__(self):
         return len(self.samples)
-
-def build_dataloader(opt):
-    image_transform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.Resize((opt.height, opt.width)),
-        transforms.ToTensor()
-    ])
-    train_ds = PushDataset(
-        root=os.path.join(opt.data_dir, 'push_train'),
-        image_transform=image_transform,
-        loader=npy_loader,
-        device=opt.device
-    )
-
-    testseen_ds = PushDataset(
-        root=os.path.join(opt.data_dir, 'push_testseen'),
-        image_transform=image_transform,
-        loader=npy_loader,
-        device=opt.device
-    )
-
-    train_dl = DataLoader(dataset=train_ds, batch_size=opt.batch_size, shuffle=True, drop_last=False)
-    testseen_dl = DataLoader(dataset=testseen_ds, batch_size=opt.batch_size, shuffle=False, drop_last=False)
-    return train_dl, testseen_dl
 
 
 def build_dataloader_CY101(opt):
@@ -154,6 +138,7 @@ def build_dataloader_CY101(opt):
         au[au>255]=255
         au[au<0]=0
         return au
+
     def addnoise_hp(hp):
         hp = hp + torch.rand_like(hp, device=hp.device)
         return hp
@@ -179,11 +164,17 @@ def build_dataloader_CY101(opt):
         transforms.Lambda(addnoise_hp)
     ])
 
+    vibro_transform = transforms.Compose([
+        transforms.Lambda(Standardizer(mean=torch.Tensor(VIBRO_MEAN),
+                                        std=torch.Tensor(VIBRO_STD))),
+    ])
+
     train_ds = CY101Dataset(
         root=os.path.join(opt.data_dir+'/train'),
         image_transform=image_transform,
         audio_transform=audio_transform,
         haptic_transform=haptic_transform,
+        vibro_transform=vibro_transform,
         loader=npy_loader,
         device=opt.device
     )
@@ -193,6 +184,7 @@ def build_dataloader_CY101(opt):
         image_transform=image_transform,
         audio_transform=audio_transform,
         haptic_transform=haptic_transform,
+        vibro_transform=vibro_transform,
         loader=npy_loader,
         device=opt.device
     )
@@ -207,7 +199,7 @@ if __name__ == '__main__':
     opt.data_dir = '../'+opt.data_dir
     tr, va = build_dataloader_CY101(opt)
     import cv2
-    for a, b, c, d in tr:
+    for a, b, c, d, e in tr:
         imgs = c[0].unbind(0)
         imgs = list(map(lambda x:(x.permute([1, 2, 0]).cpu().numpy()*255).squeeze().astype(np.uint8), imgs))
         for img in imgs:

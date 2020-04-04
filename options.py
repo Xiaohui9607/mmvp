@@ -23,16 +23,21 @@ class Options():
         self.parser.add_argument('--pretrained_model', default='', help='filepath of a pretrained model to initialize from.')
         self.parser.add_argument('--sequence_length', type=int, default=10, help='sequence length, including context frames.')
         self.parser.add_argument('--context_frames', type=int, default=4, help= '# of frames before predictions.')
-        self.parser.add_argument('--use_haptic', action='store_true', help='Whether or not to give the haptic to the model')
-        self.parser.add_argument('--use_behavior', action='store_true', help='Whether or not to give the behavior to the model')
-        self.parser.add_argument('--use_audio', action='store_true', help='Whether or not to give the audio to the model')
         self.parser.add_argument('--model', default='CDNA', help='model architecture to use - CDNA, DNA, or STP')
         self.parser.add_argument('--num_masks', type=int, default=10, help='number of masks, usually 1 for DNA, 10 for CDNA, STN.')
         self.parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu', help='cuda:[d] | cpu')
         self.parser.add_argument('--dna_kern_size', type=int, default=5, help='DNA_KERN_SIZE.')
+
+        self.parser.add_argument('--use_haptic', action='store_true', help='Whether or not to give the haptic to the model')
+        self.parser.add_argument('--use_behavior', action='store_true', help='Whether or not to give the behavior to the model')
+        self.parser.add_argument('--use_audio', action='store_true', help='Whether or not to give the audio to the model')
+        self.parser.add_argument('--use_vibro', action='store_true', help='Whether or not to give the vibro to the model')
+
         self.parser.add_argument('--haptic_layer', type=int, default=16, help='HAPTIC_LAYER.')
         self.parser.add_argument('--behavior_layer', type=int, default=9, help='number of chosen behavior.')
         self.parser.add_argument('--audio_layer', type=int, default=16, help='AUDIO_LAYER.')
+        self.parser.add_argument('--vibro_layer', type=int, default=16, help='VIBRO_LAYER.')
+
         self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will override multi-modalities options' )
         self.parser.add_argument('--aux', action='store_true', help='employ auxiliary tasks during training' )
         # training details

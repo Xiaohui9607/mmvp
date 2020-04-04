@@ -2,7 +2,7 @@ import math
 import torch
 from torch import nn
 from torch.nn import functional as F
-from .layer import ConvLSTM, haptic_feat, audio_feat, haptic_head, audio_head
+from .layer import ConvLSTM, haptic_feat, audio_feat, vibro_feat, haptic_head, audio_head, vibro_head
 
 RELU_SHIFT = 1e-12
 HAPTIC_DIM = [48, 10]
@@ -26,6 +26,7 @@ class network(nn.Module):
                  HAPTIC_LAYER = 16,
                  BEHAVIOR_LAYER = 9,
                  AUDIO_LAYER = 16,
+                 VIBRO_LAYER = 16
                  ):
         super(network, self).__init__()
         if stp + cdna + dna != 1:
@@ -51,6 +52,7 @@ class network(nn.Module):
         self.AUDIO_LAYER = AUDIO_LAYER
         self.HAPTIC_LAYER = HAPTIC_LAYER
         self.BEHAVIOR_LAYER = BEHAVIOR_LAYER
+        self.VIBRO_LAYER = VIBRO_LAYER
         # N * 3 * H * W -> N * 32 * H/2 * W/2
         self.enc0 = nn.Conv2d(in_channels=channels, out_channels=lstm_size[0], kernel_size=5, stride=2, padding=2)
         self.enc0_norm = nn.BatchNorm2d(lstm_size[0])
@@ -126,30 +128,19 @@ class network(nn.Module):
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
     def build_modalities_block(self):
+        if self.HAPTIC_LAYER != 0:
+            self.haptic_feat = haptic_feat(self.HAPTIC_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
+            self.haptic_head = haptic_head(self.HAPTIC_LAYER, self.AUDIO_LAYER, self.VIBRO_LAYER)
 
-        self.haptic_feat = haptic_feat(self.HAPTIC_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
-        self.haptic_head = haptic_head()
-        # self.haptic_feat = nn.Sequential()
-        # self.haptic_feat.add_module("haptic_1", nn.Conv2d(1, 8, [5, 1], stride=[2, 1]))
-        # self.haptic_feat.add_module("hrelu_1", nn.ReLU())
-        # self.haptic_feat.add_module("haptic_2", nn.Conv2d(8, 16, [3, 1], stride=[2, 1]))
-        # self.haptic_feat.add_module("hrelu_2", nn.ReLU())
-        # self.haptic_feat.add_module("haptic_3", nn.Conv2d(16, self.HAPTIC_LAYER, [3, 3], stride=1))
-        # self.haptic_feat.add_module("hrelu_3", nn.ReLU())
+        if self.AUDIO_LAYER != 0:
+            self.audio_feat = audio_feat(self.AUDIO_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
+            self.audio_head = audio_head(self.HAPTIC_LAYER, self.AUDIO_LAYER, self.VIBRO_LAYER)
 
-        self.audio_feat = audio_feat(self.AUDIO_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
-        self.audio_head = audio_head()
-        # self.audio_feat = nn.Sequential()
-        # self.audio_feat.add_module("audio_1", nn.Conv2d(1, 8, [1, 7], stride=[1, 3]))
-        # self.audio_feat.add_module("arelu_1", nn.ReLU())
-        # self.audio_feat.add_module("audio_2", nn.Conv2d(8, 8, [1, 7], stride=[1, 3]))
-        # self.audio_feat.add_module("arelu_2", nn.ReLU())
-        # self.audio_feat.add_module("audio_3", nn.Conv2d(8, 16, [1, 7], stride=[1, 3]))
-        # self.audio_feat.add_module("arelu_3", nn.ReLU())
-        # self.audio_feat.add_module("audio_4", nn.Conv2d(16, self.AUDIO_LAYER, [3, 3], stride=[2, 2], padding=[1, 0]))
-        # self.audio_feat.add_module("arelu_4", nn.ReLU())
+        if self.VIBRO_LAYER != 0:
+            self.vibro_feat = vibro_feat(self.VIBRO_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
+            self.vibro_head = vibro_head(self.HAPTIC_LAYER, self.AUDIO_LAYER, self.VIBRO_LAYER)
 
-    def forward(self, images, haptics, audios, behaviors, train=True):
+    def forward(self, images, haptics, audios, behaviors, vibros, train=True):
         '''
         :param inputs: T * N * C * H * W
         :param state: T * N * C
@@ -159,14 +150,19 @@ class network(nn.Module):
 
         lstm_state1, lstm_state2, lstm_state3, lstm_state4 = None, None, None, None
         lstm_state5, lstm_state6, lstm_state7 = None, None, None
-        haptic_feat_state, audio_feat_state = None, None
-        haptic_feat_old = self.haptic_feat.feature(haptics[0])
-        audio_feat_old = self.audio_feat.feature(audios[0])
+        haptic_feat_state, audio_feat_state, vibro_feat_state = None, None, None
+
+        haptic_feat_old = self.haptic_feat.feature(haptics[0]) if self.HAPTIC_LAYER != 0 else None
+        audio_feat_old = self.audio_feat.feature(audios[0]) if self.AUDIO_LAYER != 0 else None
+        vibro_feat_old = self.vibro_feat.feature(vibros[0]) if self.VIBRO_LAYER != 0 else None
+
+
         # haptic_feat_old, audio_feat_old = None, None
 
         gen_images = []
         gen_haptics = []
         gen_audios = []
+        gen_vibros = []
         if self.k == -1 or not train:
             feedself = True
         else:
@@ -174,7 +170,7 @@ class network(nn.Module):
             feedself = False
             self.iter_num += 1
 
-        for image, haptic, audio in zip(images[:-1], haptics[1:], audios[1:]):
+        for image, haptic, audio, vibro in zip(images[:-1], haptics[1:], audios[1:], vibros[1:]):
 
             done_warm_start = len(gen_images) >= self.context_frames
 
@@ -207,26 +203,29 @@ class network(nn.Module):
             enc2 = torch.relu(self.enc2(lstm4))
 
             # TODO: pass in state and action
-            enc2, haptic_feat, hv_lstm_feat, haptic_feat_state, audio_feat, av_lstm_feat, audio_feat_state = \
-                self.interaction(enc2, haptic, audio, behaviors, haptic_feat_state, audio_feat_state)
+            enc2, \
+            haptic_feat, hv_lstm_feat, haptic_feat_state, \
+            audio_feat, av_lstm_feat, audio_feat_state, \
+            vibro_feat, vv_lstm_feat, vibro_feat_state = \
+                self.interaction(enc2, haptic, audio, vibro, behaviors,
+                                 haptic_feat_state, audio_feat_state, vibro_feat_state)
 
             # step 1
-            gen_haptic = self.haptic_head(haptic_feat_old, av_lstm_feat)
-            gen_audio = self.audio_head(audio_feat_old, hv_lstm_feat)
+
+            gen_haptic = self.haptic_head(haptic_feat_old, av_lstm_feat, vv_lstm_feat) if self.HAPTIC_LAYER != 0 else None
+
+            gen_audio = self.audio_head(audio_feat_old, hv_lstm_feat, vv_lstm_feat) if self.AUDIO_LAYER != 0 else None
+
+            gen_vibro = self.vibro_head(vibro_feat_old, hv_lstm_feat, av_lstm_feat) if self.VIBRO_LAYER != 0 else None
+
             gen_haptics.append(gen_haptic)
             gen_audios.append(gen_audio)
+            gen_vibros.append(gen_vibro)
             # step 2
+
             haptic_feat_old = haptic_feat
             audio_feat_old = audio_feat
-
-            # haptic_feat = self.haptic_feat(haptic)
-            # audio_feat = self.audio_feat(audio)
-            # behavior_feat = behaviors.repeat(1, 1, enc2.shape[2]//behaviors.shape[2], enc2.shape[3]//behaviors.shape[3])
-            #
-            # smear = torch.cat([haptic_feat, behavior_feat, audio_feat], dim=1)
-            #
-            #
-            # enc2 = torch.cat([enc2, smear], dim=1)
+            vibro_feat_old = vibro_feat
 
             enc3 = torch.relu(self.enc3(enc2))
 
@@ -272,21 +271,41 @@ class network(nn.Module):
 
             gen_images.append(output)
 
-        return gen_images, gen_haptics, gen_audios
+        return gen_images, gen_haptics, gen_audios, gen_vibros
 
-    def interaction(self, enc2, haptic, audio, behaviors, haptic_feat_state, audio_feat_state):
+    def interaction(self, enc2, haptic, audio, vibro, behaviors, haptic_feat_state, audio_feat_state, vibro_feat_state):
         n_channels = enc2.shape[1] //4
-        hap_specific, vis_specific, aud_specific = enc2.split([n_channels, n_channels*2, n_channels], dim=1)
+
+        hap_specific, vis_specific, vib_specific, aud_specific = enc2.split([n_channels, n_channels, n_channels, n_channels], dim=1)
         behavior_feat = behaviors.repeat(1, 1, enc2.shape[2] // behaviors.shape[2], enc2.shape[3] // behaviors.shape[3])
 
-        hv_lstm_feat, haptic_feat, hv_lstm_feat_state = self.haptic_feat(haptic, hap_specific, behavior_feat, haptic_feat_state)
+        if torch.allclose(haptic, torch.zeros_like(haptic)):
+            hv_lstm_feat, haptic_feat, hv_lstm_feat_state = None, None, None
+        else:
+            hv_lstm_feat, haptic_feat, hv_lstm_feat_state = self.haptic_feat(haptic, hap_specific, behavior_feat,
+                                                                             haptic_feat_state)
+            hap_specific = hv_lstm_feat
 
-        av_lstm_feat, audio_feat, av_lstm_feat_state = self.audio_feat(audio, aud_specific, behavior_feat, audio_feat_state)
-        enc2 = torch.cat([hv_lstm_feat, vis_specific, av_lstm_feat], dim=1)
+        if torch.allclose(audio, torch.zeros_like(audio)):
+            av_lstm_feat, audio_feat, av_lstm_feat_state = None, None, None
+        else:
+            av_lstm_feat, audio_feat, av_lstm_feat_state = self.audio_feat(audio, aud_specific, behavior_feat,
+                                                                           audio_feat_state)
+            aud_specific = av_lstm_feat
+
+        if torch.allclose(vibro, torch.zeros_like(vibro)):
+            vv_lstm_feat, vibro_feat, vv_lstm_feat_state = None, None, None
+        else:
+            vv_lstm_feat, vibro_feat, vv_lstm_feat_state = self.vibro_feat(vibro, vib_specific, behavior_feat,
+                                                                           vibro_feat_state)
+            vib_specific = vv_lstm_feat
+
+        enc2 = torch.cat([hap_specific, vis_specific, vib_specific, aud_specific], dim=1)
+
         return enc2, \
                haptic_feat, hv_lstm_feat, haptic_feat_state, \
-               audio_feat, av_lstm_feat, audio_feat_state
-
+               audio_feat, av_lstm_feat, audio_feat_state, \
+               vibro_feat, vv_lstm_feat, vv_lstm_feat_state
 
 
     def stp_transformation(self, image, stp_input):
@@ -299,6 +318,7 @@ class network(nn.Module):
 
         transformed = [F.grid_sample(image, F.affine_grid(param.view(-1, 3, 2), image.size())) for param in params]
         return transformed
+
 
     def cdna_transformation(self, image, cdna_input):
         batch_size, height, width = image.shape[0], image.shape[2], image.shape[3]
