@@ -60,43 +60,14 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
 def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_name="spectrogram"):
     samplerate, samples = wav.read(audio_path)
-    # s1 = samples[:, 0]
-    # s2 = samples[:, 1]
-    # ss = [s1, s2]
-    # samples = np.delete(samples, 1, 1)
-    # for samples in ss:
-    s = stft(samples, binsize)
+    s = stft(samples[:, 0], binsize)
 
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
+    sshow = sshow[2:, :]
     ims = 20. * np.log10(np.abs(sshow) / 10e-6)  # amplitude to decibel
-    timebins, freqbins = np.shape(ims)
-    # print("timebins: ", timebins)
-    # print("freqbins: ", freqbins)
-    #
-    #
-    # plt.figure(figsize=(15, 7.5))
-    # plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
-    # plt.colorbar()
-    #
-    # plt.xlabel("time (s)")
-    # plt.ylabel("frequency (hz)")
-    # plt.xlim([0, timebins-1])
-    # plt.ylim([0, freqbins])
-    #
-    # xlocs = np.float32(np.linspace(0, timebins-1, 5))
-    # plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
-    # ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
-    # plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
-    #
-    # if plotpath:
-    #     plt.savefig("../../data/k",bbox_inches="tight")
-    #     plt.close()
-    # else:
-    #     plt.show()
-    #
-    # plt.clf()
-
-    return ims
+    ims = np.transpose(ims)
+    ims = ims[0:256, :]
+    return ims, 1/samplerate*samples.shape[0]
 
 
 if __name__ == '__main__':

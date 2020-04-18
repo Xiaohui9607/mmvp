@@ -4,15 +4,15 @@ import glob
 import random
 import numpy as np
 import PIL.Image
-from make_spectrogram import plotstft
+from make_spectrogram import plotstft, stft
 import argparse
 from sklearn.preprocessing import OneHotEncoder
 
 
-DATA_DIR = '../data/CY101'
-OUT_DIR = '../data/CY101NPY'
+DATA_DIR = '../../data/CY101'
+OUT_DIR = '../../data/CY101NPY'
 # added for VIS splits
-VIS_DIR = '../data/VIS/'
+VIS_DIR = '../../data/VIS/'
 
 STRATEGY = 'object' # object | category | trail
 
@@ -73,15 +73,15 @@ SEQUENCE_LENGTH = 10
 STEP = 4
 IMG_SIZE = (64, 64)
 
-
+AUDIO_EACH_FRAME_LENGTH = 8
 def read_dir():
     visions = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
     return visions
 
 
 def convert_audio_to_image(audio_path):
-    ims = plotstft(audio_path)
-    return ims
+    ims, duration = plotstft(audio_path)
+    return ims, duration
 
 
 def generate_npy_vision(path, behavior, sequence_length):
@@ -142,18 +142,18 @@ def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
     if len(audio_path) == 0:
         return None
     audio_path = audio_path[0]
-    converted_image_array = convert_audio_to_image(audio_path)
+    img, duration = convert_audio_to_image(audio_path)
+ # create a new dimension
 
-    img = converted_image_array[np.newaxis, ...]  # create a new dimension
-
-    image_width = img.shape[1]
-    effective_each_frame_length = int(image_width / n_frames_vision_image)
-    # here we need to crop from width
-    width_to_keep = effective_each_frame_length * n_frames_vision_image
-    cropped_image = img[:, :width_to_keep, :]
+    image_height, image_width = img.shape
+    image_width = AUDIO_EACH_FRAME_LENGTH * n_frames_vision_image
+    img = PIL.Image.fromarray(img)
+    img = img.resize((image_height, image_width))
+    img = np.array(img)
+    img = img[np.newaxis, ...]
     imglist = []
     for i in range(0, n_frames_vision_image):
-        imglist.append(cropped_image[:, i * effective_each_frame_length:(i + 1) * effective_each_frame_length, :])
+        imglist.append(img[:, i * AUDIO_EACH_FRAME_LENGTH:(i + 1) * AUDIO_EACH_FRAME_LENGTH, :])
     imglist = imglist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
     ret = []
     for i in range(0, len(imglist) - sequence_length, STEP):
@@ -172,6 +172,7 @@ def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
     path = path[0]
     vibro_list = open(path).readlines()
     vibro_list = [list(map(int, vibro.strip().split('\t'))) for vibro in vibro_list]
+
     vibro_list = np.array(vibro_list)
     vibro_time = vibro_list[:, 0]
     vibro_data = vibro_list[:, 1:]
@@ -185,6 +186,7 @@ def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
     groups = np.digitize(vibro_time, bins, right=False)
 
     vibro_data = [vibro_data[np.where(groups == idx)] for idx in range(1, n_frames + 1)]
+
     vibro_data = [np.vstack([np.resize(vibro[:, 0], (128,)),
                              np.resize(vibro[:, 1], (128,)),
                              np.resize(vibro[:, 2], (128,))]).T[np.newaxis, ...]
