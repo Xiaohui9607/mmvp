@@ -31,7 +31,7 @@ class network(nn.Module):
         super(network, self).__init__()
         if stp + cdna + dna != 1:
             raise ValueError('More than one, or no network option specified.')
-        lstm_size = [32, 32, 64, 64, 128, 64, 32]
+        self.lstm_size = [32, 32, 64, 64, 128, 64, 32]
         # lstm_size = [l//2 for l in lstm_size]   # ligthen network
         self.dna = dna
         self.stp = stp
@@ -54,91 +54,98 @@ class network(nn.Module):
         self.BEHAVIOR_LAYER = BEHAVIOR_LAYER
         self.VIBRO_LAYER = VIBRO_LAYER
         # N * 3 * H * W -> N * 32 * H/2 * W/2
-        self.enc0 = nn.Conv2d(in_channels=channels, out_channels=lstm_size[0], kernel_size=5, stride=2, padding=2)
-        self.enc0_norm = nn.BatchNorm2d(lstm_size[0])
-        # self.enc0_norm = nn.BatchNorm2d(lstm_size[0], self.height//2, self.width//2])
+        self.enc0 = nn.Conv2d(in_channels=channels, out_channels=self.lstm_size[0], kernel_size=5, stride=2, padding=2)
+        self.enc0_norm = nn.BatchNorm2d(self.lstm_size[0])
+
         # N * 32 * H/2 * W/2 -> N * 32 * H/2 * W/2
-        self.lstm1 = ConvLSTM(in_channels=lstm_size[0], out_channels=lstm_size[0], kernel_size=5, padding=2)
-        self.lstm1_norm = nn.BatchNorm2d(lstm_size[0])
-        # self.lstm1_norm = nn.BatchNorm2d(lstm_size[0], self.height//2, self.width//2])
+        self.lstm1 = ConvLSTM(in_channels=self.lstm_size[0], out_channels=self.lstm_size[0], kernel_size=5, padding=2)
+        self.lstm1_norm = nn.BatchNorm2d(self.lstm_size[0])
+
         # N * 32 * H/2 * W/2 -> N * 32 * H/2 * W/2
-        self.lstm2 = ConvLSTM(in_channels=lstm_size[0], out_channels=lstm_size[1], kernel_size=5, padding=2)
-        self.lstm2_norm = nn.BatchNorm2d(lstm_size[1])
-        # self.lstm2_norm = nn.BatchNorm2d(lstm_size[1], self.height//2, self.width//2])
+        self.lstm2 = ConvLSTM(in_channels=self.lstm_size[0], out_channels=self.lstm_size[1], kernel_size=5, padding=2)
+        self.lstm2_norm = nn.BatchNorm2d(self.lstm_size[1])
+
 
         # N * 32 * H/4 * W/4 -> N * 32 * H/4 * W/4
-        self.enc1 = nn.Conv2d(in_channels=lstm_size[1], out_channels=lstm_size[1], kernel_size=3, stride=2, padding=1)
+        self.enc1 = nn.Conv2d(in_channels=self.lstm_size[1], out_channels=self.lstm_size[1], kernel_size=3, stride=2, padding=1)
         # N * 32 * H/4 * W/4 -> N * 64 * H/4 * W/4
-        self.lstm3 = ConvLSTM(in_channels=lstm_size[1], out_channels=lstm_size[2], kernel_size=5, padding=2)
-        self.lstm3_norm = nn.BatchNorm2d(lstm_size[2])
-        # self.lstm3_norm = nn.BatchNorm2d(lstm_size[2], self.height//4, self.width//4])
+        self.lstm3 = ConvLSTM(in_channels=self.lstm_size[1], out_channels=self.lstm_size[2], kernel_size=5, padding=2)
+        self.lstm3_norm = nn.BatchNorm2d(self.lstm_size[2])
+
         # N * 64 * H/4 * W/4 -> N * 64 * H/4 * W/4
-        self.lstm4 = ConvLSTM(in_channels=lstm_size[2], out_channels=lstm_size[3], kernel_size=5, padding=2)
-        self.lstm4_norm = nn.BatchNorm2d(lstm_size[3])
-        # self.lstm4_norm = nn.BatchNorm2d(lstm_size[3], self.height//4, self.width//4])
+        self.lstm4 = ConvLSTM(in_channels=self.lstm_size[2], out_channels=self.lstm_size[3], kernel_size=5, padding=2)
+        self.lstm4_norm = nn.BatchNorm2d(self.lstm_size[3])
+
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/8 * W/8
-        self.enc2 = nn.Conv2d(in_channels=lstm_size[3], out_channels=lstm_size[3], kernel_size=3, stride=2, padding=1)
+        self.enc2 = nn.Conv2d(in_channels=self.lstm_size[3], out_channels=self.lstm_size[3], kernel_size=3, stride=2, padding=1)
 
         # pass in state and action
         self.build_modalities_block()
 
         # N * (10+64) * H/8 * W/8 -> N * 64 * H/8 * W/8
-        self.enc3 = nn.Conv2d(in_channels=lstm_size[3], out_channels=lstm_size[3], kernel_size=1, stride=1)
+        self.enc3 = nn.Conv2d(in_channels=self.lstm_size[3]+self.VIBRO_LAYER+self.HAPTIC_LAYER+self.AUDIO_LAYER+self.BEHAVIOR_LAYER,
+                              out_channels=self.lstm_size[3], kernel_size=1, stride=1)
 
         # N * 64 * H/8 * W/8 -> N * 128 * H/8 * W/8
-        self.lstm5 = ConvLSTM(in_channels=lstm_size[3], out_channels=lstm_size[4], kernel_size=5, padding=2)
-        self.lstm5_norm = nn.BatchNorm2d(lstm_size[4])
-        # self.lstm5_norm = nn.BatchNorm2d(lstm_size[4], self.height//8, self.width//8])
+        self.lstm5 = ConvLSTM(in_channels=self.lstm_size[3], out_channels=self.lstm_size[4], kernel_size=5, padding=2)
+        self.lstm5_norm = nn.BatchNorm2d(self.lstm_size[4])
+
         # N * 128 * H/8 * W/8 -> N * 128 * H/4 * W/4
-        self.enc4 = nn.ConvTranspose2d(in_channels=lstm_size[4], out_channels=lstm_size[4], kernel_size=3, stride=2, output_padding=1, padding=1)
+        self.enc4 = nn.ConvTranspose2d(in_channels=self.lstm_size[4],
+                                       out_channels=self.lstm_size[4],
+                                       kernel_size=3, stride=2, output_padding=1, padding=1)
         # N * 128 * H/4 * W/4 -> N * 64 * H/4 * W/4
-        self.lstm6 = ConvLSTM(in_channels=lstm_size[4], out_channels=lstm_size[5], kernel_size=5, padding=2)
-        self.lstm6_norm = nn.BatchNorm2d(lstm_size[5])
-        # self.lstm6_norm = nn.BatchNorm2d(lstm_size[5], self.height//4, self.width//4])
+        self.lstm6 = ConvLSTM(in_channels=self.lstm_size[4], out_channels=self.lstm_size[5], kernel_size=5, padding=2)
+        self.lstm6_norm = nn.BatchNorm2d(self.lstm_size[5])
 
         # N * 64 * H/4 * W/4 -> N * 64 * H/2 * W/2
-        self.enc5 = nn.ConvTranspose2d(in_channels=lstm_size[5]+lstm_size[1], out_channels=lstm_size[5]+lstm_size[1], kernel_size=3, stride=2, output_padding=1, padding=1)
+        self.enc5 = nn.ConvTranspose2d(in_channels=self.lstm_size[5]+self.lstm_size[1],
+                                       out_channels=self.lstm_size[5]+self.lstm_size[1],
+                                       kernel_size=3, stride=2, output_padding=1, padding=1)
         # N * 64 * H/2 * W/2 -> N * 32 * H/2 * W/2
-        self.lstm7 = ConvLSTM(in_channels=lstm_size[5]+lstm_size[1], out_channels=lstm_size[6], kernel_size=5, padding=2)
-        self.lstm7_norm = nn.BatchNorm2d(lstm_size[6])
-        # self.lstm7_norm = nn.BatchNorm2d(lstm_size[6], self.height//2, self.width//2])
+        self.lstm7 = ConvLSTM(in_channels=self.lstm_size[5]+self.lstm_size[1],
+                              out_channels=self.lstm_size[6], kernel_size=5, padding=2)
+        self.lstm7_norm = nn.BatchNorm2d(self.lstm_size[6])
+
         # N * 32 * H/2 * W/2 -> N * 32 * H * W
-        self.enc6 = nn.ConvTranspose2d(in_channels=lstm_size[6]+lstm_size[0], out_channels=lstm_size[6], kernel_size=3, stride=2, output_padding=1, padding=1)
-        self.enc6_norm = nn.BatchNorm2d(lstm_size[6])
-        # self.enc6_norm = nn.BatchNorm2d(lstm_size[6], self.height, self.width])
+        self.enc6 = nn.ConvTranspose2d(in_channels=self.lstm_size[6]+self.lstm_size[0],
+                                       out_channels=self.lstm_size[6], kernel_size=3,
+                                       stride=2, output_padding=1, padding=1)
+        self.enc6_norm = nn.BatchNorm2d(self.lstm_size[6])
+
 
         if self.dna:
             # N * 32 * H * W -> N * (DNA_KERN_SIZE*DNA_KERN_SIZE) * H * W
-            self.enc7 = nn.ConvTranspose2d(in_channels=lstm_size[6], out_channels=self.DNA_KERN_SIZE**2, kernel_size=1, stride=1)
+            self.enc7 = nn.ConvTranspose2d(in_channels=self.lstm_size[6], out_channels=self.DNA_KERN_SIZE**2, kernel_size=1, stride=1)
         else:
             # N * 32 * H * W -> N * 3 * H * W
-            self.enc7 = nn.ConvTranspose2d(in_channels=lstm_size[6], out_channels=channels, kernel_size=1, stride=1)
+            self.enc7 = nn.ConvTranspose2d(in_channels=self.lstm_size[6], out_channels=channels, kernel_size=1, stride=1)
             if self.cdna:
                 # a reshape from lstm5: N * 128 * H/8 * W/8 -> N * (128 * H/8 * W/8)
                 # N * (128 * H/8 * W/8) -> N * (10 * 5 * 5)
-                in_dim = int(lstm_size[4] * self.height * self.width / 64)
+                in_dim = int(self.lstm_size[4] * self.height * self.width / 64)
                 self.fc = nn.Linear(in_dim, self.DNA_KERN_SIZE * self.DNA_KERN_SIZE * self.num_masks)
             else:
-                in_dim = int(lstm_size[4] * self.height * self.width / 64)
+                in_dim = int(self.lstm_size[4] * self.height * self.width / 64)
                 self.fc = nn.Linear(in_dim, 100)
                 self.fc_stp = nn.Linear(100, (self.num_masks-1) * 6)
         #  N * 32 * H * W -> N * 11 * H * W
-        self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
+        self.maskout = nn.ConvTranspose2d(self.lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
     def build_modalities_block(self):
         if self.HAPTIC_LAYER != 0:
-            self.haptic_feat = haptic_feat(self.HAPTIC_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
-            self.haptic_head = haptic_head(self.HAPTIC_LAYER, self.AUDIO_LAYER, self.VIBRO_LAYER)
+            self.haptic_feat = haptic_feat(self.HAPTIC_LAYER)
+            self.haptic_head = haptic_head(self.lstm_size[3])
 
         if self.AUDIO_LAYER != 0:
-            self.audio_feat = audio_feat(self.AUDIO_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
-            self.audio_head = audio_head(self.HAPTIC_LAYER, self.AUDIO_LAYER, self.VIBRO_LAYER)
+            self.audio_feat = audio_feat(self.AUDIO_LAYER)
+            self.audio_head = audio_head(self.lstm_size[3])
 
         if self.VIBRO_LAYER != 0:
-            self.vibro_feat = vibro_feat(self.VIBRO_LAYER, self.enc2.out_channels//4, self.BEHAVIOR_LAYER)
-            self.vibro_head = vibro_head(self.HAPTIC_LAYER, self.AUDIO_LAYER, self.VIBRO_LAYER)
+            self.vibro_feat = vibro_feat(self.VIBRO_LAYER)
+            self.vibro_head = vibro_head(self.lstm_size[3])
 
     def forward(self, images, haptics, audios, behaviors, vibros, train=True):
         '''
@@ -152,9 +159,9 @@ class network(nn.Module):
         lstm_state5, lstm_state6, lstm_state7 = None, None, None
         haptic_feat_state, audio_feat_state, vibro_feat_state = None, None, None
 
-        haptic_feat_old = self.haptic_feat.feature(haptics[0]) if self.HAPTIC_LAYER != 0 else None
-        audio_feat_old = self.audio_feat.feature(audios[0]) if self.AUDIO_LAYER != 0 else None
-        vibro_feat_old = self.vibro_feat.feature(vibros[0]) if self.VIBRO_LAYER != 0 else None
+        # haptic_feat_old = self.haptic_feat.feature(haptics[0]) if self.HAPTIC_LAYER != 0 else None
+        # audio_feat_old = self.audio_feat.feature(audios[0]) if self.AUDIO_LAYER != 0 else None
+        # vibro_feat_old = self.vibro_feat.feature(vibros[0]) if self.VIBRO_LAYER != 0 else None
 
 
         # haptic_feat_old, audio_feat_old = None, None
@@ -202,33 +209,22 @@ class network(nn.Module):
 
             enc2 = torch.relu(self.enc2(lstm4))
 
-            # TODO: pass in state and action
-            enc2, \
-            haptic_feat, hv_lstm_feat, haptic_feat_state, \
-            audio_feat, av_lstm_feat, audio_feat_state, \
-            vibro_feat, vv_lstm_feat, vibro_feat_state = \
+            # TODO: interaction + modalities feature extraction
+            enc3, haptic_feat_state, audio_feat_state, vibro_feat_state = \
                 self.interaction(enc2, haptic, audio, vibro, behaviors,
                                  haptic_feat_state, audio_feat_state, vibro_feat_state)
 
-            # step 1
 
-            gen_haptic = self.haptic_head(haptic_feat_old, av_lstm_feat, vv_lstm_feat) if self.HAPTIC_LAYER != 0 else None
+            gen_haptic = self.haptic_head(enc3) if self.HAPTIC_LAYER != 0 else None
+            gen_audio = self.audio_head(enc3) if self.AUDIO_LAYER != 0 else None
+            gen_vibro = self.vibro_head(enc3) if self.VIBRO_LAYER != 0 else None
 
-            gen_audio = self.audio_head(audio_feat_old, hv_lstm_feat, vv_lstm_feat) if self.AUDIO_LAYER != 0 else None
-
-            gen_vibro = self.vibro_head(vibro_feat_old, hv_lstm_feat, av_lstm_feat) if self.VIBRO_LAYER != 0 else None
-
+            # TODO: done in modalities preiction
             gen_haptics.append(gen_haptic)
             gen_audios.append(gen_audio)
             gen_vibros.append(gen_vibro)
-            # step 2
 
-            haptic_feat_old = haptic_feat
-            audio_feat_old = audio_feat
-            vibro_feat_old = vibro_feat
-
-            enc3 = torch.relu(self.enc3(enc2))
-
+            # TODO: proceed on visual task
             lstm5, lstm_state5 = self.lstm5(enc3, lstm_state5)
             lstm5 = self.lstm5_norm(lstm5)
             enc4 = torch.relu(self.enc4(lstm5))
@@ -273,39 +269,32 @@ class network(nn.Module):
 
         return gen_images, gen_haptics, gen_audios, gen_vibros
 
-    def interaction(self, enc2, haptic, audio, vibro, behaviors, haptic_feat_state, audio_feat_state, vibro_feat_state):
-        n_channels = enc2.shape[1] //4
+    def interaction(self, vis_feat, haptic, audio, vibro, behaviors, haptic_feat_state, audio_feat_state, vibro_feat_state):
 
-        hap_specific, vis_specific, vib_specific, aud_specific = enc2.split([n_channels, n_channels, n_channels, n_channels], dim=1)
-        behavior_feat = behaviors.repeat(1, 1, enc2.shape[2] // behaviors.shape[2], enc2.shape[3] // behaviors.shape[3])
+        behavior_feat = behaviors.repeat(1, 1, vis_feat.shape[2] // behaviors.shape[2], vis_feat.shape[3] // behaviors.shape[3])
+        enc2 = [vis_feat, behavior_feat]
 
-        if torch.allclose(haptic, torch.zeros_like(haptic)):
-            hv_lstm_feat, haptic_feat, hv_lstm_feat_state = None, None, None
-        else:
-            hv_lstm_feat, haptic_feat, hv_lstm_feat_state = self.haptic_feat(haptic, hap_specific, behavior_feat,
-                                                                             haptic_feat_state)
-            hap_specific = hv_lstm_feat
+        if not torch.allclose(haptic, torch.zeros_like(haptic)):
+            haptic_feat, haptic_feat_state = self.haptic_feat(haptic, haptic_feat_state)
+            enc2.append(haptic_feat)
 
-        if torch.allclose(audio, torch.zeros_like(audio)):
-            av_lstm_feat, audio_feat, av_lstm_feat_state = None, None, None
-        else:
-            av_lstm_feat, audio_feat, av_lstm_feat_state = self.audio_feat(audio, aud_specific, behavior_feat,
-                                                                           audio_feat_state)
-            aud_specific = av_lstm_feat
+        if not torch.allclose(audio, torch.zeros_like(audio)):
+            audio_feat, audio_feat_state = self.audio_feat(audio, audio_feat_state)
+            enc2.append(audio_feat)
 
-        if torch.allclose(vibro, torch.zeros_like(vibro)):
-            vv_lstm_feat, vibro_feat, vv_lstm_feat_state = None, None, None
-        else:
-            vv_lstm_feat, vibro_feat, vv_lstm_feat_state = self.vibro_feat(vibro, vib_specific, behavior_feat,
-                                                                           vibro_feat_state)
-            vib_specific = vv_lstm_feat
+        if not torch.allclose(vibro, torch.zeros_like(vibro)):
+            vibro_feat, vibro_feat_state = self.vibro_feat(vibro, vibro_feat_state)
+            enc2.append(vibro_feat)
 
-        enc2 = torch.cat([hap_specific, vis_specific, vib_specific, aud_specific], dim=1)
+        enc2 = torch.cat(enc2, dim=1)
 
-        return enc2, \
-               haptic_feat, hv_lstm_feat, haptic_feat_state, \
-               audio_feat, av_lstm_feat, audio_feat_state, \
-               vibro_feat, vv_lstm_feat, vv_lstm_feat_state
+        enc3 = torch.relu(self.enc3(enc2))
+
+        return enc3, haptic_feat_state, audio_feat_state, vibro_feat_state
+        # return enc2, \
+        #        haptic_feat, haptic_feat_state, \
+        #        audio_feat, audio_feat_state, \
+        #        vibro_feat, vv_lstm_feat_state
 
 
     def stp_transformation(self, image, stp_input):
