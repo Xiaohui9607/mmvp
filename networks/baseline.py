@@ -98,7 +98,7 @@ class baseline(nn.Module):
         self.maskout = nn.ConvTranspose2d(lstm_size[6], self.num_masks+1, kernel_size=1, stride=1)
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
-    def forward(self, images, haptics, audios, behaviors, train=True):
+    def forward(self, images, haptics, audios, behaviors, vibros, train=True):
         '''
         :param inputs: T * N * C * H * W
         :param state: T * N * C
@@ -118,7 +118,6 @@ class baseline(nn.Module):
             self.iter_num += 1
 
         for image in images[:-1]:
-
             done_warm_start = len(gen_images) >= self.context_frames
             #
             if feedself and done_warm_start:
@@ -194,7 +193,7 @@ class baseline(nn.Module):
             gen_images.append(output)
 
         self.iter_num += 1
-        return gen_images, None, None
+        return gen_images, None, None, None
 
     def stp_transformation(self, image, stp_input):
         identity_params = torch.tensor([1.0, 0.0, 0.0, 0.0, 1.0, 0.0], dtype=torch.float32).unsqueeze(1).repeat(1, self.num_masks-1)

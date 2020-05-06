@@ -1,4 +1,0 @@
-1. also predict haptic and audio
-2. change network architectur (a little bit)
-3. all behaviors training
-4. data loader -- change the audio input size (16,513) to (16, 128)

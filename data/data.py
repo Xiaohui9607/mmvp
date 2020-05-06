@@ -74,10 +74,10 @@ class CY101Dataset(Dataset):
         if not os.path.exists(root):
             raise FileExistsError('{0} does not exists!'.format(root))
 
-        self.image_transform = image_transform
-        self.haptic_transform = haptic_transform
-        self.audio_transform = audio_transform
-        self.vibro_transform = vibro_transform
+        self.image_transform = lambda vision: torch.cat([image_transform(single_image).unsqueeze(0) for single_image in vision.unbind(0)], dim=0)
+        self.haptic_transform = lambda haptic: torch.cat([haptic_transform(single_haptic).unsqueeze(0) for single_haptic in haptic.unbind(0)], dim=0)
+        self.audio_transform = lambda audio: torch.cat([audio_transform(single_audio).unsqueeze(0) for single_audio in audio.unbind(0)], dim=0)
+        self.vibro_transform = lambda vibro: torch.cat([vibro_transform(single_vibro).unsqueeze(0) for single_vibro in vibro.unbind(0)], dim=0)
 
         self.samples = make_dataset(root)
         if len(self.samples) == 0:
@@ -94,13 +94,17 @@ class CY101Dataset(Dataset):
         behavior = modalities['behavior']
         vibro = modalities['vibro']
         if self.image_transform is not None:
-            vision = torch.cat([self.image_transform(single_image).unsqueeze(0) for single_image in vision.unbind(0)], dim=0)
+            vision = self.image_transform(vision)
+            # vision = torch.cat([self.image_transform(single_image).unsqueeze(0) for single_image in vision.unbind(0)], dim=0)
         if self.haptic_transform is not None:
-            haptic = torch.cat([self.haptic_transform(single_haptic).unsqueeze(0) for single_haptic in haptic.unbind(0)], dim=0)
+            haptic = self.haptic_transform(haptic)
+            # haptic = torch.cat([self.haptic_transform(single_haptic).unsqueeze(0) for single_haptic in haptic.unbind(0)], dim=0)
         if self.audio_transform is not None:
-            audio = torch.cat([self.audio_transform(single_audio).unsqueeze(0) for single_audio in audio.unbind(0)], dim=0)
+            audio = self.audio_transform(audio)
+            # audio = torch.cat([self.audio_transform(single_audio).unsqueeze(0) for single_audio in audio.unbind(0)], dim=0)
         if self.vibro_transform is not None:
-            vibro = torch.cat([self.vibro_transform(single_vibro).unsqueeze(0) for single_vibro in vibro.unbind(0)], dim=0)
+            vibro = self.vibro_transform(vibro)
+            # vibro = torch.cat([self.vibro_transform(single_vibro).unsqueeze(0) for single_vibro in vibro.unbind(0)], dim=0)
         return vision.to(self.device), haptic.to(self.device), audio.to(self.device), behavior.to(self.device), vibro.to(self.device)
 
     def __len__(self):

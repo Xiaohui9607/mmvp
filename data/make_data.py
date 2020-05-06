@@ -4,15 +4,24 @@ import glob
 import random
 import numpy as np
 import PIL.Image
-from make_spectrogram import plotstft, stft
+from . import plotstft, stft
+# from make_spectrogram import plotstft, stft
 import argparse
 from sklearn.preprocessing import OneHotEncoder
 
+FIXED = False
+if FIXED:
+    train_test_split = '/home/golf/code/models/Experiement_object_based_sep_behaviors/VIS/tap/train_test_split'
+    train, test = open(train_test_split).readlines()[:2]
+    train = train[9:-3].split('\', \'')
+    test = test[8:-3].split('\', \'')
 
 DATA_DIR = '../../data/CY101'
 OUT_DIR = '../../data/CY101NPY'
 # added for VIS splits
 VIS_DIR = '../../data/VIS/'
+
+
 
 STRATEGY = 'object' # object | category | trail
 
@@ -209,6 +218,8 @@ def split(strategy):
     '''
     train_list = []
     test_list = []
+    if FIXED:
+        return train, test
     if strategy == 'object':
         for i in range(len(SORTED_OBJECTS) // 5):
             random_number = np.random.randint(low=0, high=5)
@@ -303,9 +314,6 @@ def process(visions, chosen_behavior):
             out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
             out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
 
-            # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
-            # out_vibro_npys = generate_npy_vibro(vibro)
-            # make sure that all the lists are in the same length!
             for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
                     out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
                 ret = {
