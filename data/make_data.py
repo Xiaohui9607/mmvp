@@ -9,9 +9,9 @@ from . import plotstft, stft
 import argparse
 from sklearn.preprocessing import OneHotEncoder
 
-FIXED = False
+FIXED = True
 if FIXED:
-    train_test_split = '/home/golf/code/models/Experiement_object_based_sep_behaviors/VIS/tap/train_test_split'
+    train_test_split = '/home/golf/code/models/Experiement_object_based_all_behaviors/None/train_test_split'
     train, test = open(train_test_split).readlines()[:2]
     train = train[9:-3].split('\', \'')
     test = test[8:-3].split('\', \'')

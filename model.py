@@ -1,14 +1,13 @@
 import os
 import torch
 from torch import nn
+import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 from networks import network, baseline
 from data import build_dataloader_CY101
 from torch.nn import functional as F
-
-
-def mse_to_psnr(mse):
-    return 10.0 * torch.log(torch.tensor(1.0) / mse) / torch.log(torch.tensor(10.0))
+from metrics import calc_ssim
 
 
 def peak_signal_to_noise_ratio(true, pred):
@@ -124,7 +123,7 @@ class Model():
             self.evaluate(epoch_i)
             self.save_weight(epoch_i)
 
-    def evaluate(self, epoch, keep_frame=False, save_prediction=False):
+    def evaluate(self, epoch, keep_frame=False, save_prediction=False, ssim=False):
         with torch.no_grad():
             if keep_frame:
                 mse_loss = [0.0 for _ in range(self.opt.sequence_length - self.opt.context_frames)]
@@ -151,12 +150,20 @@ class Model():
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
                     if keep_frame:
-                        mse_loss[i] += self.mse_loss(image, gen_image)
+                        if ssim:
+                            image = image.permute([0,2,3,1]).unbind(0)
+                            image = [ cv2.cvtColor((im.cpu().numpy()*255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im in image]
+                            gen_image = gen_image.permute([0,2,3,1]).unbind(0)
+                            gen_image = [ cv2.cvtColor((im.cpu().numpy()*255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im in gen_image]
+                            mse_loss[i] += sum([calc_ssim(im, gim)[0] for im, gim in zip(image, gen_image)])/len(gen_image)
+                        else:
+                            mse_loss[i] += self.mse_loss(image, gen_image)
+
                     else:
                         mse_loss += self.mse_loss(image, gen_image)
 
             if keep_frame:
-                mse_loss = [loss / len(self.dataloader['valid'].dataset) * self.opt.batch_size for loss in mse_loss]
+                mse_loss = [loss / len(self.dataloader['valid'].dataset) * self.opt.batch_size for loss in mse_loss if loss!=0]
 
             else:
                 mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)

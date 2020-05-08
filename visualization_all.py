@@ -1,5 +1,6 @@
 from options import Options
-from model import Model, mse_to_psnr
+from model import Model
+from metrics import mse_to_psnr, calc_ssim
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="darkgrid")
@@ -34,15 +35,15 @@ def eval_proposed(weight, use_haptic, use_audio, use_virbo):
     return model.evaluate(0, keep_frame=True)
 
 if __name__ == '__main__':
-    psnr_baseline = [mse_to_psnr(mse).numpy().item() for mse in eval_baseline(Experiement_object_based_all_behaviors['baseline'])]
+    psnr_baseline = [mse_to_psnr(mse) for mse in eval_baseline(Experiement_object_based_all_behaviors['baseline'])]
     psnr_use_haptic= \
-        [mse_to_psnr(mse).numpy().item() for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic'],
+        [mse_to_psnr(mse)for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic'],
                                                                 use_haptic=True, use_audio=False, use_virbo=False)]
     psnr_use_haptic_audio = \
-        [mse_to_psnr(mse).numpy().item() for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio'],
+        [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio'],
                                                                        use_haptic=True, use_audio=True, use_virbo=False)]
     psnr_use_haptic_audio_vibro = \
-        [mse_to_psnr(mse).numpy().item() for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio_vibro'],
+        [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio_vibro'],
                                                                              use_haptic=True, use_audio=True, use_virbo=True)]
 
     frames = range(4, 20)
@@ -52,6 +53,6 @@ if __name__ == '__main__':
     sns.lineplot(x=frames, y=psnr_use_haptic_audio, legend='brief', label="+haptic+audio")
     sns.lineplot(x=frames, y=psnr_use_haptic_audio_vibro, legend='brief', label="+haptic")
     plt.xlabel('# frame')
-    plt.ylabel('psnr')
-    plt.savefig("exp1.png",dpi=300)
+    plt.ylabel('SSIM')
+    plt.savefig("all_ssim.png",dpi=300)
     plt.show()

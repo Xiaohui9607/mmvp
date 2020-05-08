@@ -1,5 +1,6 @@
 from options import Options
-from model import Model, mse_to_psnr
+from model import Model
+from metrics import mse_to_psnr
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="darkgrid")
@@ -78,8 +79,8 @@ if __name__ == '__main__':
 
     frames = range(4, 20)
     for idx, setting in enumerate(Experiement_object_based_sep_behaviors):
-        psnr_baseline = [mse_to_psnr(mse).numpy().item() for mse in eval_baseline(Experiement_object_based_sep_behaviors[setting]['baseline'],setting)]
-        psnr_use_haptic_audio = [mse_to_psnr(mse).numpy().item() for mse in eval_proposed(Experiement_object_based_sep_behaviors[setting]['proposed'],True,True,False,setting)]
+        psnr_baseline = [mse_to_psnr(mse) for mse in eval_baseline(Experiement_object_based_sep_behaviors[setting]['baseline'],setting)]
+        psnr_use_haptic_audio = [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_sep_behaviors[setting]['proposed'],True,True,False,setting)]
         if idx==0:
             sns.lineplot(x=range(4, 4+len(psnr_baseline)), y=psnr_baseline, legend='brief', label="baseline", ax=axes[idx % 3, idx // 3])
             sns.lineplot(x=range(4, 4+len(psnr_use_haptic_audio)), y=psnr_use_haptic_audio, legend='brief', label="+haptic+audio+vibro", ax=axes[idx % 3, idx // 3])
@@ -89,6 +90,6 @@ if __name__ == '__main__':
         axes[idx % 3, idx // 3].set_title(setting)
     axes[2, 1].set_xlabel("#frame")
     axes[2, 0].set_xlabel("#frame")
-    axes[1, 0].set_ylabel("psnr")
-    plt.savefig("exp1.png",dpi=300)
+    axes[1, 0].set_ylabel("mse")
+    plt.savefig("sep_ssim.png",dpi=600)
     plt.show()
