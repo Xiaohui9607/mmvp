@@ -33,17 +33,26 @@ for i, metric in enumerate(paths):
             xs = range(4, 10) if behave in ['grasp', 'tap'] else range(4, 20)
             ys = ys[:len(list(xs))]
             if i*j == len(behaviors)-1:
-                sns.lineplot(x=xs, y=ys, ax=ax, label=lengends[setting])
+                if lengends[setting]=='Finn et al.':
+                    sns.lineplot(x=xs, y=ys, ax=ax,  marker=8, label=lengends[setting])
+                else:
+                    sns.lineplot(x=xs, y=ys, ax=ax, marker="o", label=lengends[setting])
             else:
-                sns.lineplot(x=xs, y=ys, ax=ax)
+                if lengends[setting] == 'Finn et al.':
+                    sns.lineplot(x=xs, y=ys, ax=ax, marker=8)
+                else:
+                    sns.lineplot(x=xs, y=ys, ax=ax, marker="o")
         if j in [0, 3]:
             ax.set_ylabel(metric)
         else:
             ax.yaxis.label.set_visible(False)
-        ax.set_xlabel("# frames")
-        ax.set_title(behave, fontsize=14)
+        ax.set_xlabel("Time step", fontsize=16)
+        ax.set_title(behave, fontsize=18)
         if metric == 'SSIM':
-            ax.yaxis.set_major_locator(ticker.MultipleLocator(0.05))
+            if behave in ['grasp', 'hold', 'tap']:
+                ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+            else:
+                ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
         else:
             if behave in ['grasp', 'hold', 'tap']:
                 ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
