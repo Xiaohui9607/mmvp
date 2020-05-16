@@ -44,12 +44,16 @@ for i, metric in enumerate(paths):
         ax.set_title(behave, fontsize=14)
         if metric == 'SSIM':
             ax.yaxis.set_major_locator(ticker.MultipleLocator(0.05))
-        else:
-            if behave in ['grasp', 'hold', 'tap']:
-                ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
-            else:
-                ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
+        # else:
+        #     if behave in ['grasp', 'hold', 'tap']:
+        #         ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+        #     else:
+        #         ax.yaxis.set_major_locator(ticker.MultipleLocator(2))
 
+        if behave in ['grasp', 'hold', 'tap']:
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+        else:
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
         fig.add_subplot(ax)
 
 # plt.legend(ncol=4)

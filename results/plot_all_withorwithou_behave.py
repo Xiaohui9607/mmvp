@@ -2,8 +2,8 @@ import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
 paths = {
-    'PSNR':'Experiement_object_based_all_behavior_w_o_behave/psnr_all.csv',
-    'SSIM': 'Experiement_object_based_all_behavior_w_o_behave/ssim_all.csv'
+    'PSNR': 'Experiement_object_based_all_behavior_w_o_behave/psnr_all.csv',
+    'SSIM': 'Experiement_object_based_all_behavior_w_o_behave/ssim_all.csv',
 }
 sns.set(style="darkgrid")
 # sns.set(rc={'figure.figsize':(8.7,11.27)})
