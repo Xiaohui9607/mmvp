@@ -27,7 +27,7 @@ lengends = {
 }
 # f, axes = plt.subplots(1, 2, figsize=(19,5))
 fig = plt.figure(figsize=(29,5))
-outer = gridspec.GridSpec(1, 2, wspace=0.2, hspace=0.2)
+outer = gridspec.GridSpec(1, 2, wspace=0.1, hspace=0.2)
 
 for i, TYPE in enumerate(paths):
     axes = gridspec.GridSpecFromSubplotSpec(1, 2,
@@ -53,7 +53,7 @@ for i, TYPE in enumerate(paths):
 
         fig.add_subplot(ax)
 
-plt.legend(fontsize=16, loc='center', bbox_to_anchor=(-1.5, -0.2, 0, 0),
+plt.legend(fontsize=16, loc='center', bbox_to_anchor=(-1.35, -0.2, 0, 0),
            ncol=4, columnspacing=15,frameon=False)
 fig.suptitle('model performance on object-based dataset'
              '                                 '

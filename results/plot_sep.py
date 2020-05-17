@@ -13,19 +13,18 @@ behaviors = ['crush', 'lift', 'grasp', 'shake', 'push', 'tap']
 settings = ['baseline', 'haptic', 'haptic_audio', 'haptic_audio_vibro']
 sns.set(style="darkgrid")
 lengends = {
-    'baseline':'Finn et al.',
+    'baseline':'vision (Finn et al.)',
     'haptic':'vision+haptic',
     'haptic_audio': 'vision+haptic+audio' ,
     'haptic_audio_vibro': 'vision+haptic+audio+vibro'
 }
 # f, axes = plt.subplots(1, 2, figsize=(19,5))
 fig = plt.figure(figsize=(31,8))
-outer = gridspec.GridSpec(1, 2, wspace=0.15, hspace=0.2)
+outer = gridspec.GridSpec(1, 2, wspace=0.1, hspace=0.2)
 for i, metric in enumerate(paths):
     df = pd.read_csv(paths[metric])
-    # ax1 =
     axes = gridspec.GridSpecFromSubplotSpec(2, 3,
-                                             subplot_spec=outer[i], wspace=0.15, hspace=0.5)
+                                             subplot_spec=outer[i], wspace=0.15, hspace=0.4)
     for j, behave in enumerate(behaviors):
         ax = plt.Subplot(fig, axes[j // 3, j % 3])
         for setting in settings:
@@ -33,12 +32,12 @@ for i, metric in enumerate(paths):
             xs = range(4, 10) if behave in ['grasp', 'tap'] else range(4, 20)
             ys = ys[:len(list(xs))]
             if i*j == len(behaviors)-1:
-                if lengends[setting]=='Finn et al.':
+                if lengends[setting]=='vision (Finn et al.)':
                     sns.lineplot(x=xs, y=ys, ax=ax,  marker=8, label=lengends[setting])
                 else:
                     sns.lineplot(x=xs, y=ys, ax=ax, marker="o", label=lengends[setting])
             else:
-                if lengends[setting] == 'Finn et al.':
+                if lengends[setting] == 'vision (Finn et al.)':
                     sns.lineplot(x=xs, y=ys, ax=ax, marker=8)
                 else:
                     sns.lineplot(x=xs, y=ys, ax=ax, marker="o")
@@ -47,8 +46,9 @@ for i, metric in enumerate(paths):
         else:
             ax.yaxis.label.set_visible(False)
         ax.set_xlabel("Time step", fontsize=16)
-        ax.set_title(behave, fontsize=18)
-
+        ax.set_title(behave, fontsize=16)
+        if metric == 'SSIM':
+            ax.yaxis.set_major_locator(ticker.MultipleLocator(0.05))
         if behave in ['grasp', 'hold', 'tap']:
             ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
         else:
@@ -56,7 +56,7 @@ for i, metric in enumerate(paths):
         fig.add_subplot(ax)
 
 # plt.legend(ncol=4)
-plt.legend(fontsize=16, loc='center', bbox_to_anchor=(-3, -0.55, 0.5, 0.5),
+plt.legend(fontsize=16, loc='center', bbox_to_anchor=(-2.75, -0.55, 0.5, 0.5),
            ncol=4, columnspacing=15,frameon=False)
 fig.suptitle('Heldout set reconstruction evaluation on separated behaviours with PSNR'
              '              '
