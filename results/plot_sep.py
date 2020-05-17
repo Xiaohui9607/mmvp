@@ -33,22 +33,21 @@ for i, metric in enumerate(paths):
             xs = range(4, 10) if behave in ['grasp', 'tap'] else range(4, 20)
             ys = ys[:len(list(xs))]
             if i*j == len(behaviors)-1:
-                sns.lineplot(x=xs, y=ys, ax=ax, label=lengends[setting])
+                if lengends[setting]=='Finn et al.':
+                    sns.lineplot(x=xs, y=ys, ax=ax,  marker=8, label=lengends[setting])
+                else:
+                    sns.lineplot(x=xs, y=ys, ax=ax, marker="o", label=lengends[setting])
             else:
-                sns.lineplot(x=xs, y=ys, ax=ax)
+                if lengends[setting] == 'Finn et al.':
+                    sns.lineplot(x=xs, y=ys, ax=ax, marker=8)
+                else:
+                    sns.lineplot(x=xs, y=ys, ax=ax, marker="o")
         if j in [0, 3]:
             ax.set_ylabel(metric)
         else:
             ax.yaxis.label.set_visible(False)
-        ax.set_xlabel("# frames")
-        ax.set_title(behave, fontsize=14)
-        if metric == 'SSIM':
-            ax.yaxis.set_major_locator(ticker.MultipleLocator(0.05))
-        # else:
-        #     if behave in ['grasp', 'hold', 'tap']:
-        #         ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
-        #     else:
-        #         ax.yaxis.set_major_locator(ticker.MultipleLocator(2))
+        ax.set_xlabel("Time step", fontsize=16)
+        ax.set_title(behave, fontsize=18)
 
         if behave in ['grasp', 'hold', 'tap']:
             ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
@@ -59,6 +58,9 @@ for i, metric in enumerate(paths):
 # plt.legend(ncol=4)
 plt.legend(fontsize=16, loc='center', bbox_to_anchor=(-3, -0.55, 0.5, 0.5),
            ncol=4, columnspacing=15,frameon=False)
-fig.suptitle('Heldout set reconstruction evaluation on separated behaviours', fontsize=20)
-plt.savefig('sep.png', dpi=600, bbox_inches='tight')
+fig.suptitle('Heldout set reconstruction evaluation on separated behaviours with PSNR'
+             '              '
+             '              '
+             'Heldout set reconstruction evaluation on separated behaviours with SSIM', fontsize=20)
+plt.savefig('sep.png', dpi=300, bbox_inches='tight')
 fig.show()
