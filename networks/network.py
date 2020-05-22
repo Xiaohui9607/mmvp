@@ -32,7 +32,7 @@ class network(nn.Module):
         if stp + cdna + dna != 1:
             raise ValueError('More than one, or no network option specified.')
         self.lstm_size = [32, 32, 64, 64, 128, 64, 32]
-        # lstm_size = [l//2 for l in lstm_size]   # ligthen network
+        self.lstm_size = [l//2 for l in self.lstm_size]   # ligthen network
         self.dna = dna
         self.stp = stp
         self.cdna = cdna

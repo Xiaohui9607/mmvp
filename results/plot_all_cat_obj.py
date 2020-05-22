@@ -17,11 +17,11 @@ paths = {
 }
 
 # behaviors = ['crush', 'lift', 'grasp', 'shake', 'push', 'tap']
-settings = ['baseline', 'use_haptic', 'use_haptic_audio', 'use_haptic_audio_vibro']
+settings = ['baseline', 'use_haptic.csv', 'use_haptic_audio', 'use_haptic_audio_vibro']
 sns.set(style="darkgrid")
 lengends = {
     'baseline':'vision (Finn et al.)',
-    'use_haptic':'vision+haptic',
+    'use_haptic.csv':'vision+haptic',
     'use_haptic_audio': 'vision+haptic+audio' ,
     'use_haptic_audio_vibro': 'vision+haptic+audio+vibro'
 }

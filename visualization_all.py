@@ -1,6 +1,6 @@
 from options import Options
 from model import Model
-from metrics import mse_to_psnr, calc_ssim
+from metrics import  calc_ssim
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="darkgrid")
@@ -19,7 +19,7 @@ def eval_baseline(weight):
     print("Model Config: ", opt)
     model = Model(opt)
     model.load_weight(weight)
-    return model.evaluate(0, keep_frame=True)
+    return model.evaluate(0, keep_frame=True, ssim=True)
 
 def eval_proposed(weight, use_haptic, use_audio, use_virbo):
     opt = Options().parse()
@@ -32,27 +32,47 @@ def eval_proposed(weight, use_haptic, use_audio, use_virbo):
     print("Model Config: ", opt)
     model = Model(opt)
     model.load_weight(weight)
-    return model.evaluate(0, keep_frame=True)
+    return model.evaluate(0, keep_frame=True, ssim=True)
 
 if __name__ == '__main__':
-    psnr_baseline = [mse_to_psnr(mse) for mse in eval_baseline(Experiement_object_based_all_behaviors['baseline'])]
-    psnr_use_haptic= \
-        [mse_to_psnr(mse)for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic'],
-                                                                use_haptic=True, use_audio=False, use_virbo=False)]
-    psnr_use_haptic_audio = \
-        [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio'],
-                                                                       use_haptic=True, use_audio=True, use_virbo=False)]
-    psnr_use_haptic_audio_vibro = \
-        [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio_vibro'],
-                                                                             use_haptic=True, use_audio=True, use_virbo=True)]
+    import pandas as pd
 
-    frames = range(4, 20)
+    data_dict = {}
+    loss, std = eval_baseline(Experiement_object_based_all_behaviors['baseline'])
+    metric_baseline = [(l, s) for l, s in zip(loss,std)]
+    for frame_id, (loss, std) in enumerate(metric_baseline):
+        data_dict[frame_id] = (loss, std)
+    df = pd.DataFrame.from_dict(data_dict, orient="index")
+    df.to_csv("{}.csv".format('baseline'))
 
-    sns.lineplot(x=frames, y=psnr_baseline, legend='brief', label="baseline")
-    sns.lineplot(x=frames, y=psnr_use_haptic, legend='brief', label="+haptic+audio+vibro")
-    sns.lineplot(x=frames, y=psnr_use_haptic_audio, legend='brief', label="+haptic+audio")
-    sns.lineplot(x=frames, y=psnr_use_haptic_audio_vibro, legend='brief', label="+haptic")
-    plt.xlabel('# frame')
-    plt.ylabel('SSIM')
-    plt.savefig("all_ssim.png",dpi=300)
-    plt.show()
+
+    data_dict = {}
+    loss, std = eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic'],
+                              use_haptic=True, use_audio=False, use_virbo=False)
+    metric_use_haptic = [(l, s) for l, s in zip(loss,std)]
+    for frame_id, (loss, std) in enumerate(metric_use_haptic):
+        data_dict[frame_id] = (loss, std)
+    df = pd.DataFrame.from_dict(data_dict, orient="index")
+    df.to_csv("{}.csv".format('use_haptic'))
+
+
+    data_dict = {}
+    loss, std =  eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio'],
+                               use_haptic=True, use_audio=True, use_virbo=False)
+    metric_use_haptic_audio = [(l, s) for l, s in zip(loss,std)]
+    for frame_id, (loss, std) in enumerate(metric_use_haptic_audio):
+        data_dict[frame_id] = (loss, std)
+    df = pd.DataFrame.from_dict(data_dict, orient="index")
+    df.to_csv("{}.csv".format('use_haptic_audio'))
+
+
+    data_dict = {}
+    loss, std = eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio_vibro'],
+                              use_haptic=True, use_audio=True, use_virbo=True)
+    metric_use_haptic_audio_vibro = [(l, s) for l, s in zip(loss,std)]
+    for frame_id, (loss, std) in enumerate(metric_use_haptic_audio_vibro):
+        data_dict[frame_id] = (loss, std)
+    df = pd.DataFrame.from_dict(data_dict, orient="index")
+    df.to_csv("{}.csv".format('use_haptic_audio_vibro'))
+
+

@@ -207,6 +207,6 @@ if __name__ == '__main__':
         imgs = c[0].unbind(0)
         imgs = list(map(lambda x:(x.permute([1, 2, 0]).cpu().numpy()*255).squeeze().astype(np.uint8), imgs))
         for img in imgs:
-            cv2.imshow('l', img)
-            cv2.waitKey(0)
+            cv2.imwrite('l.png', img[20])
+
 

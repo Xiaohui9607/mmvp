@@ -5,7 +5,8 @@ from skimage.measure import compare_ssim
 
 
 def mse_to_psnr(mse):
-    return 10.0 * torch.log(torch.tensor(1.0) / mse) / torch.log(torch.tensor(10.0))
+    # return mse
+    return (10.0 * torch.log(torch.tensor(1.0) / mse) / torch.log(torch.tensor(10.0))).numpy()
 
 
 def calc_ssim(ground_truth, target):

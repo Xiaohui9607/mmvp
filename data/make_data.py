@@ -4,8 +4,10 @@ import glob
 import random
 import numpy as np
 import PIL.Image
-from . import plotstft, stft
-# from make_spectrogram import plotstft, stft
+try:
+    from . import plotstft, stft
+except:
+    from make_spectrogram import plotstft, stft
 import argparse
 from sklearn.preprocessing import OneHotEncoder
 

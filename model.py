@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from networks import network, baseline
 from data import build_dataloader_CY101
 from torch.nn import functional as F
-from metrics import calc_ssim
+from metrics import calc_ssim, mse_to_psnr
 
 
 def peak_signal_to_noise_ratio(true, pred):
@@ -123,12 +123,16 @@ class Model():
             self.evaluate(epoch_i)
             self.save_weight(epoch_i)
 
-    def evaluate(self, epoch, keep_frame=False, save_prediction=False, ssim=False):
+    def evaluate(self, epoch, keep_frame=False, keep_batch=False, save_prediction=False, ssim=False):
         with torch.no_grad():
-            if keep_frame:
-                mse_loss = [0.0 for _ in range(self.opt.sequence_length - self.opt.context_frames)]
-            else:
-                mse_loss = 0.0
+
+            loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
+            # if keep_frame:
+            #     mse_loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
+            # elif keep_batch:
+            #     mse_loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
+            # else:
+            #     mse_loss = 0.0
             for iter_, (images, haptics, audios, behaviors, vibros) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
                     haptics = torch.zeros_like(haptics).to(self.device)
@@ -149,26 +153,32 @@ class Model():
 
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
-                    if keep_frame:
-                        if ssim:
-                            image = image.permute([0,2,3,1]).unbind(0)
-                            image = [ cv2.cvtColor((im.cpu().numpy()*255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im in image]
-                            gen_image = gen_image.permute([0,2,3,1]).unbind(0)
-                            gen_image = [ cv2.cvtColor((im.cpu().numpy()*255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im in gen_image]
-                            mse_loss[i] += sum([calc_ssim(im, gim)[0] for im, gim in zip(image, gen_image)])/len(gen_image)
-                        else:
-                            mse_loss[i] += self.mse_loss(image, gen_image)
-
+                    stats = None
+                    if ssim:
+                        image = image.permute([0, 2, 3, 1]).unbind(0)
+                        image = [cv2.cvtColor((im.cpu().numpy() * 255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im in
+                                 image]
+                        gen_image = gen_image.permute([0, 2, 3, 1]).unbind(0)
+                        gen_image = [cv2.cvtColor((im.cpu().numpy() * 255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im
+                                     in gen_image]
+                        stats = [calc_ssim(im, gim)[0] for im, gim in zip(image, gen_image)]
                     else:
-                        mse_loss += self.mse_loss(image, gen_image)
+                        stats = mse_to_psnr(torch.mean((image-gen_image)**2, dim=[1,2,3]).cpu())
+
+                    loss[i].extend(stats)
 
             if keep_frame:
-                mse_loss = [loss / len(self.dataloader['valid'].dataset) * self.opt.batch_size for loss in mse_loss if loss!=0]
-
+                stds = [np.std(item) for item in loss]
+                loss = [np.mean(item) for item in loss]
+                return loss, stds
+            if keep_batch:
+                loss = np.stack([it for it in loss if it])
+                loss = np.mean(loss, axis=0)
+                return loss
             else:
-                mse_loss /= (torch.tensor(self.opt.sequence_length - self.opt.context_frames) * len(self.dataloader['valid'].dataset)/self.opt.batch_size)
-                print("evaluation epoch: %3d, recon_loss: %6f" % (epoch, mse_loss))
-            return mse_loss
+                loss = np.stack(loss)
+                loss = np.mean(loss)
+                return loss
 
 
     def save_weight(self, epoch):
