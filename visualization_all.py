@@ -19,7 +19,7 @@ def eval_baseline(weight):
     print("Model Config: ", opt)
     model = Model(opt)
     model.load_weight(weight)
-    return model.evaluate(0, keep_frame=True, ssim=True)
+    return model.evaluate(0, keep_frame=True, ssim=False)
 
 def eval_proposed(weight, use_haptic, use_audio, use_virbo):
     opt = Options().parse()
@@ -45,7 +45,6 @@ if __name__ == '__main__':
     df = pd.DataFrame.from_dict(data_dict, orient="index")
     df.to_csv("{}.csv".format('baseline'))
 
-
     data_dict = {}
     loss, std = eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic'],
                               use_haptic=True, use_audio=False, use_virbo=False)
@@ -64,7 +63,6 @@ if __name__ == '__main__':
         data_dict[frame_id] = (loss, std)
     df = pd.DataFrame.from_dict(data_dict, orient="index")
     df.to_csv("{}.csv".format('use_haptic_audio'))
-
 
     data_dict = {}
     loss, std = eval_proposed(Experiement_object_based_all_behaviors['weight_use_haptic_audio_vibro'],

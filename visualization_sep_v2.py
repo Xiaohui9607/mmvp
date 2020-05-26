@@ -6,42 +6,42 @@ import seaborn as sns
 import pandas as pd
 
 Experiement_object_based_sep_behaviors = [
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_crush/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_grasp/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_hold/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_lift_slow/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_low_drop/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_poke/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_push/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_shake/net_epoch_29.pth',
-    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_tap/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_crush/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_grasp/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_hold/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_lift_slow/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_low_drop/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_poke/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_push/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_shake/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_tap/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_crush/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_grasp/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_hold/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_lift_slow/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_low_drop/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_poke/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_push/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_shake/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_tap/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_crush/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_grasp/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_hold/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_lift_slow/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_low_drop/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_poke/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_push/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_shake/net_epoch_29.pth',
-    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_tap/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_crush/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_grasp/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_hold/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_lift_slow/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_low_drop/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_poke/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_push/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_shake/net_epoch_29.pth',
+    '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_tap/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_crush/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_grasp/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_hold/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_lift_slow/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_low_drop/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_poke/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_push/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_shake/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_tap/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_crush/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_grasp/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_hold/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_lift_slow/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_low_drop/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_poke/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_push/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_shake/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_audio_vibro_tap/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_crush/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_grasp/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_hold/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_lift_slow/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_low_drop/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_poke/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_push/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_shake/net_epoch_29.pth',
+    # '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_use_haptic_tap/net_epoch_29.pth',
 ]
 
 
@@ -54,7 +54,7 @@ def eval_baseline(weight, behavior):
     print("Model Config: ", opt)
     model = Model(opt)
     model.load_weight(weight)
-    return model.evaluate(0, keep_batch=True)
+    return model.evaluate(0, keep_batch=True, ssim=True)
 
 def eval_proposed(weight, use_haptic, use_audio, use_virbo, behavior):
     opt = Options().parse()
@@ -88,8 +88,10 @@ if __name__ == '__main__':
         pass
         dict_data = {}
         rowid = 0
-        psnr_use_haptic_audio = eval_proposed(path, use_haptic, use_audio, use_virbo, behavior)
-        for ssim in psnr_use_haptic_audio:
+        psnr_baseline = eval_baseline(Experiement_object_based_sep_behaviors[idx], behavior)
+
+        # psnr_use_haptic_audio = eval_proposed(path, use_haptic, use_audio, use_virbo, behavior)
+        for ssim in psnr_baseline:
             dict_data[rowid] = ('{}_{}_{}_{}'.format(behavior, use_haptic, use_audio, use_virbo), ssim)
             rowid+=1
         df = pd.DataFrame.from_dict(dict_data,orient="index")

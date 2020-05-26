@@ -40,7 +40,6 @@ class Model():
             self.opt.audio_layer = 0
 
         if self.opt.baseline:
-
             self.net = baseline(self.opt, self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
                             self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames)
         else:
@@ -86,7 +85,6 @@ class Model():
                 psnr += psnr_i
 
             if self.opt.use_haptic and self.opt.aux:
-                # add gen haptic loss
                 for i, (haptic, gen_haptic) in enumerate(
                         zip(haptics[self.opt.context_frames:], gen_haptics[self.opt.context_frames - 1:])):
                     haptic = torch.mean(haptic, dim=[1,2], keepdim=True)
@@ -102,7 +100,6 @@ class Model():
                 for i, (vibro, gen_vibro) in enumerate(
                         zip(vibros[self.opt.context_frames:], gen_vibros[self.opt.context_frames - 1:])):
                     vibro_loss += self.mse_loss(vibro, gen_vibro) * 1e-4
-
 
             recon_loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
             haptic_loss /= torch.tensor(self.opt.sequence_length - self.opt.context_frames)
@@ -125,14 +122,7 @@ class Model():
 
     def evaluate(self, epoch, keep_frame=False, keep_batch=False, save_prediction=False, ssim=False):
         with torch.no_grad():
-
             loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
-            # if keep_frame:
-            #     mse_loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
-            # elif keep_batch:
-            #     mse_loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
-            # else:
-            #     mse_loss = 0.0
             for iter_, (images, haptics, audios, behaviors, vibros) in enumerate(self.dataloader['valid']):
                 if not self.opt.use_haptic:
                     haptics = torch.zeros_like(haptics).to(self.device)
@@ -149,7 +139,7 @@ class Model():
                 audios = audios.permute([1, 0, 2, 3, 4]).unbind(0)
                 vibros = vibros.permute([1, 0, 2, 3, 4]).unbind(0)
 
-                gen_images, _, _, _ = self.net(images, haptics, audios, behaviors, vibros, train=False)
+                gen_images, gen_haptics, gen_audios, gen_vibros = self.net(images, haptics, audios, behaviors, vibros, train=False)
 
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
@@ -179,7 +169,6 @@ class Model():
                 loss = np.stack(loss)
                 loss = np.mean(loss)
                 return loss
-
 
     def save_weight(self, epoch):
         torch.save(self.net.state_dict(), os.path.join(self.opt.output_dir, "net_epoch_%d.pth" % epoch))
@@ -246,7 +235,7 @@ class Model():
                 audios = audios.unsqueeze(0).permute([1, 0, 2, 3, 4]).unbind(0)
                 vibros = vibros.unsqueeze(0).permute([1, 0, 2, 3, 4]).unbind(0)
 
-                gen_images, _, _, _ = self.net(images, haptics, audios, behaviors, vibros, train=False)
-                gt.append(images)
-                ret.append(gen_images)
+                gens = self.net(images, haptics, audios, behaviors, vibros, train=False)
+                gt.append((images, haptics, audios, vibros))
+                ret.append(gens)
             return ret, gt

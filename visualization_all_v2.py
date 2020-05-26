@@ -6,8 +6,8 @@ import seaborn as sns
 
 Experiement_object_based_all_behaviors = {
     # 'baseline': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_baseline/net_epoch_29.pth',
-    'weight_use_haptic': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic/net_epoch_29.pth',
-    'weight_use_haptic_audio': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic_audio/net_epoch_29.pth',
+    # 'weight_use_haptic': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic/net_epoch_29.pth',
+    # 'weight_use_haptic_audio': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic_audio/net_epoch_29.pth',
     'weight_use_haptic_audio_vibro': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic_audio_vibro/net_epoch_29.pth',
 }
 
@@ -35,7 +35,8 @@ def eval_proposed(weight, use_haptic, use_audio, use_virbo):
 
 
 if __name__ == '__main__':
-    options = [[True, False, False], [True, True, False], [True, True, True]]
+    # options = [[True, False, False], [True, True, False], [True, True, True]]
+    options = [[True, True, True]]
     import pandas as pd
     for i,setting in enumerate(Experiement_object_based_all_behaviors):
         dict_data = {}

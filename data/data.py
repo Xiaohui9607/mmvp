@@ -17,15 +17,17 @@ HAPTIC_STD = [4.01142790e+01, 2.29780167e+01, 2.63156072e+01, 7.54091499e+00, 3.
 VIBRO_MEAN = [55.32553454, -141.92273532, -26.08607739]
 VIBRO_STD = [109.59627816, 133.72501765, 163.39785803]
 
+
 def make_dataset(path):
     if not os.path.exists(path):
         raise FileExistsError('some subfolders from data set do not exists!')
 
     samples = []
     for sample in os.listdir(path):
-        image  = os.path.join(path, sample)
+        image = os.path.join(path, sample)
         samples.append(image)
     return samples
+
 
 def npy_loader(path):
     samples = np.load(path, allow_pickle=True).item()
@@ -52,6 +54,7 @@ class PushDataset(Dataset):
                 IMG_EXTENSIONS)))
         self.loader = loader
         self.device = device
+
     def __getitem__(self, index):
         image, action, state, behaivor = self.samples[index]
         image, action, state, behaivor = self.loader(image), self.loader(action), self.loader(state), self.loader(behaivor)
@@ -146,7 +149,6 @@ def build_dataloader_CY101(opt):
     def addnoise_hp(hp):
         hp = hp + torch.rand_like(hp, device=hp.device)
         return hp
-
 
     image_transform = transforms.Compose([
         transforms.Lambda(crop),
