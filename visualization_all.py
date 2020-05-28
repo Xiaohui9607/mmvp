@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style="darkgrid")
 
+
 Experiement_object_based_all_behaviors = {
     'baseline': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_baseline/net_epoch_29.pth',
     'weight_use_haptic': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic/net_epoch_29.pth',
     'weight_use_haptic_audio': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic_audio/net_epoch_29.pth',
     'weight_use_haptic_audio_vibro': '/home/golf/code/models/Experiement_object_based_all_behaviors/weight_use_haptic_audio_vibro/net_epoch_29.pth',
 }
+
 
 def eval_baseline(weight):
     opt = Options().parse()
@@ -20,6 +22,7 @@ def eval_baseline(weight):
     model = Model(opt)
     model.load_weight(weight)
     return model.evaluate(0, keep_frame=True, ssim=False)
+
 
 def eval_proposed(weight, use_haptic, use_audio, use_virbo):
     opt = Options().parse()
@@ -34,9 +37,9 @@ def eval_proposed(weight, use_haptic, use_audio, use_virbo):
     model.load_weight(weight)
     return model.evaluate(0, keep_frame=True, ssim=True)
 
+
 if __name__ == '__main__':
     import pandas as pd
-
     data_dict = {}
     loss, std = eval_baseline(Experiement_object_based_all_behaviors['baseline'])
     metric_baseline = [(l, s) for l, s in zip(loss,std)]

@@ -17,7 +17,6 @@ behaviors = ['crush', 'lift', 'grasp', 'shake', 'push', 'tap', 'hold', 'drop', '
 settings = ['baseline', 'haptic', 'haptic_audio', 'haptic_audio_vibro']
 plist = []
 
-# sep
 for i, behavior in enumerate(behaviors):
     xs = []
     ys = []
@@ -25,6 +24,8 @@ for i, behavior in enumerate(behaviors):
     for j, a_setting in enumerate(settings):
         df = pd.read_csv(os.path.join(path, a_setting, '{}.csv'.format(behavior)))
         dfs.append(df.iloc[:, 1])
+        # add ensemble
+        # add ensemble
 
     p = pd.DataFrame(dfs).T
     p.columns=settings
@@ -54,7 +55,7 @@ for i, setting in enumerate(settings):
 
 p = pd.concat(plist, axis=0)
 g = sns.catplot(x="behavior", y="SSIM", hue="setting", data=p, kind="bar",
-                col_order=['blue', 'orange', 'green', 'red'], aspect=2, legend=False, ci='sd')
+                col_order=['blue', 'orange', 'green', 'red'], aspect=3, legend=False, ci='sd')
 g.despine(left=True)
 
 plt.ylim([0.7, 1.0])
@@ -65,7 +66,7 @@ plt.ylabel('SSIM', fontsize=16)
 handles, _ = plt.gca().get_legend_handles_labels()
 labels = ['Finn et al. (vision)', 'vision+haptic', 'vision+haptic+audio', 'vision+haptic+audio+vibro']
 order = [3,2,1,0]
-plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order])
+plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc='upper left')
 
 plt.savefig('sep_behave_group_bar.png', dpi=300)
 plt.show()
