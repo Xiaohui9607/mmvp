@@ -28,7 +28,7 @@ for i, setting in enumerate(settings):
     dfs = []
     for j, behave in enumerate(behaviors):
         df = pd.read_csv(os.path.join(path, setting, '{}.csv'.format(behave)))
-        dfs.append(df.iloc[:, 2])
+        dfs.append(df.iloc[:, 1])
     # ax = axes[i]
     p = pd.DataFrame(dfs).T
     p.columns = behaviors
@@ -37,8 +37,8 @@ for i, setting in enumerate(settings):
     P2 = p1.loc[:31778].copy()
     P2['behavior'] = 'ensemble'
     p3=pd.concat([p1, P2],axis=0)
-    # sns.barplot(x='behavior', y='SSIM', data=p3, ax=ax, ci="sd")
-    sns.boxplot(x='behavior', y='SSIM', data=p3)
+    sns.barplot(x='behavior', y='SSIM', data=p3, ci="sd")
+    # sns.boxplot(x='behavior', y='SSIM', data=p3)
 
     plt.ylim([0.6, 1])
     # ax.set_title('+' +'+'.join(setting.split('_')))

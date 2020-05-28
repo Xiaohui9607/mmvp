@@ -12,18 +12,19 @@ dpi = 300
 plt.rc('ytick', labelsize=12)
 plt.rc('xtick', labelsize=12)
 
-fig = plt.figure(figsize=(3400/300.0, 1800/300.0))
-behaviors = ['crush', 'lift', 'grasp', 'shake', 'push', 'tap', 'hold', 'drop', 'poke']
+fig = plt.figure(figsize=(6100/300.0, 1800/300.0))
+behaviors = ['crush', 'lift', 'grasp', 'shake', 'push', 'tap', 'hold', 'drop', 'poke', 'all']
 settings = ['baseline', 'haptic', 'haptic_audio', 'haptic_audio_vibro']
-#xlabels = ['Finn et al.', 'vision+haptic', 'vision+haptic\n+audio', 'vision+haptic\n+audio+vibro']
 plist = []
+
+# sep
 for i, behavior in enumerate(behaviors):
     xs = []
     ys = []
     dfs = []
     for j, a_setting in enumerate(settings):
         df = pd.read_csv(os.path.join(path, a_setting, '{}.csv'.format(behavior)))
-        dfs.append(df.iloc[:, 2])
+        dfs.append(df.iloc[:, 1])
 
     p = pd.DataFrame(dfs).T
     p.columns=settings
@@ -31,6 +32,25 @@ for i, behavior in enumerate(behaviors):
     p1 = p1.dropna(axis=0,how='any')
     p1['behavior']= behavior
     plist.append(p1)
+
+# ensemble
+
+for i, setting in enumerate(settings):
+    xs = []
+    ys = []
+    dfs = []
+    for j, behave in enumerate(behaviors[:-1]):
+        df = pd.read_csv(os.path.join(path, setting, '{}.csv'.format(behave)))
+        dfs.append(df.iloc[:, 1])
+    # ax = axes[i]
+    p = pd.DataFrame(dfs)
+    p = p.mean().T
+    p = pd.DataFrame(p)
+    p.columns = [setting]
+    p1 = p.melt(var_name='setting', value_name='SSIM')
+    p1['behavior']= 'ensemble'
+    plist.append(p1)
+
 
 p = pd.concat(plist, axis=0)
 g = sns.catplot(x="behavior", y="SSIM", hue="setting", data=p, kind="bar",

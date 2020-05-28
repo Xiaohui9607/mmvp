@@ -26,7 +26,7 @@ for i, setting in enumerate(settings):
     dfs = []
     for j, behave in enumerate(behaviors):
         df = pd.read_csv(os.path.join(path, setting, '{}.csv'.format(behave)))
-        dfs.append(df.iloc[:, 2])
+        dfs.append(df.iloc[:, 1])
     # ax = axes[i]
     p = pd.DataFrame(dfs).T
     p.columns=behaviors
