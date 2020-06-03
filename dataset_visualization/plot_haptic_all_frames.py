@@ -22,11 +22,11 @@ crop_stategy = {
     'hold': [0, -1],
 }
 
-behavior='low_drop'
-n_frames_low_drop_can_coke=22
+behavior='crush'
+n_frames_low_drop_can_coke=48
 
-path1= '/Users/ramtin/PycharmProjects/data/CY101/rc_data/can_coke/trial_1/exec_1/low_drop/proprioception/ttrq0.txt'
-path2='/Users/ramtin/PycharmProjects/data/CY101/rc_data/can_coke/trial_1/exec_1/low_drop/proprioception/cpos0.txt'
+path1= '/home/golf/code/data/CY101/rc_data/can_coke/trial_1/exec_1/crush/proprioception/ttrq0.txt'
+path2='/home/golf/code/data/CY101/rc_data/can_coke/trial_1/exec_1/crush/proprioception/cpos0.txt'
 
 haplist1 = open(path1, 'r').readlines()
 haplist2 = open(path2, 'r').readlines()
@@ -39,15 +39,9 @@ bins = np.arange(haplist[0][0], haplist[-1][0], time_duration)
 end_time = haplist[-1][0]
 groups = np.digitize(haplist[:, 0], bins, right=False)
 
-# print("%d," %end_time)
-# for bin in bins:
-#     print("%d," %bin)
-
 haplist = [haplist[np.where(groups == idx)][..., 1:][:48] for idx in range(1, n_frames_low_drop_can_coke + 1)]
 haplist = [np.pad(ht, [[0, 48 - ht.shape[0]], [0, 0]], mode='edge')[np.newaxis, ...] for ht in haplist]
 haplist = haplist[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
-
-# print(haplist[0][0]) # one frame
 
 haptic_across_all_frames = []
 for i in range(0, 21):
@@ -63,21 +57,36 @@ for index, a_frame in enumerate(haptic_across_all_frames):
 
 # haptic_data = np.array(haptic_across_all_frames).T.reshape(10,21) # extend
 haptic_data = haptic_across_all_frames.T
+sum_of_rows = haptic_data.sum(axis=1)
+haptic_data = haptic_data/ sum_of_rows[:, np.newaxis]
+fig = plt.figure(figsize=(22.0, 8.0))
+import matplotlib.gridspec as gridspec
+gs = gridspec.GridSpec(10, 1, hspace=0.1)
+# fig1, f1_axes = plt.subplots(ncols=1, nrows=10, constrained_layout=True,figsize=(20.0, 8.0))
+ax1 = None
+for i, g in enumerate(gs):
+    ax = plt.subplot(g)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    # ax.set_title(str(i+1))
+    if i ==0 :
+        plt.title("Visualization of Haptic Features", fontsize=24)
+    # ax.set_yticks(np.arange(0, 10+1, 1))
+    plt.imshow(haptic_data[i:i+1,:])
+    plt.ylabel(ylabel=str(i+1), fontsize=20)
+    if i == 9:
+        plt.xticks(np.arange(0, 21+1, 2), fontsize=20)
+        # plt.
+# f1_axes[0].imshow(haptic_data, cmap=plt.cm.gray) #for gray_scale: cmap=plt.cm.gray
 
-fig = plt.figure(figsize=(20.0, 8.0))
-plt.imshow(haptic_data) #for gray_scale: cmap=plt.cm.gray
+# ax = plt.gca()
+# ax.set_xticklabels(np.arange(1, 21+1 , 2))
+# ax.set_yticklabels(np.arange(1, 10+1, 1))
 
-ax = plt.gca()
-ax.set_xticks(np.arange(0, 21+1, 2))
-ax.set_yticks(np.arange(0, 10+1, 1))
-ax.set_xticklabels(np.arange(1, 21+1 , 2))
-ax.set_yticklabels(np.arange(1, 10+1, 1))
+# plt.ylabel(ylabel="Joints [1-7], End Effector [8-10]", fontsize=18)
+plt.xlabel(xlabel="Frames", fontsize=24)
 
-plt.ylabel(ylabel="Joints [1-7], End Effector [8-10]", fontsize=18)
-plt.xlabel(xlabel="Frames", fontsize=18)
-plt.title("Visualization of Haptic Features", fontsize=18)
-
-plt.colorbar()
-# plt.show()
+# plt.colorbar()
 plt.savefig("haptic_low_drop_can_coke.png", dpi=300, bbox_inches='tight')
+plt.show()
 plt.close()

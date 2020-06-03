@@ -157,9 +157,11 @@ def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
  # create a new dimension
 
     image_height, image_width = img.shape
+    import cv2
     image_width = AUDIO_EACH_FRAME_LENGTH * n_frames_vision_image
     img = PIL.Image.fromarray(img)
     img = img.resize((image_height, image_width))
+
     img = np.array(img)
     img = img[np.newaxis, ...]
     imglist = []

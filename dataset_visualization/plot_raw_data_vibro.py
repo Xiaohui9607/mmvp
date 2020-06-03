@@ -19,7 +19,7 @@ crop_stategy = {
 behavior = 'low_drop'
 n_frames_low_drop_can_coke = 22
 
-path = "/Users/ramtin/PycharmProjects/data/CY101/rc_data/can_coke/trial_1/exec_1/low_drop" \
+path = "/home/golf/code/data/CY101/rc_data/can_coke/trial_1/exec_1/low_drop" \
        "/vibro/b877428f-4080-11e0-bd19-000c2930dc90-1301423955849128165.tsv"
 
 vibro_list = open(path).readlines()
@@ -77,7 +77,7 @@ fig = plt.figure(figsize=(20.0, 8.0))
 plt.plot(timestep, x, label="x-axis accelerometer")
 plt.plot(timestep, y, label="y-axis accelerometer")
 plt.plot(timestep, z, label="z-axis accelerometer")
-plt.plot(timestep, std, label="magnitude deviation of accelerometer")
+# plt.plot(timestep, std, label="magnitude deviation of accelerometer")
 
 plt.ylabel(ylabel="Acceleration", fontsize=18)
 plt.xlabel(xlabel="Time (ms)", fontsize=18)

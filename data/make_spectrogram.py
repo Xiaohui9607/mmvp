@@ -57,11 +57,29 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
 def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_name="spectrogram"):
     samplerate, samples = wav.read(audio_path)
+    import matplotlib.pyplot as plt
     s = stft(samples[:, 0], binsize)
 
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
     sshow = sshow[2:, :]
     ims = 20. * np.log10(np.abs(sshow) / 10e-6)  # amplitude to decibel
+    timebins, freqbins = np.shape(ims)
+    plt.figure(figsize=(15, 7.5))
+    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
+    plt.colorbar()
+
+    plt.xlabel("time (s)", fontsize=14)
+    plt.ylabel("frequency (hz)", fontsize=14)
+    plt.xlim([0, timebins - 1])
+    plt.ylim([0, freqbins])
+
+    xlocs = np.float32(np.linspace(0, timebins - 1, 5))
+    plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs * len(samples) / timebins) + (0.5 * binsize)) / samplerate], fontsize=12)
+    ylocs = np.int16(np.round(np.linspace(0, freqbins - 1, 10)))
+    plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs], fontsize=12)
+
+    plt.savefig("audio_spectrogram_low_drop_can_coke.png", bbox_inches="tight")
+
     ims = np.transpose(ims)
     ims = ims[0:256, :]
     return ims, 1/samplerate*samples.shape[0]
