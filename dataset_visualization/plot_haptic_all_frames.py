@@ -59,24 +59,20 @@ for index, a_frame in enumerate(haptic_across_all_frames):
 haptic_data = haptic_across_all_frames.T
 sum_of_rows = haptic_data.sum(axis=1)
 haptic_data = haptic_data/ sum_of_rows[:, np.newaxis]
-fig = plt.figure(figsize=(22.0, 8.0))
+# fig = plt.figure(figsize=(3200.0/300.0, 2100.0/300.0))
 import matplotlib.gridspec as gridspec
-gs = gridspec.GridSpec(10, 1, hspace=0.1)
-# fig1, f1_axes = plt.subplots(ncols=1, nrows=10, constrained_layout=True,figsize=(20.0, 8.0))
+# gs = gridspec.GridSpec(10, 1, hspace=0.1)
+# fig1, f1_axes = plt.subplots(ncols=1, nrows=10, constrained_layout=True, figsize=(20.0, 8.0))
+fig, axes = plt.subplots(nrows=10, figsize=(3200.0/300.0, 2100.0/300.0))
 ax1 = None
-for i, g in enumerate(gs):
-    ax = plt.subplot(g)
+for i, ax in enumerate(axes):
     ax.set_xticks([])
     ax.set_yticks([])
-    # ax.set_title(str(i+1))
-    if i ==0 :
-        plt.title("Visualization of Haptic Features", fontsize=24)
-    # ax.set_yticks(np.arange(0, 10+1, 1))
-    plt.imshow(haptic_data[i:i+1,:])
-    plt.ylabel(ylabel=str(i+1), fontsize=20)
+    ax.imshow(haptic_data[i:i+1,:], cmap=plt.cm.gray)
+    ax.set_ylabel(ylabel=str(i+1), fontsize=32)
     if i == 9:
-        plt.xticks(np.arange(0, 21+1, 2), fontsize=20)
-        # plt.
+        plt.xticks(np.arange(0, 21+1, 2), fontsize=24)
+
 # f1_axes[0].imshow(haptic_data, cmap=plt.cm.gray) #for gray_scale: cmap=plt.cm.gray
 
 # ax = plt.gca()
@@ -84,9 +80,10 @@ for i, g in enumerate(gs):
 # ax.set_yticklabels(np.arange(1, 10+1, 1))
 
 # plt.ylabel(ylabel="Joints [1-7], End Effector [8-10]", fontsize=18)
-plt.xlabel(xlabel="Frames", fontsize=24)
-
+plt.xlabel(xlabel="Frames", fontsize=32)
 # plt.colorbar()
-plt.savefig("haptic_low_drop_can_coke.png", dpi=300, bbox_inches='tight')
+plt.tight_layout()
+plt.subplots_adjust(hspace=0.0)
+plt.savefig("haptic_low_drop_can_coke.png", dpi=300)
 plt.show()
 plt.close()

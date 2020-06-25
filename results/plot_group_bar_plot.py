@@ -64,7 +64,7 @@ plt.ylabel('SSIM', fontsize=16)
 
 # reodering the legends and renaming them
 handles, _ = plt.gca().get_legend_handles_labels()
-labels = ['Finn et al. (vision)', 'vision+haptic', 'vision+haptic+audio', 'vision+haptic+audio+vibro']
+labels = ['Finn et al.', 'vision+haptic', 'vision+haptic+audio', 'vision+haptic+audio+vibro']
 order = [3,2,1,0]
 plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc='upper left')
 

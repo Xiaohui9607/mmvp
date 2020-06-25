@@ -67,22 +67,25 @@ binsn_low_drop_can_coke = binsn_low_drop_can_coke * v_h_ratio
 # vibro_data = vibro_data[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
 # print(vibro_data)
 
-x = vibro_data[2000:4000,0]
-y = vibro_data[2000:4000,1]
-z = vibro_data[2000:4000,2]
+x = vibro_data[1000:2000,0] / 1000
+y = vibro_data[1000:2000,1] / 1000
+z = vibro_data[1000:2000,2] / 1000
 std = np.sqrt(x**2+y**2+z**2)
-timestep = np.arange(len(x))
+timestep = [i/ 1000 for i in np.arange(len(x))]
 
-fig = plt.figure(figsize=(20.0, 8.0))
+fig = plt.figure(figsize=(3200.0/300.0, 2100.0/300.0))
 plt.plot(timestep, x, label="x-axis accelerometer")
 plt.plot(timestep, y, label="y-axis accelerometer")
 plt.plot(timestep, z, label="z-axis accelerometer")
 # plt.plot(timestep, std, label="magnitude deviation of accelerometer")
 
-plt.ylabel(ylabel="Acceleration", fontsize=18)
-plt.xlabel(xlabel="Time (ms)", fontsize=18)
-plt.title("Raw 3-axis accelerometer readings", fontsize=18)
-plt.legend(fontsize=12)
+plt.ylabel(ylabel="Acceleration (g)", fontsize=32)
+plt.xlabel(xlabel="Time (s)", fontsize=32)
+plt.xticks(fontsize=24)
+plt.yticks(fontsize=24)
+# plt.title("Raw 3-axis Accelerometer Readings", fontsize=32)
+plt.legend(fontsize=22)
 # plt.show()
-plt.savefig('vibro_low_drop_can_coke.png', dpi=300, bbox_inches='tight')
+plt.tight_layout()
+plt.savefig('vibro_low_drop_can_coke.png', dpi=300)
 plt.close()

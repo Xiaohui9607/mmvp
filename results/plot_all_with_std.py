@@ -20,22 +20,27 @@ for i, metric in enumerate(paths):
         axes[1].errorbar(x=range(4, 20), y=df.use_haptic_audio_mean, yerr=df.use_haptic_audio_std, marker='v', fillstyle='none',label="vision+haptic+audio", color='green')
         axes[1].errorbar(x=range(4, 20), y=df.use_haptic_mean, yerr=df.use_haptic_std, marker="o", fillstyle='none',label="vision+haptic", color='orange')
         axes[1].errorbar(x=range(4, 20), y=df.baseline_mean, yerr=df.baseline_std, marker=8, fillstyle='none',label="Finn et al.", color='blue')
+        axes[i].set_ylim(0.65, 0.95)
     else:
         axes[0].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro_mean, yerr=df.use_haptic_audio_vibro_std, fillstyle='none',marker="x", color='red')
         axes[0].errorbar(x=range(4, 20), y=df.use_haptic_audio_mean, yerr=df.use_haptic_audio_std, marker='v', fillstyle='none',color='green')
         axes[0].errorbar(x=range(4, 20), y=df.use_haptic_mean, yerr=df.use_haptic_std, marker="o",fillstyle='none', color='orange')
         axes[0].errorbar(x=range(4, 20), y=df.baseline_mean, yerr=df.baseline_std, marker=8, fillstyle='none',color='blue')
+        axes[i].set_ylim(22, 32)
     axes[i].set_ylabel(metric, fontsize = 16)
     axes[i].set_xlabel("Time step", fontsize = 16)
     axes[i].set_title("Heldout set reconstruction evaluation", fontsize = 18)
+
     # plt.xlabel("# frames")
     axes[i].xaxis.set_major_locator(ticker.MultipleLocator(2))
     if metric == 'SSIM':
         axes[i].yaxis.set_major_locator(ticker.MultipleLocator(0.05))
     else:
-        axes[i].yaxis.set_major_locator(ticker.MultipleLocator(1))
+        axes[i].yaxis.set_major_locator(ticker.MultipleLocator(2))
 
 # plt.subplots_adjust(wspace=0.45)
 plt.legend(fontsize=12)
-plt.savefig('all_with_std.png', dpi=300, bbox_inches='tight')
+
+plt.tight_layout()
+plt.savefig('all_with_std.png', dpi=300)
 plt.show()
