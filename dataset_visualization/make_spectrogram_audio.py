@@ -53,43 +53,37 @@ def logscale_spec(spec, sr=44100, factor=20.):
 """ plot spectrogram"""
 def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_name="spectrogram"):
     samplerate, samples = wav.read(audio_path)
+    import matplotlib.pyplot as plt
     s = stft(samples[:, 0], binsize)
 
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
     sshow = sshow[2:, :]
     ims = 20. * np.log10(np.abs(sshow) / 10e-6)  # amplitude to decibel
-    ims = np.transpose(ims)
-    ims = ims[0:256, :]
-
-    ### plot
     timebins, freqbins = np.shape(ims)
-    print("timebins: ", timebins)
-    print("freqbins: ", freqbins)
+    plt.figure(figsize=(3200.0/300.0, 2100.0/300.0))
 
-    # plt.figure(figsize=(15, 7.5))
-    fig = plt.figure(figsize=(3400 / 300.0, 1800 / 300.0))
-    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
-    # plt.colorbar()
-    plt.xlabel("Time (s)", fontsize=18)
-    plt.ylabel("Frequency (Hz)", fontsize=18)
+    # plt.title("Audio Spectrogram", fontsize=32)
+    plt.xlabel("Time (s)", fontsize=32)
+    plt.ylabel("Frequency (kHz)", fontsize=32)
     plt.xlim([0, timebins - 1])
     plt.ylim([0, freqbins])
 
     xlocs = np.float32(np.linspace(0, timebins - 1, 5))
-    plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs * len(samples) / timebins) + (0.5 * binsize)) / samplerate])
-    ylocs = np.int16(np.round(np.linspace(0, freqbins - 1, 10)))
-    plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
-    plt.title("Visualization of Audio Features for Drop Behavior", fontsize=18)
-    plt.savefig("audio_spectrogram_low_drop_can_coke.png")
-    plt.clf()
-    ###plot
+    plt.xticks(xlocs, ["%.01f" % l for l in ((xlocs * len(samples) / timebins) + (0.5 * binsize)) / samplerate], fontsize=24)
+    ylocs = np.int16(np.round(np.linspace(0, freqbins - 1, 23)))[::4]
+    ylocs1 = list(range(int(np.max(freq)//1000)+1))[::4]
 
-    return ims, 1/samplerate*samples.shape[0]
+    plt.yticks(ylocs[1:], ylocs1[1:], fontsize=24)
+
+    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
+    # plt.colorbar()
+    plt.tight_layout()
+    plt.savefig("audio_spectrogram_low_drop_can_coke.png", dpi=300)
 
 
 
 def main():
-    audio_path = '/Users/ramtin/PycharmProjects/data/CY101/rc_data/can_coke/trial_1/exec_1/low_drop/hearing/' \
+    audio_path = '/home/golf/code/data/CY101/rc_data/can_coke/trial_1/exec_1/low_drop/hearing/' \
                  '1301423955763139.wav'
     plotstft(audio_path=audio_path)
 
