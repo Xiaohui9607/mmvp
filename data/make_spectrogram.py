@@ -3,8 +3,6 @@ import scipy.io.wavfile as wav
 from numpy.lib import stride_tricks
 
 """ short time fourier transform of audio signal """
-
-
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     win = window(frameSize)
     hopSize = int(frameSize - np.floor(overlapFac * frameSize))
@@ -23,8 +21,6 @@ def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
 
 
 """ scale frequency axis logarithmically """
-
-
 def logscale_spec(spec, sr=44100, factor=20.):
     timebins, freqbins = np.shape(spec)
 
@@ -53,8 +49,6 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
 
 """ plot spectrogram"""
-
-
 def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_name="spectrogram"):
     samplerate, samples = wav.read(audio_path)
     import matplotlib.pyplot as plt
@@ -64,6 +58,8 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
     sshow = sshow[2:, :]
     ims = 20. * np.log10(np.abs(sshow) / 10e-6)  # amplitude to decibel
     timebins, freqbins = np.shape(ims)
+
+    """
     plt.figure(figsize=(3200.0/300.0, 2100.0/300.0))
 
     # plt.title("Audio Spectrogram", fontsize=32)
@@ -83,6 +79,7 @@ def plotstft(audio_path, binsize=2 ** 10, plotpath=None, colormap="jet", fig_nam
     # plt.colorbar()
     plt.tight_layout()
     plt.savefig("audio_spectrogram_low_drop_can_coke.png", dpi=300)
+    """
 
     ims = np.transpose(ims)
     ims = ims[0:256, :]
