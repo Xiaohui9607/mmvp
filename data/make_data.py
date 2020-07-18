@@ -11,9 +11,10 @@ except:
 import argparse
 from sklearn.preprocessing import OneHotEncoder
 
+#/Users/ramtin/PycharmProjects/VP/Experiement_object_based_all_behaviors
 FIXED = True
 if FIXED:
-    train_test_split = '/home/golf/code/models/Experiement_object_based_all_behaviors/None/train_test_split'
+    train_test_split = '/Users/ramtin/PycharmProjects/VP/Experiement_object_based_all_behaviors/None/train_test_split'
     train, test = open(train_test_split).readlines()[:2]
     train = train[9:-3].split('\', \'')
     test = test[8:-3].split('\', \'')
@@ -25,7 +26,7 @@ VIS_DIR = '../../data/VIS/'
 
 
 
-STRATEGY = 'object' # object | category | trail
+STRATEGY = 'object' # object | category | trial
 
 CATEGORIES = ['basket', 'weight', 'smallstuffedanimal', 'bigstuffedanimal', 'metal', 'timber', 'pasta', 'tin', 'pvc',
               'cup', 'can', 'bottle', 'cannedfood', 'medicine', 'tupperware', 'cone', 'noodle', 'eggcoloringcup', 'egg',
@@ -65,7 +66,7 @@ SORTED_OBJECTS = sorted(OBJECTS)
 
 BEHAVIORS = ['crush', 'grasp', 'lift_slow', 'shake', 'poke', 'push', 'tap', 'low_drop', 'hold']
 
-TRAILS = ['exec_1', 'exec_2', 'exec_3', 'exec_4', 'exec_5']
+TRIALS = ['exec_1', 'exec_2', 'exec_3', 'exec_4', 'exec_5']
 
 crop_stategy = {
     'crush': [16, -5],
@@ -216,7 +217,7 @@ def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
 def split(strategy):
     '''
 
-    :param strategy: object | category | trail
+    :param strategy: object | category | trial
     :return: train -> list
              test -> list
     '''
@@ -238,9 +239,9 @@ def split(strategy):
         random.shuffle(CATEGORIES)
         train_list, test_list = CATEGORIES[:16], CATEGORIES[16:]
 
-    elif strategy == 'trail':
-        random.shuffle(TRAILS)
-        train_list, test_list = TRAILS[:4], TRAILS[4:]
+    elif strategy == 'trial':
+        random.shuffle(TRIALS)
+        train_list, test_list = TRIALS[:4], TRIALS[4:]
         train_list += ['exec_6', 'exec_7', 'exec_8', 'exec_9', 'exec_10']
     return train_list, test_list
 
@@ -327,7 +328,7 @@ def process(visions, chosen_behavior):
                     'audio': out_audio_npy,
                     'vibro': out_vibro_npy
                 }
-                np.save(vis_out_sample_dir + '_' + str(i), ret)
+                # np.save(vis_out_sample_dir + '_' + str(i), ret)
 
         out_vision_npys, n_frames = generate_npy_vision(vision, behavior, SEQUENCE_LENGTH)
         out_audio_npys = generate_npy_audio(audio, n_frames, behavior, SEQUENCE_LENGTH)
@@ -352,13 +353,14 @@ def process(visions, chosen_behavior):
                 'audio': out_audio_npy,
                 'vibro': out_vibro_npy
             }
-            np.save(out_sample_dir + '_' + str(i), ret)
+            # np.save(out_sample_dir + '_' + str(i), ret)
     print("fail: ", fail_count)
 
 
 def run(chosen_behavior):
     print("start making data")
     visons = read_dir()
+
     process(visons, chosen_behavior)
     print("done!")
 
