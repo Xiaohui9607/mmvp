@@ -1,4 +1,4 @@
-# A Framework for Next-Frame Prediction using Multi-Modal Perception of an Embodied Agent
+# Visual Next-Frame Prediction using Multisensory Perception for Embodied Agents
 
 **Abstract:**
 
