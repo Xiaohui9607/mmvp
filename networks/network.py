@@ -65,7 +65,6 @@ class network(nn.Module):
         self.lstm2 = ConvLSTM(in_channels=self.lstm_size[0], out_channels=self.lstm_size[1], kernel_size=5, padding=2)
         self.lstm2_norm = nn.BatchNorm2d(self.lstm_size[1])
 
-
         # N * 32 * H/4 * W/4 -> N * 32 * H/4 * W/4
         self.enc1 = nn.Conv2d(in_channels=self.lstm_size[1], out_channels=self.lstm_size[1], kernel_size=3, stride=2, padding=1)
         # N * 32 * H/4 * W/4 -> N * 64 * H/4 * W/4

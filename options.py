@@ -36,8 +36,6 @@ class Options():
         self.parser.add_argument('--behavior_layer', type=int, default=9, help='number of chosen behaviors.')
         self.parser.add_argument('--audio_layer', type=int, default=16, help='AUDIO_LAYER.')
         self.parser.add_argument('--vibro_layer', type=int, default=16, help='VIBRO_LAYER.')
-
-        self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will override multi-modalities options')
         self.parser.add_argument('--aux', action='store_true', help='employ auxiliary tasks during training' )
         # training details
         self.parser.add_argument('--print_interval', type=int, default=100, help='# iterations to output loss')
