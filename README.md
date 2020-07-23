@@ -19,6 +19,6 @@ We used the publicly available dataset collected by Sinapov et al. [see referenc
 
 ### Dataset Visualization
 
-<img src="dataset_visualization/haptic_low_drop_can_coke.png" alt="drawing" width="600px"/> <img src="dataset_visualization/audio_spectrogram_low_drop_can_coke.png" alt="drawing" width="600px"/> img src="dataset_visualization/vibro_low_drop_can_coke.png" alt="drawing" width="600px"/>
+<img src="dataset_visualization/haptic_low_drop_can_coke.png" alt="drawing" width="300px"/> <img src="dataset_visualization/audio_spectrogram_low_drop_can_coke.png" alt="drawing" width="300px"/> <img src="dataset_visualization/vibro_low_drop_can_coke.png" alt="drawing" width="300px"/>
 
 
