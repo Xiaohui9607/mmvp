@@ -17,7 +17,8 @@ pip install -r requirements.txt
 We used the publicly available dataset collected by Sinapov et al. [see reference 7 in the paper] to evaluate and compare our proposed network with the single-modal network. For collecting this dataset, an uppertorso humanoid robot with a 7-DOF arm manipulates 100 objects by executing 9 different exploratory behaviors (*push, poke, press, shake, lift, drop, grasp, tap* and *hold*) multiple times. The robot records visual, haptic, auditory and vibrotactile data using 4 sensors. The dataset can be found [here](https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1).
 
 ## How to run the code?
-python ./main.py  \
+```bash
+$ python ./main.py  \
         --data_dir path-to-data\ # directory containing data
         --channels 3 \ # channels of input
         --height 64 \ # height of image
@@ -44,7 +45,7 @@ python ./main.py  \
         --batch_size 32 \ # batch size for training
         --learning_rate 0.001, \ # the base learning rate
         --epochs 30 \ # total training epochs
-
+```
 <img src="Figures/model_architecture_figures/ModelArch.png" alt="drawing" width="600px"/> 
 <p>The architecture of the proposed model, which consists of 4 feature encoders (left) and prediction heads (right) for 4 modalities, and 1 fusion module (middle) for merging representations of different modalities.</p>
 
