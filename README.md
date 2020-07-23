@@ -10,7 +10,7 @@
 ## Dependencies
 
 ## Dataset
-
+We used the publicly available dataset collected by Sinapov et al. [see reference 7 in the paper] to evaluate and compare our proposed network with the single-modal network. For collecting this dataset, an uppertorso humanoid robot with a 7-DOF arm manipulates 100 objects by executing 9 different exploratory behaviors (\textit{push, poke, press, shake, lift, drop, grasp, tap} and \textit{hold}) multiple times. The robot records visual, haptic, auditory and vibrotactile data using 4 sensors. The dataset can be found [here](https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1)
 ## How to run the code?
 
 ## Experiment Pipeline 
