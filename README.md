@@ -13,8 +13,18 @@
 ## Enviroment Setup
 pip install -r requirements.txt
 
-## Dataset prepara
-We used the publicly available dataset collected by Sinapov et al. [see reference 7 in the paper] to evaluate and compare our proposed network with the single-modal network. For collecting this dataset, an uppertorso humanoid robot with a 7-DOF arm manipulates 100 objects by executing 9 different exploratory behaviors (*push, poke, press, shake, lift, drop, grasp, tap* and *hold*) multiple times. The robot records visual, haptic, auditory and vibrotactile data using 4 sensors. The dataset can be found [here](https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1).
+## Dataset Preparation
+Description: https://www.eecs.tufts.edu/~gtatiya/pages/2014/CY101Dataset.html
+
+Download: https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1
+
+Preparation:
+```bash
+$ python ./data/make_data.py \
+        --data_dir path-to-downloaded-data-directory \ 
+        --out_dir path-to-output-data-directory \
+```
+
 
 ## Usage
 ```bash
@@ -27,8 +37,8 @@ $ python ./main.py  \
         --pretrained_model path-to-checkpoint \ # filepath of a pretrained model to initialize from
         --sequence_length 10 \ # sequence length + context frames
         --context_frames 4 \ # the number of ground truth frames to pass in at start
-        --model CDNA \ # model architecture to use - CDNA, DNA, or STP
-        --num_masks 10 \ # number of masks, usually 1 for DNA, 10 for CDNA, STN
+        --model CDNA \ # model architecture to use - CDNA | DNA | STP
+        --num_masks 10 \ # number of masks, usually 1 for DNA, 10 for CDNA, STP
         --device cuda  \ # device cuda | cpu
         --dna_kern_size 5 \ # CDNA_KERN_SIZE
         --haptic_layer 16 \ # HAPTIC_LAYER
