@@ -11,18 +11,17 @@
 
 ## Dataset
 We used the publicly available dataset collected by Sinapov et al. [see reference 7 in the paper] to evaluate and compare our proposed network with the single-modal network. For collecting this dataset, an uppertorso humanoid robot with a 7-DOF arm manipulates 100 objects by executing 9 different exploratory behaviors (*push, poke, press, shake, lift, drop, grasp, tap* and *hold*) multiple times. The robot records visual, haptic, auditory and vibrotactile data using 4 sensors. The dataset can be found [here](https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1).
+
 ## How to run the code?
 
 ## Experiment Pipeline 
 
 The architecture of the proposed model, which consists of 4 feature encoders (left) and prediction heads (right) for 4 modalities, and 1 fusion module (middle) for merging representations of different modalities.
-
 <img src="model_architecture/ModelArch.png" alt="drawing" width="600px"/> 
 
 
 Pipeline of The Visual Prediction Module: the architecture of visual feature
 extractor (left), the architecture of visual prediction network (right).
-
 <img src="model_architecture/Vis_feat.png" alt="drawing" width="400px"/> <img src="model_architecture/Vis_pred.png" alt="drawing" width="400px"/> 
 
 ## Results
@@ -44,7 +43,14 @@ extractor (left), the architecture of visual prediction network (right).
 
 <img src="results/ablation_on_behavior.png" alt="drawing" width="600px"/>
 
+<img src="tables/table 1.png" alt="drawing" width="600px"/>
+
 
 #### Training the Network with Individual Behavior
 
 <img src="results/sep_behave_group_bar.png" alt="drawing" width="600px"/>
+
+#### Predicting Future Frames of Auxiliary Modalities
+
+<img src="tables/table 2.png" alt="drawing" width="600px"/>
+
