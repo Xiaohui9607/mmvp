@@ -22,7 +22,7 @@ The architecture of the proposed model, which consists of 4 feature encoders (le
 
 Pipeline of The Visual Prediction Module: the architecture of visual feature
 extractor (left), the architecture of visual prediction network (right).
-<img src="model_architecture/Vis_feat.png" alt="drawing" width="400px"/> <img src="model_architecture/Vis_pred.png" alt="drawing" width="400px"/> 
+<img src="model_architecture/Vis_feat.png" alt="drawing" width="300px"/> <img src="model_architecture/Vis_pred.png" alt="drawing" width="300px"/> 
 
 ## Results
 
