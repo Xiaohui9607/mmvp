@@ -17,8 +17,33 @@ pip install -r requirements.txt
 We used the publicly available dataset collected by Sinapov et al. [see reference 7 in the paper] to evaluate and compare our proposed network with the single-modal network. For collecting this dataset, an uppertorso humanoid robot with a 7-DOF arm manipulates 100 objects by executing 9 different exploratory behaviors (*push, poke, press, shake, lift, drop, grasp, tap* and *hold*) multiple times. The robot records visual, haptic, auditory and vibrotactile data using 4 sensors. The dataset can be found [here](https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1).
 
 ## How to run the code?
-
-## Experiment Pipeline 
+python ./main.py  \
+        --data_dir path-to-data\ # directory containing data
+        --channels 3 \ # channels of input
+        --height 64 \ # height of image
+        --width 64 \ # width of image
+        --output_dir path-to-checkpoint-dir \ # directory for model weight
+        --pretrained_model path-to-checkpoint \ # filepath of a pretrained model to initialize from
+        --sequence_length 10 \ # sequence length + context frames
+        --context_frames 4 \ # the number of ground truth frames to pass in at start
+        --model CDNA \ # model architecture to use - CDNA, DNA, or STP
+        --num_masks 10 \ # number of masks, usually 1 for DNA, 10 for CDNA, STN
+        --device cuda  \ # device cuda | cpu
+        --dna_kern_size 5 \ # CDNA_KERN_SIZE
+        --haptic_layer 16 \ # HAPTIC_LAYER
+        --use_haptic \ # Whether or not to give the haptic to the model
+        --behavior_layer 9 \ # number of chosen behaviors
+        --use_behavior \ # Whether or not to give the behavior to the model
+        --audio_layer 16 \ # AUDIO_LAYER
+        --use_audio \ # Whether or not to give the audio to the model
+        --vibro_layer 16 \ # VIBRO_LAYER
+        --use_vibro \ # Whether or not to give the vibro to the model
+        --aux \ # Whether or not to employ auxiliary tasks during training 
+        --print_interval 100 \ # iterations to output loss
+        --schedsamp_k  400 \ # The k hyperparameter for scheduled sampling, -1 for no scheduled sampling
+        --batch_size 32 \ # batch size for training
+        --learning_rate 0.001, \ # the base learning rate
+        --epochs 30 \ # total training epochs
 
 <img src="Figures/model_architecture_figures/ModelArch.png" alt="drawing" width="600px"/> 
 <p>The architecture of the proposed model, which consists of 4 feature encoders (left) and prediction heads (right) for 4 modalities, and 1 fusion module (middle) for merging representations of different modalities.</p>
