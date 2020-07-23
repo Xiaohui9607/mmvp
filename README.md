@@ -19,22 +19,22 @@ We used the publicly available dataset collected by Sinapov et al. [see referenc
 
 ### Dataset Visualization
 
-<img src="dataset_visualization/haptic_low_drop_can_coke.png" alt="drawing" width="300px"/> <img src="dataset_visualization/audio_spectrogram_low_drop_can_coke.png" alt="drawing" width="300px"/> <img src="dataset_visualization/vibro_low_drop_can_coke.png" alt="drawing" width="300px"/>
+<img src="dataset_visualization/haptic_low_drop_can_coke.png" alt="drawing" width="200px"/> <img src="dataset_visualization/audio_spectrogram_low_drop_can_coke.png" alt="drawing" width="200px"/> <img src="dataset_visualization/vibro_low_drop_can_coke.png" alt="drawing" width="200px"/>
 
 ### Training the Network with All Behaviors
 
 #### Illustrative Example
 
-<img src="results/all_pred_v1_p1.png" alt="drawing" width="300px"/> <img src="results/all_pred_v1_p2.png" alt="drawing" width="300px"/>
+<img src="results/all_pred_v1_p1.png" alt="drawing" width="500px"/> <img src="results/all_pred_v1_p2.png" alt="drawing" width="500px"/>
 
 
 ### Quantitative Reconstruction Performance
 
-<img src="results/aall_with_std.png" alt="drawing" width="300px"/> 
+<img src="results/all_with_std.png" alt="drawing" width="600px"/> 
 
-<img src="results/ablation_on_behavior.png" alt="drawing" width="300px"/>
+<img src="results/ablation_on_behavior.png" alt="drawing" width="600px"/>
 
 
 ### Training the Network with Individual Behavior
 
-<img src="results/sep_behave_group_bar.png" alt="drawing" width="300px"/>
+<img src="results/sep_behave_group_bar.png" alt="drawing" width="600px"/>
