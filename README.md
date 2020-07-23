@@ -39,7 +39,7 @@ We used the publicly available dataset collected by Sinapov et al. [see referenc
 #### Illustrative Example
 
 <img src="Figures/all_pred_lift_behavior.png" alt="drawing" width="400px"/> <img src="Figures/all_pred_push_behavior.png" alt="drawing" width="400px"/>
-<p>Sharpness of predicted images, when the robot arm perform *lift* (left) and *push* (right) behaviors. For each behavior, top row is ground truth, middle row is multi-modal and bottom row is the vision only approach</p>
+<p>Sharpness of predicted images, when the robot arm perform lift (left) and push (right) behaviors. For each behavior, top row is ground truth, middle row is multi-modal and bottom row is the vision only approach</p>
 
 #### Quantitative Reconstruction Performance
 
