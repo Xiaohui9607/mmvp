@@ -12,8 +12,8 @@ import argparse
 from sklearn.preprocessing import OneHotEncoder
 
 #/Users/ramtin/PycharmProjects/VP/Experiement_object_based_all_behaviors
-DATA_DIR = '../../data/CY101'
-OUT_DIR = '../../data/CY101NPY'
+# DATA_DIR = '../../data/CY101'
+# OUT_DIR = '../../data/CY101NPY'
 # VIS_DIR = '../../data/VIS/'
 
 
@@ -78,7 +78,7 @@ STEP = 4
 IMG_SIZE = (64, 64)
 
 AUDIO_EACH_FRAME_LENGTH = 8
-def read_dir():
+def read_dir(DATA_DIR):
     visions = glob.glob(os.path.join(DATA_DIR, 'vision*/*/*/*/*'))
     return visions
 
@@ -234,7 +234,7 @@ def split(strategy):
     return train_list, test_list
 
 
-def process(visions, chosen_behavior):
+def process(visions, chosen_behavior, OUT_DIR):
     CHOOSEN_BEHAVIORS = BEHAVIORS
     if chosen_behavior in CHOOSEN_BEHAVIORS:
         CHOOSEN_BEHAVIORS = [chosen_behavior]
@@ -315,10 +315,10 @@ def process(visions, chosen_behavior):
     print("fail: ", fail_count)
 
 
-def run(chosen_behavior):
+def run(chosen_behavior, data_dir, out_dir):
     print("start making data")
-    visons = read_dir()
-    process(visons, chosen_behavior)
+    visons = read_dir(data_dir)
+    process(visons, chosen_behavior, out_dir)
     print("done!")
 
 
@@ -326,10 +326,11 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--behavior', default='None', help='which behavior?')
+    parser.add_argument('--data_dir', default='../../data/CY101', help='source data directory')
+    parser.add_argument('--out_dir', default='../../data/CY101NPY', help='target data directory')
     args = parser.parse_args()
-
     print("behavior: ", args.behavior)
 
-    if not os.path.exists(OUT_DIR):
-        os.makedirs(OUT_DIR)
-    run(chosen_behavior=args.behavior)
+    if not os.path.exists(args.out_dir):
+        os.makedirs(args.out_dir)
+    run(chosen_behavior=args.behavior, data_dir=args.data_dir, out_dir=args.out_dir)
