@@ -18,7 +18,7 @@ lengends = {
     'haptic_audio': 'vision+haptic+audio' ,
     'haptic_audio_vibro': 'vision+haptic+audio+vibro'
 }
-# f, axes = plt.subplots(1, 2, figsize=(19,5))
+
 fig = plt.figure(figsize=(19,8))
 outer = gridspec.GridSpec(1, 1, wspace=0.1, hspace=0.2)
 for i, metric in enumerate(paths):

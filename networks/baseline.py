@@ -99,12 +99,12 @@ class baseline(nn.Module):
         # self.stateout = nn.Linear(STATE_DIM+ACTION_DIM, STATE_DIM)
 
     def forward(self, images, haptics, audios, behaviors, vibros, train=True):
-        '''
+        """
         :param inputs: T * N * C * H * W
         :param state: T * N * C
         :param action: T * N * C
         :return:
-        '''
+        """
 
         lstm_state1, lstm_state2, lstm_state3, lstm_state4 = None, None, None, None
         lstm_state5, lstm_state6, lstm_state7 = None, None, None

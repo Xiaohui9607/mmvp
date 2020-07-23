@@ -140,7 +140,7 @@ class vibro_feat(nn.Module):
         return vibro_feat, vv_lstm_feat_state
 
 
-# heads
+# Haptic head
 class haptic_head(nn.Module):
     def __init__(self, in_channels):
         super(haptic_head, self).__init__()
@@ -159,7 +159,7 @@ class haptic_head(nn.Module):
         haptic = self.head(enc3)
         return haptic
 
-
+# Audio head
 class audio_head(nn.Module):
     def __init__(self, in_channels):
         super(audio_head, self).__init__()
@@ -177,7 +177,7 @@ class audio_head(nn.Module):
         audio = self.head(enc3)
         return audio
 
-
+# Vibro head
 class vibro_head(nn.Module):
     def __init__(self, in_channels):
         super(vibro_head, self).__init__()
@@ -193,7 +193,6 @@ class vibro_head(nn.Module):
         self.head.add_module('relu_4', nn.ReLU())
         self.head.add_module('global_pool', nn.AvgPool2d((128, 1)))
         self.head.add_module('permute', Permute([0, 2, 3, 1]))
-
 
     def forward(self, enc3):
         vibro = self.head(enc3)

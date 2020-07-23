@@ -163,7 +163,6 @@ class network(nn.Module):
         # audio_feat_old = self.audio_feat.feature(audios[0]) if self.AUDIO_LAYER != 0 else None
         # vibro_feat_old = self.vibro_feat.feature(vibros[0]) if self.VIBRO_LAYER != 0 else None
 
-
         # haptic_feat_old, audio_feat_old = None, None
 
         gen_images = []
@@ -219,7 +218,7 @@ class network(nn.Module):
             gen_audio = self.audio_head(enc3) if self.AUDIO_LAYER != 0 else None
             gen_vibro = self.vibro_head(enc3) if self.VIBRO_LAYER != 0 else None
 
-            # TODO: done in modalities preiction
+            # TODO: done in modalities prediction
             gen_haptics.append(gen_haptic)
             gen_audios.append(gen_audio)
             gen_vibros.append(gen_vibro)

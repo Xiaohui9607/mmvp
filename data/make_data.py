@@ -97,10 +97,10 @@ def convert_audio_to_image(audio_path):
 
 
 def generate_npy_vision(path, behavior, sequence_length):
-    '''
+    """
     :param path: path to images folder,
     :return: numpy array with size [SUB_SAMPLE_SIZE, SEQ_LENGTH, ...]
-    '''
+    """
     files = sorted(glob.glob(os.path.join(path, '*.jpg')))
     img_length = len(files)
     files = files[crop_stategy[behavior][0]:crop_stategy[behavior][1]]
@@ -117,13 +117,13 @@ def generate_npy_vision(path, behavior, sequence_length):
 
 
 def generate_npy_haptic(path1, path2, n_frames, behavior, sequence_length):
-    '''
+    """
     :param path: path to ttrq0.txt, you need to open it before you process
     :param n_frames: # frames
     :return: list of numpy array with size [SEQ_LENGTH, ...]
     :preprocess protocol: 48 bins for each single frame, given one frame, if #bin is less than 48,
                             we pad it in the tail with the last bin value. if #bin is more than 48, we take bin[:48]
-    '''
+    """
     if not os.path.exists(path1):
         return None, None
     haplist1 = open(path1, 'r').readlines()
@@ -146,10 +146,10 @@ def generate_npy_haptic(path1, path2, n_frames, behavior, sequence_length):
 
 
 def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
-    '''
+    """
     :param path: path to audio, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
-    '''
+    """
     audio_path = glob.glob(path)
     if len(audio_path) == 0:
         return None
@@ -176,10 +176,10 @@ def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
 
 
 def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
-    '''
+    """
     :param path: path to .tsv, you need to open it before you process
     :return: list of numpy array with size [SEQ_LENGTH, ...]
-    '''
+    """
     path = glob.glob(path)
     if not path and not bins:
         return None
@@ -215,12 +215,11 @@ def generate_npy_vibro(path, n_frames, bins, behavior, sequence_length):
 
 
 def split(strategy):
-    '''
-
+    """
     :param strategy: object | category | trial
     :return: train -> list
              test -> list
-    '''
+    """
     train_list = []
     test_list = []
     if FIXED:
@@ -328,7 +327,7 @@ def process(visions, chosen_behavior):
                     'audio': out_audio_npy,
                     'vibro': out_vibro_npy
                 }
-                # np.save(vis_out_sample_dir + '_' + str(i), ret)
+                np.save(vis_out_sample_dir + '_' + str(i), ret)
 
         out_vision_npys, n_frames = generate_npy_vision(vision, behavior, SEQUENCE_LENGTH)
         out_audio_npys = generate_npy_audio(audio, n_frames, behavior, SEQUENCE_LENGTH)
@@ -353,7 +352,7 @@ def process(visions, chosen_behavior):
                 'audio': out_audio_npy,
                 'vibro': out_vibro_npy
             }
-            # np.save(out_sample_dir + '_' + str(i), ret)
+            np.save(out_sample_dir + '_' + str(i), ret)
     print("fail: ", fail_count)
 
 

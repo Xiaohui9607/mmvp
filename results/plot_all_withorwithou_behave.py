@@ -19,15 +19,21 @@ f, axes = plt.subplots(1, 2, figsize=(13.5,4.5))
 for i, metric in enumerate(paths):
     df = pd.read_csv(paths[metric])
     if i == len(paths)-1:
-        axes[1].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro, yerr=df.use_haptic_audio_vibro_std, marker="o", label="With Behavior Input Feature", fillstyle='none', color='orange')
-        axes[1].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro_wo, yerr=df.use_haptic_audio_vibro_wo_std, marker="x", label="Without Behavior Input Feature", fillstyle='none', color='green')
-        axes[1].errorbar(x=range(4, 20), y=df.baseline, yerr=df.baseline_std, marker=8, label="Finn et al.", fillstyle='none', color='blue')
+        axes[1].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro, yerr=df.use_haptic_audio_vibro_std,
+                         marker="o", label="With Behavior Input Feature", fillstyle='none', color='orange')
+        axes[1].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro_wo, yerr=df.use_haptic_audio_vibro_wo_std,
+                         marker="x", label="Without Behavior Input Feature", fillstyle='none', color='green')
+        axes[1].errorbar(x=range(4, 20), y=df.baseline, yerr=df.baseline_std, marker=8, label="Finn et al.",
+                         fillstyle='none', color='blue')
         axes[i].set_ylim(0.65, 0.95)
 
     else:
-        axes[0].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro, yerr=df.use_haptic_audio_vibro_std,marker="o", fillstyle='none', color='orange')
-        axes[0].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro_wo, yerr=df.use_haptic_audio_vibro_wo_std, marker="x", fillstyle='none', color='green')
-        axes[0].errorbar(x=range(4, 20),y=df.baseline, yerr=df.baseline_std,  marker=8, fillstyle='none', color='blue')
+        axes[0].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro, yerr=df.use_haptic_audio_vibro_std,
+                         marker="o", fillstyle='none', color='orange')
+        axes[0].errorbar(x=range(4, 20), y=df.use_haptic_audio_vibro_wo, yerr=df.use_haptic_audio_vibro_wo_std,
+                         marker="x", fillstyle='none', color='green')
+        axes[0].errorbar(x=range(4, 20),y=df.baseline, yerr=df.baseline_std,
+                         marker=8, fillstyle='none', color='blue')
         axes[i].set_ylim(22, 32)
 
     axes[i].set_ylabel(metric, fontsize = 16)
