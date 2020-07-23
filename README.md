@@ -56,6 +56,7 @@ $ python ./main.py  \
         --learning_rate 0.001, \ # the base learning rate
         --epochs 30 \ # total training epochs
 ```
+## Architecture
 <img src="Figures/model_architecture_figures/ModelArch.png" alt="drawing" width="600px"/> 
 <p>The architecture of the proposed model, which consists of 4 feature encoders (left) and prediction heads (right) for 4 modalities, and 1 fusion module (middle) for merging representations of different modalities.</p>
 
