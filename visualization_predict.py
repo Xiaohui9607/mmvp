@@ -5,6 +5,7 @@ import torch
 import PIL.Image
 from options import Options
 from model import Model
+import os, cv2
 from torchvision.transforms import functional as F
 
 
@@ -59,7 +60,6 @@ def predict_proposed(weight, use_haptic, use_audio, use_virbo, filelist):
 
 
 if __name__ == '__main__':
-    import os, cv2
     # resultlist = predict_baseline(Experiement_object_based_all_behaviors['baseline'], filelist)
     # for idx, result in enumerate(resultlist):
     #     os.mkdir("baseline_{}".format(idx))

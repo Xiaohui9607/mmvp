@@ -2,8 +2,10 @@ from options import Options
 from model import Model
 from metrics import  calc_ssim
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
 sns.set(style="darkgrid")
+
 
 
 Experiement_object_based_all_behaviors = {
@@ -39,7 +41,6 @@ def eval_proposed(weight, use_haptic, use_audio, use_virbo):
 
 
 if __name__ == '__main__':
-    import pandas as pd
     data_dict = {}
     loss, std = eval_baseline(Experiement_object_based_all_behaviors['baseline'])
     metric_baseline = [(l, s) for l, s in zip(loss,std)]

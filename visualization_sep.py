@@ -42,8 +42,6 @@ Experiement_object_based_sep_behaviors = {
         'baseline': '/home/golf/code/models/Experiement_object_based_sep_behaviors/weight_baseline_tap/net_epoch_29.pth',
         'proposed': '/home/golf/code/models/Experiement_object_based_sep_behaviors/weight_use_haptic_audio_tap/net_epoch_29.pth',
     },
-
-
 }
 
 
@@ -80,7 +78,7 @@ if __name__ == '__main__':
     frames = range(4, 20)
     for idx, setting in enumerate(Experiement_object_based_sep_behaviors):
         psnr_baseline = [mse_to_psnr(mse) for mse in eval_baseline(Experiement_object_based_sep_behaviors[setting]['baseline'],setting)]
-        psnr_use_haptic_audio = [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_sep_behaviors[setting]['proposed'],True,True,False,setting)]
+        psnr_use_haptic_audio = [mse_to_psnr(mse) for mse in eval_proposed(Experiement_object_based_sep_behaviors[setting]['proposed'], True, True, False, setting)]
         if idx==0:
             sns.lineplot(x=range(4, 4+len(psnr_baseline)), y=psnr_baseline, legend='brief', label="baseline", ax=axes[idx % 3, idx // 3])
             sns.lineplot(x=range(4, 4+len(psnr_use_haptic_audio)), y=psnr_use_haptic_audio, legend='brief', label="+haptic+audio+vibro", ax=axes[idx % 3, idx // 3])

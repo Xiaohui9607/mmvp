@@ -4,7 +4,6 @@ import torch
 
 # pylint: disable=C0103,C0301,R0903,W0622
 
-
 class Options():
     """Options class
 
@@ -16,7 +15,7 @@ class Options():
         self.parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
         self.parser.add_argument('--data_dir', default='../data/CY101NPY', help='directory containing data.')
-        self.parser.add_argument('--channels', type=int, default=3, help='# channel of input')
+        self.parser.add_argument('--channels', type=int, default=3, help='# channels of input')
         self.parser.add_argument('--height', type=int, default=64, help='height of image')
         self.parser.add_argument('--width', type=int, default=64, help='width of image')
         self.parser.add_argument('--output_dir', default='weight', help='directory for model weight.')
@@ -34,11 +33,11 @@ class Options():
         self.parser.add_argument('--use_vibro', action='store_true', help='Whether or not to give the vibro to the model')
 
         self.parser.add_argument('--haptic_layer', type=int, default=16, help='HAPTIC_LAYER.')
-        self.parser.add_argument('--behavior_layer', type=int, default=9, help='number of chosen behavior.')
+        self.parser.add_argument('--behavior_layer', type=int, default=9, help='number of chosen behaviors.')
         self.parser.add_argument('--audio_layer', type=int, default=16, help='AUDIO_LAYER.')
         self.parser.add_argument('--vibro_layer', type=int, default=16, help='VIBRO_LAYER.')
 
-        self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will override multi-modalities options' )
+        self.parser.add_argument('--baseline', action='store_true', help='baseline or proposed method, will override multi-modalities options')
         self.parser.add_argument('--aux', action='store_true', help='employ auxiliary tasks during training' )
         # training details
         self.parser.add_argument('--print_interval', type=int, default=100, help='# iterations to output loss')

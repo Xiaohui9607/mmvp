@@ -1,9 +1,10 @@
 from options import Options
 from model import Model
+import pandas as pd
 from metrics import mse_to_psnr
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
+
 
 Experiement_object_based_sep_behaviors = [
     '/home/golf/code/models/Experiement_object_based_sep_behaviors_lighter_network/weight_baseline_crush/net_epoch_29.pth',

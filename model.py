@@ -3,7 +3,6 @@ import torch
 from torch import nn
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 from networks import network, baseline
 from data import build_dataloader_CY101
 from torch.nn import functional as F

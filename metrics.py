@@ -52,18 +52,18 @@ if __name__ == '__main__':
     N = len(ground_truth_images)
     for reconstruction_folder in reconstruction_folders:
         ssim = 0
-        # read recon images
+        # read reconstructed images
         reconstruction_images = sorted(glob.glob(os.path.join(reconstruction_folder, "*")),
                                  key=lambda x:int(x.split('/')[-1].split('.')[0]))
         reconstruction_images = [cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2GRAY) for image_path in reconstruction_images]
 
         # for loop
         for recon_image, gt_image in zip(reconstruction_images, ground_truth_images):
-            # compare ssim
+            # compare (SSIM)
             i_ssim, i_diff = calc_ssim(gt_image, recon_image)
             ssim += i_ssim
 
-        # averging
+        # averaging
         ssim /= N
         # print
         print(reconstruction_folder, ssim)

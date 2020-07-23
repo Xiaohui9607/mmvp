@@ -1,5 +1,6 @@
 from options import Options
 from model import Model
+import pandas as pd
 from metrics import mse_to_psnr, calc_ssim
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -37,7 +38,6 @@ def eval_proposed(weight, use_haptic, use_audio, use_virbo):
 if __name__ == '__main__':
     # options = [[True, False, False], [True, True, False], [True, True, True]]
     options = [[True, True, True]]
-    import pandas as pd
     for i,setting in enumerate(Experiement_object_based_all_behaviors):
         dict_data = {}
         rowid = 0
