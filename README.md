@@ -25,6 +25,7 @@ We used the publicly available dataset collected by Sinapov et al. [see referenc
 The architecture of the proposed model, which consists of 4 feature encoders (left) and prediction heads (right) for 4 modalities, and 1 fusion module (middle) for merging representations of different modalities.
 
 <img src="Figures/model_architecture_figures/Vis_feat.png" alt="drawing" width="300px"/> <img src="Figures/model_architecture_figures/Vis_pred.png" alt="drawing" width="300px"/> 
+
 Pipeline of The Visual Prediction Module: the architecture of visual feature extractor (left), the architecture of visual prediction network (right).
 
 ## Results
@@ -32,28 +33,30 @@ Pipeline of The Visual Prediction Module: the architecture of visual feature ext
 ### Dataset Visualization
 
 <img src="Figures/dataset_visualization/haptic_drop_can_coke.png" alt="drawing" width="250px"/> <img src="Figures/dataset_visualization/audio_spectrogram_drop_can_coke.png" alt="drawing" width="250px"/> <img src="Figures/dataset_visualization/vibro_drop_can_coke.png" alt="drawing" width="250px"/>
-Visualization of (left) haptic, (middle) audio and (right) vibrotactile modalities when the robot drops a bottle
+Visualization of haptic (left), audio (middle) and vibrotactile (right) modalities when the robot drops a bottle
 
 ### Training the Network with All Behaviors
 
 #### Illustrative Example
 
 <img src="Figures/all_pred_lift_behavior.png" alt="drawing" width="400px"/> <img src="Figures/all_pred_push_behavior.png" alt="drawing" width="400px"/>
-Illustrative example: Sharpness of predicted images, when the robot arm perform *lift* (left) and *push* (right) behaviors. For each behavior, top row is ground truth, middle row is multi-modal and bottom row is the vision only approach
+Sharpness of predicted images, when the robot arm perform *lift* (left) and *push* (right) behaviors. For each behavior, top row is ground truth, middle row is multi-modal and bottom row is the vision only approach
 
 #### Quantitative Reconstruction Performance
 
 <img src="Figures/all_with_std.png" alt="drawing" width="600px"/> 
 PSNR (left) and SSIM (right), when all behaviors are used in conducting experiments
+
 <img src="Figures/ablation_on_adding_behavior.png" alt="drawing" width="600px"/>
 PSNR (left) and SSIM (right), investigating the effect of adding behavior as an input feature
+
 <img src="Figures/tables/table 1.png" alt="drawing" width="600px"/>
 
 
 #### Training the Network with Individual Behavior
 
 <img src="Figures/separate_behavior_group_bar.png" alt="drawing" width="600px"/>
-Investigating the performance of different combinations of modalities per individual behavior
+<p>Investigating the performance of different combinations of modalities per individual behavior</p>
 
 #### Predicting Future Frames of Auxiliary Modalities
 
