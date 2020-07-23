@@ -1,7 +1,6 @@
 import os
 import torch
 from torch import nn
-import cv2
 import numpy as np
 from networks import network
 from data import build_dataloader_CY101
@@ -25,7 +24,6 @@ class Model():
 
         if not self.opt.use_audio:
             self.opt.audio_layer = 0
-
 
         self.net = network(self.opt, self.opt.channels, self.opt.height, self.opt.width, -1, self.opt.schedsamp_k,
                        self.opt.num_masks, self.opt.model=='STP', self.opt.model=='CDNA', self.opt.model=='DNA', self.opt.context_frames,
@@ -104,7 +102,7 @@ class Model():
             self.evaluate(epoch_i)
             self.save_weight(epoch_i)
 
-    def evaluate(self, epoch, keep_frame=False, keep_batch=False, save_prediction=False, ssim=False):
+    def evaluate(self, epoch, keep_frame=False, keep_batch=False, ssim=False):
         with torch.no_grad():
             loss = [[] for _ in range(self.opt.sequence_length - self.opt.context_frames)]
             for iter_, (images, haptics, audios, behaviors, vibros) in enumerate(self.dataloader['valid']):
@@ -127,14 +125,11 @@ class Model():
 
                 for i, (image, gen_image) in enumerate(
                         zip(images[self.opt.context_frames:], gen_images[self.opt.context_frames - 1:])):
-                    stats = None
                     if ssim:
                         image = image.permute([0, 2, 3, 1]).unbind(0)
-                        image = [cv2.cvtColor((im.cpu().numpy() * 255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im in
-                                 image]
+                        image = [(im.cpu().numpy() * 255).astype(np.uint8) for im in image]
                         gen_image = gen_image.permute([0, 2, 3, 1]).unbind(0)
-                        gen_image = [cv2.cvtColor((im.cpu().numpy() * 255).astype(np.uint8), cv2.COLOR_BGR2GRAY) for im
-                                     in gen_image]
+                        gen_image = [(im.cpu().numpy() * 255).astype(np.uint8) for im in gen_image]
                         stats = [calc_ssim(im, gim)[0] for im, gim in zip(image, gen_image)]
                     else:
                         stats = mse_to_psnr(torch.mean((image-gen_image)**2, dim=[1,2,3]).cpu())

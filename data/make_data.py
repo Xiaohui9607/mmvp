@@ -12,17 +12,9 @@ import argparse
 from sklearn.preprocessing import OneHotEncoder
 
 #/Users/ramtin/PycharmProjects/VP/Experiement_object_based_all_behaviors
-FIXED = True
-if FIXED:
-    train_test_split = '/Users/ramtin/PycharmProjects/VP/Experiement_object_based_all_behaviors/None/train_test_split'
-    train, test = open(train_test_split).readlines()[:2]
-    train = train[9:-3].split('\', \'')
-    test = test[8:-3].split('\', \'')
-
 DATA_DIR = '../../data/CY101'
 OUT_DIR = '../../data/CY101NPY'
-# added for VIS splits
-VIS_DIR = '../../data/VIS/'
+# VIS_DIR = '../../data/VIS/'
 
 
 
@@ -158,7 +150,6 @@ def generate_npy_audio(path, n_frames_vision_image, behavior, sequence_length):
  # create a new dimension
 
     image_height, image_width = img.shape
-    import cv2
     image_width = AUDIO_EACH_FRAME_LENGTH * n_frames_vision_image
     img = PIL.Image.fromarray(img)
     img = img.resize((image_height, image_width))
@@ -222,8 +213,6 @@ def split(strategy):
     """
     train_list = []
     test_list = []
-    if FIXED:
-        return train, test
     if strategy == 'object':
         for i in range(len(SORTED_OBJECTS) // 5):
             random_number = np.random.randint(low=0, high=5)
@@ -251,29 +240,26 @@ def process(visions, chosen_behavior):
         CHOOSEN_BEHAVIORS = [chosen_behavior]
     train_subdir = 'train'
     test_subdir = 'test'
-    vis_subdir = 'vis'
+    # vis_subdir = 'vis'
     if not os.path.exists(os.path.join(OUT_DIR, train_subdir)):
         os.makedirs(os.path.join(OUT_DIR, train_subdir))
 
     if not os.path.exists(os.path.join(OUT_DIR, test_subdir)):
         os.makedirs(os.path.join(OUT_DIR, test_subdir))
 
-    if not os.path.exists(os.path.join(OUT_DIR, vis_subdir)):
-        os.makedirs(os.path.join(OUT_DIR, vis_subdir))
-
     # added for VIS splits
-    if not os.path.exists(os.path.join(VIS_DIR, chosen_behavior)):
-        os.makedirs(os.path.join(VIS_DIR, chosen_behavior))
+    # if not os.path.exists(os.path.join(VIS_DIR, chosen_behavior)):
+    #     os.makedirs(os.path.join(VIS_DIR, chosen_behavior))
 
     train_list, test_list = split(strategy=STRATEGY)
 
-    train_test_split_dict = {
-        'train': train_list,
-        'test': test_list
-    }
-    with open(os.path.join(VIS_DIR, chosen_behavior, "train_test_split"), 'wt') as split_file:
-        for k, v in train_test_split_dict.items():
-            split_file.write('%s: %s\n' % (str(k), str(v)))
+    # train_test_split_dict = {
+    #     'train': train_list,
+    #     'test': test_list
+    # }
+    # with open(os.path.join(VIS_DIR, chosen_behavior, "train_test_split"), 'wt') as split_file:
+    #     for k, v in train_test_split_dict.items():
+    #         split_file.write('%s: %s\n' % (str(k), str(v)))
 
     split_base = train_list + test_list
     cutting = len(train_list)
@@ -305,30 +291,6 @@ def process(visions, chosen_behavior):
         audio = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'hearing', '*.wav')
         vibro = os.path.join(re.sub(r'vision_data_part[1-4]', 'rc_data', vision), 'vibro', '*.tsv')
 
-        if subdir == test_subdir:
-            vis_out_sample_dir = os.path.join(OUT_DIR, vis_subdir, '_'.join(vision.split('/')[-4:]))
-            out_vision_npys, n_frames = generate_npy_vision(vision, behavior, SEQUENCE_LENGTH*2)
-            out_audio_npys = generate_npy_audio(audio, n_frames, behavior, SEQUENCE_LENGTH*2)
-            out_haptic_npys, bins = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH*2)
-            out_vibro_npys = generate_npy_vibro(vibro, n_frames, bins, behavior, SEQUENCE_LENGTH*2)
-
-            if out_audio_npys is None or out_haptic_npys is None or out_vibro_npys is None:
-                fail_count += 1
-                continue
-            out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
-            out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
-
-            for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
-                    out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
-                ret = {
-                    'behavior': out_behavior_npys,
-                    'vision': out_vision_npy,
-                    'haptic': out_haptic_npy,
-                    'audio': out_audio_npy,
-                    'vibro': out_vibro_npy
-                }
-                np.save(vis_out_sample_dir + '_' + str(i), ret)
-
         out_vision_npys, n_frames = generate_npy_vision(vision, behavior, SEQUENCE_LENGTH)
         out_audio_npys = generate_npy_audio(audio, n_frames, behavior, SEQUENCE_LENGTH)
         out_haptic_npys, bins = generate_npy_haptic(haptic1, haptic2, n_frames, behavior, SEQUENCE_LENGTH)
@@ -340,9 +302,6 @@ def process(visions, chosen_behavior):
         out_behavior_npys = np.zeros(len(CHOOSEN_BEHAVIORS))
         out_behavior_npys[CHOOSEN_BEHAVIORS.index(behavior)] = 1
 
-        # print(len(out_haptic_npys), len(out_audio_npys), len(out_vision_npys))
-        # out_vibro_npys = generate_npy_vibro(vibro)
-        # make sure that all the lists are in the same length!
         for i, (out_vision_npy, out_haptic_npy, out_audio_npy, out_vibro_npy) in enumerate(zip(
                 out_vision_npys, out_haptic_npys, out_audio_npys, out_vibro_npys)):
             ret = {
@@ -359,7 +318,6 @@ def process(visions, chosen_behavior):
 def run(chosen_behavior):
     print("start making data")
     visons = read_dir()
-
     process(visons, chosen_behavior)
     print("done!")
 
