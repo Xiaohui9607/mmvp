@@ -17,10 +17,12 @@ We used the publicly available dataset collected by Sinapov et al. [see referenc
 ## Experiment Pipeline 
 
 The architecture of the proposed model, which consists of 4 feature encoders (left) and prediction heads (right) for 4 modalities, and 1 fusion module (middle) for merging representations of different modalities.
+
 <img src="model_architecture/ModelArch.png" alt="drawing" width="600px"/> 
 
 
 Pipeline of The Visual Prediction Module: the architecture of visual feature extractor (left), the architecture of visual prediction network (right).
+
 <img src="model_architecture/Vis_feat.png" alt="drawing" width="300px"/> <img src="model_architecture/Vis_pred.png" alt="drawing" width="300px"/> 
 
 ## Results
