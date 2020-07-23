@@ -14,9 +14,9 @@
 pip install -r requirements.txt
 
 ## Dataset Preparation
-Description: https://www.eecs.tufts.edu/~gtatiya/pages/2014/CY101Dataset.html
+Description: https://www.eecs.tufts.edu/~ramtin/pages/2014/CY101Dataset.html
 
-Download: https://tufts.box.com/s/lk4tcyf8jnmpnlhpfofw4lg1khcn2ia1
+Download: https://tufts.app.box.com/v/DeepMultiSensoryDataset
 
 Preparation:
 ```bash
