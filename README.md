@@ -10,7 +10,7 @@
 <!-- 
 \* These authors contributed equally to this work. -->
 
-## Enviroment Setup
+## Environment Setup
 pip install -r requirements.txt
 
 ## Dataset Preparation
