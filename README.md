@@ -47,7 +47,7 @@ $ python ./main.py  \
         --print_interval 100 \ # iterations to output loss
         --schedsamp_k  400 \ # The k hyperparameter for scheduled sampling, -1 for no scheduled sampling
         --batch_size 32 \ # batch size for training
-        --learning_rate 0.001, \ # the base learning rate
+        --learning_rate 0.001 \ # the base learning rate
         --epochs 30 \ # total training epochs
 ```
 ## Architecture
