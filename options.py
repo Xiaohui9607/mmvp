@@ -25,7 +25,7 @@ class Options():
         self.parser.add_argument('--model', default='CDNA', help='model architecture to use - CDNA, DNA, or STP')
         self.parser.add_argument('--num_masks', type=int, default=10, help='number of masks, usually 1 for DNA, 10 for CDNA, STN.')
         self.parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu', help='cuda:[d] | cpu')
-        self.parser.add_argument('--dna_kern_size', type=int, default=5, help='DNA_KERN_SIZE.')
+        self.parser.add_argument('--cdna_kern_size', type=int, default=5, help='CDNA_KERN_SIZE.')
 
         self.parser.add_argument('--use_haptic', action='store_true', help='Whether or not to give the haptic to the model')
         self.parser.add_argument('--use_behavior', action='store_true', help='Whether or not to give the behavior to the model')
