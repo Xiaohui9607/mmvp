@@ -34,7 +34,7 @@ $ python ./main.py  \
         --model CDNA \ # model architecture to use - CDNA | DNA | STP
         --num_masks 10 \ # number of masks, usually 1 for DNA, 10 for CDNA, STP
         --device cuda  \ # device cuda | cpu
-        --dna_kern_size 5 \ # CDNA_KERN_SIZE
+        --cdna_kern_size 5 \ # CDNA_KERN_SIZE
         --haptic_layer 16 \ # HAPTIC_LAYER
         --use_haptic \ # Whether or not to give the haptic to the model
         --behavior_layer 9 \ # number of chosen behaviors
