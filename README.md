@@ -76,7 +76,7 @@ $ python ./main.py  \
 <img src="Figures/all_with_std.png" alt="drawing" width="600px"/> 
 <p>PSNR (left) and SSIM (right), when all behaviors are used in conducting experiments</p>
 
-<img src="Figures/ablation_on_adding_behavior.png" alt="drawing" width="600px"/>
+<img src="Figures/ablation_on_behavior.png" alt="drawing" width="600px"/>
 <p>PSNR (left) and SSIM (right), investigating the effect of adding behavior as an input feature</p>
 
 <img src="Figures/tables/table 1.png" alt="drawing" width="600px"/>
