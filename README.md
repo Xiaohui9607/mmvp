@@ -69,12 +69,12 @@ $ python ./main.py  \
 #### Illustrative Example
 
 <img src="Figures/all_pred_lift_behavior.png" alt="drawing" width="400px"/> <img src="Figures/all_pred_push_behavior.png" alt="drawing" width="400px"/>
-<p>Sharpness of predicted images, when the robot arm perform lift (left) and push (right) behaviors. For each behavior, top row is ground truth, middle row is multi-modal and bottom row is the vision only approach</p>
+<p>Sharpness of predicted images, when the robot arm perform lift (left) and push (right) behaviors.
 
 #### Quantitative Reconstruction Performance
 
 <img src="Figures/all_with_std.png" alt="drawing" width="600px"/> 
-<p>Ablation study on behavior input</p>
+<p>Ablation study on sensory input</p>
 
 <img src="Figures/ablation_on_behavior.png" alt="drawing" width="600px"/>
 <p>Ablation study on behavior input</p>
